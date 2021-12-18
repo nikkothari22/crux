@@ -1,3 +1,6 @@
+import { Heading } from "@chakra-ui/react";
 export const Button = () => {
-  return <button>Boop</button>;
+  return <>
+    <Heading>Hello</Heading>
+  </>;
 };
