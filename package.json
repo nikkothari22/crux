@@ -39,8 +39,5 @@
   "engines": {
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
-  },
-  "dependencies": {
-    "react-icons": "^4.3.1"
   }
 }
