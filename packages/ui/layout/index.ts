@@ -1,0 +1,1 @@
+export { DividerWithText } from "./DividerWithText/DividerWithText";

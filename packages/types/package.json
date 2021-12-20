@@ -1,0 +1,11 @@
+{
+    "name": "types",
+    "version": "0.0.1",
+    "main": "./index.tsx",
+    "types": "./index.ts",
+    "license": "MIT",
+    "devDependencies": {
+        "tsconfig": "*",
+        "typescript": "^4.5.3"
+    }
+}
