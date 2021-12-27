@@ -1,5 +1,4 @@
 import { Box, Divider, Flex, FlexProps, Text, useColorModeValue } from '@chakra-ui/react'
-import * as React from 'react'
 
 export const DividerWithText = (props: FlexProps) => {
     const { children, ...flexProps } = props

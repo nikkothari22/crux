@@ -1,8 +1,5 @@
 import {
-    Box,
     Flex,
-    Heading,
-    Image,
     Link,
     Stack,
     Text,
@@ -10,11 +7,22 @@ import {
 } from '@chakra-ui/react'
 import { DividerWithText } from '../../layout'
 import { EmailPasswordForm, FormCard, getSocialButtonPropsFromProvider, Header, SocialButton } from '../common'
-import { LoginSettings } from 'types'
+import { CustomError, LoginProvider, LoginSettings } from 'types'
 import NextLink from 'next/link'
 import { ColorModeButton } from '../../theme'
 
-export const LoginForm = ({ metadata }: { metadata: LoginSettings }) => {
+interface Props {
+    metadata: LoginSettings,
+    callback: (provider: LoginProvider, options?: {
+        email?: string,
+        password?: string,
+    }) => void,
+    state: {
+        loading: boolean,
+        error: CustomError | null
+    }
+}
+export const LoginForm = ({ metadata, callback, state }: Props) => {
 
     const { heading, text, logo, signup_enabled, providers } = metadata
     return (
@@ -34,7 +42,10 @@ export const LoginForm = ({ metadata }: { metadata: LoginSettings }) => {
                     <FormCard>
                         {providers.includes("password") &&
                             <>
-                                <EmailPasswordForm page="login" />
+                                <EmailPasswordForm
+                                    page="login"
+                                    callback={(email: string, password: string) => callback('password', { email, password })}
+                                    state={state} />
                                 {providers.length > 1 &&
                                     <DividerWithText>OR</DividerWithText>}
                             </>
@@ -43,10 +54,12 @@ export const LoginForm = ({ metadata }: { metadata: LoginSettings }) => {
                         <Stack spacing={4}>
                             {providers.map(provider => provider !== "password" && <SocialButton
                                 {...getSocialButtonPropsFromProvider(provider)}
-                                onClick={() => console.log(provider, " clicked!")}
+                                onClick={() => callback(provider)}
+                                key={provider}
                             />
                             )}
                         </Stack>
+
                     </FormCard>
                     {signup_enabled &&
                         <Text pt="4" align="center" maxW="md" fontWeight="medium">
@@ -60,8 +73,6 @@ export const LoginForm = ({ metadata }: { metadata: LoginSettings }) => {
                                     Sign up here
                                 </Link>
                             </NextLink>
-
-
                         </Text>
                     }
                 </Stack>

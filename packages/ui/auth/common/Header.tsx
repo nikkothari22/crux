@@ -1,5 +1,4 @@
-import { DarkMode, Heading, Image, LightMode, Stack, Text, useColorModeValue } from '@chakra-ui/react'
-import React from 'react'
+import { Heading, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 
 interface Props {
     logo: {
