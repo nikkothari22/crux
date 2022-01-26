@@ -1,13 +1,18 @@
-import { Button } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Navbar } from "ui/layout";
+import { LoginSettings } from "types";
+import { Navbar, Sidebar } from "ui/layout";
 import { supabase } from "../config/supabaseInit";
 
-export default function Index() {
+interface Props {
+  metadata: LoginSettings
+}
+
+export default function Index({ metadata }: Props) {
 
   const router = useRouter()
+  // const { logo } = metadata
 
   const logout = () => {
     supabase.auth.signOut()
@@ -35,9 +40,8 @@ export default function Index() {
 
   return (
     <div>
-      <Navbar />
-      <h1>Supabase</h1>
-      <Button onClick={logout}>Logout</Button>
+      <Navbar logout={logout} />
+      <Sidebar />
     </div>
   );
 }
@@ -62,6 +66,3 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   }
 }
-
-
-
