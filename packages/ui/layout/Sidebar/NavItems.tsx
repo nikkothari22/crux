@@ -7,15 +7,18 @@ import {
     MenuButton,
     MenuList
 } from '@chakra-ui/react'
+import { IconType } from 'react-icons'
+
 
 interface navItemsProps {
-    icon: React.ReactElement,
+    icon: IconType,
     title: string,
     active?: boolean,
-    navSize: string
+    navSize: string,
+    link: string
 }
 
-export default function NavItem({ icon, title, active, navSize }: navItemsProps) {
+export default function NavItem({ icon, title, active, navSize, link }: navItemsProps) {
     return (
         <Flex
             mt={30}
@@ -25,6 +28,7 @@ export default function NavItem({ icon, title, active, navSize }: navItemsProps)
         >
             <Menu placement="right">
                 <Link
+                    href={link}
                     backgroundColor={active ? "gray.200" : "none"}
                     p={2}
                     borderRadius={8}

@@ -1,18 +1,19 @@
-import { Avatar, Box, Flex, HStack, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Heading } from '@chakra-ui/react'
+import { Avatar, Box, Flex, HStack, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Heading, Skeleton } from '@chakra-ui/react'
 import { ColorModeButton } from '../../theme';
 
 interface Props {
-    logo: {
+    logo?: {
         light: string,
         dark: string
     },
     logout: VoidFunction,
-    userEmail?: string
+    userEmail?: string,
+    loading: boolean
 }
 
-export const Navbar = ({ logo, logout, userEmail }: Props) => {
+export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
 
-    const colorLogo = useColorModeValue(logo.light, logo.dark)
+    const colorLogo = useColorModeValue(logo?.light, logo?.dark)
 
     return (
         <Flex
@@ -25,7 +26,7 @@ export const Navbar = ({ logo, logout, userEmail }: Props) => {
             boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.08)">
 
             <Box>
-                {colorLogo ? <Image src={colorLogo} mx="auto" h="6" />
+                {loading ? <Skeleton width="100px" height="30px" /> : colorLogo ? <Image src={colorLogo} mx="auto" h="6" />
                     : <Heading>crux</Heading>}
             </Box>
 
