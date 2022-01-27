@@ -15,8 +15,8 @@ export const Sidebar = (props: Props) => {
 
     return (
         <Flex
-            pos="sticky"
-            h="90vh"
+            pos="fixed"
+            height="full"
             boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.08)"
             w={navSize == "small" ? "80px" : "200px"}
             flexDirection="column"
@@ -43,10 +43,10 @@ export const Sidebar = (props: Props) => {
                         }
                     }}
                 />
-                <NavItem navSize={navSize} icon={FiCalendar} title="Calendar" />
-                <NavItem navSize={navSize} icon={FiUser} title="Clients" />
-                <NavItem navSize={navSize} icon={FiBriefcase} title="Reports" />
-                <NavItem navSize={navSize} icon={FiSettings} title="Settings" />
+                <NavItem navSize={navSize} icon={<FiCalendar />} title="Calendar" />
+                <NavItem navSize={navSize} icon={<FiUser />} title="Clients" />
+                <NavItem navSize={navSize} icon={<FiBriefcase />} title="Reports" />
+                <NavItem navSize={navSize} icon={<FiSettings />} title="Settings" />
             </Flex>
         </Flex>
     )

@@ -1,5 +1,4 @@
-import { Avatar, Box, Flex, HStack, IconButton, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Button, Heading } from '@chakra-ui/react'
-import { FiBell, FiChevronDown } from 'react-icons/fi'
+import { Avatar, Box, Flex, HStack, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Heading } from '@chakra-ui/react'
 import { ColorModeButton } from '../../theme';
 
 interface Props {
