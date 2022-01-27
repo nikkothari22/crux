@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, HStack, IconButton, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Button } from '@chakra-ui/react'
+import { Avatar, Box, Flex, HStack, IconButton, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Button, Heading } from '@chakra-ui/react'
 import { FiBell, FiChevronDown } from 'react-icons/fi'
 import { ColorModeButton } from '../../theme';
 
@@ -7,55 +7,59 @@ interface Props {
         light: string,
         dark: string
     },
-    logout: VoidFunction
+    logout: VoidFunction,
+    userEmail?: string
 }
 
-export const Navbar = ({ logout }: Props) => {
+export const Navbar = ({ logo, logout, userEmail }: Props) => {
 
-    // const colorLogo = useColorModeValue(logo.light, logo.dark)
-    const colorLogo = useColorModeValue("https://supabase.com/brand-assets/supabase-logo-wordmark--light.svg", "https://supabase.com/brand-assets/supabase-logo-wordmark--dark.svg")
+    const colorLogo = useColorModeValue(logo.light, logo.dark)
 
     return (
         <Flex
-            pos="sticky"
-            h="10vh"
+            pos="fixed"
+            width="full"
+            h="50px"
+            px="4"
+            justifyContent='space-between'
+            align='center'
             boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.08)">
-            {colorLogo && <Image src={colorLogo} mx="auto" h="8" position="absolute" top="6" left="4" />}
 
-            <Flex position="absolute" top={4} right={4} px={4}>
+            <Box>
+                {colorLogo ? <Image src={colorLogo} mx="auto" h="6" />
+                    : <Heading>crux</Heading>}
+            </Box>
+
+            <Flex px={4}>
                 <HStack spacing={{ base: '0', md: '6' }}>
-                    <IconButton
-                        size="lg"
-                        variant="ghost"
-                        aria-label="open menu"
-                        icon={<FiBell />}
-                    />
+                    <ColorModeButton size="sm" />
                     <Flex alignItems={'center'}>
                         <Menu>
                             <MenuButton
-                                py={2}
+                                py={1}
                                 transition="all 0.3s"
                                 _focus={{ boxShadow: 'none' }}>
                                 <HStack>
                                     <Avatar
                                         size={'sm'}
                                         src={
-                                            'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                                            'https://en.wikipedia.org/wiki/File:Peter_Griffin.png'
                                         }
+                                        name={userEmail ?? 'User'}
                                     />
                                     <VStack
                                         display={{ base: 'none', md: 'flex' }}
                                         alignItems="flex-start"
-                                        spacing="1px"
+                                        spacing="-0.5"
                                         ml="2">
-                                        <Text fontSize="sm">Justina Clark</Text>
-                                        <Text fontSize="xs" color="gray.600">
-                                            Admin
-                                        </Text>
+                                        <Text fontSize="sm" color="gray.700">{userEmail ?? 'User Email'}</Text>
+                                        {/* <Text fontSize="xs" color="gray.600">
+
+                                        </Text> */}
                                     </VStack>
-                                    <Box display={{ base: 'none', md: 'flex' }}>
+                                    {/* <Box display={{ base: 'none', md: 'flex' }}>
                                         <FiChevronDown />
-                                    </Box>
+                                    </Box> */}
                                 </HStack>
                             </MenuButton>
                             <MenuList
@@ -63,7 +67,6 @@ export const Navbar = ({ logout }: Props) => {
                                 borderColor={useColorModeValue('gray.200', 'gray.700')}>
                                 <MenuItem>Profile</MenuItem>
                                 <MenuItem>Settings</MenuItem>
-                                <MenuItem>Theme: <ColorModeButton variant="ghost" /></MenuItem>
                                 <MenuDivider />
                                 <MenuItem onClick={logout}>Sign out</MenuItem>
                             </MenuList>

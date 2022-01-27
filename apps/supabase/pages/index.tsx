@@ -1,15 +1,19 @@
+import { Box } from "@chakra-ui/react";
+import { User } from "@supabase/supabase-js";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { LoginSettings } from "types";
 import { Navbar, Sidebar } from "ui/layout";
 import { supabase } from "../config/supabaseInit";
+import getSettingsFromDatabase from "../utils/getSettingsFromDatabase";
 
 interface Props {
-  metadata: LoginSettings
+  metadata: LoginSettings,
+  user: User
 }
 
-export default function Index({ metadata }: Props) {
+export default function Index({ metadata, user }: Props) {
 
   const router = useRouter()
   // const { logo } = metadata
@@ -38,10 +42,15 @@ export default function Index({ metadata }: Props) {
     }
   }, [router])
 
+  console.log(user)
+
   return (
     <div>
-      <Navbar logout={logout} />
-      <Sidebar />
+      <Navbar logout={logout} logo={metadata.logo} userEmail={user.email} />
+      <Box pt="50px">
+        <Sidebar />
+      </Box>
+
     </div>
   );
 }
@@ -49,9 +58,6 @@ export default function Index({ metadata }: Props) {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   const { user, error } = await supabase.auth.api.getUserByCookie(req)
-
-  console.log(user)
-  console.log(error)
 
   if (!user) {
     return {
@@ -62,7 +68,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   } else {
     return {
-      props: {}
+      props: {
+        user: user,
+        metadata: await getSettingsFromDatabase(),
+      },
     }
   }
 }
