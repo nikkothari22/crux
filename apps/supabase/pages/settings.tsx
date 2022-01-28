@@ -1,23 +1,27 @@
-import { GetServerSideProps } from "next";
-import Link from "next/link";
+import { Heading, SimpleGrid } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import AdminPanelPage from "../components/AdminPanelPage";
-import { supabase } from "../config/supabaseInit";
+import { SettingsButton, BreadCrumb } from "ui/layout/";
+import { FiLogIn, FiSettings, FiUser } from "react-icons/fi";
+import enforceAuthenticated from "../utils/enforceAuthenticated";
+
 interface Props {
+
 }
 
-export default function Settings(props: Props) {
-
+const Settings = (props: Props) => {
     return (
         <>
-            <p>Settings</p>
-            <Link href="/">
-                Back to home
-            </Link>
+            <BreadCrumb currentPage="Settings" />
+            <Heading>Settings</Heading>
+            <SimpleGrid columns={3} spacing={6} mt={8} mr={8}>
+                <SettingsButton icon={FiLogIn} title="Login Settings" link="/settings/loginSettings" />
+                <SettingsButton icon={FiUser} title="Account Settings" link="/settings/accountSettings" />
+                <SettingsButton icon={FiSettings} title="System Settings" link="/settings/systemSettings" />
+            </SimpleGrid>
         </>
     );
 }
-
 
 Settings.getLayout = function getLayout(page: ReactElement) {
     return (
@@ -26,21 +30,7 @@ Settings.getLayout = function getLayout(page: ReactElement) {
         </AdminPanelPage>
     )
 }
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
-    const { user, error } = await supabase.auth.api.getUserByCookie(req)
+export const getServerSideProps = enforceAuthenticated();
 
-    if (!user) {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false
-            }
-        }
-    } else {
-        return {
-            props: {
-            },
-        }
-    }
-}
+export default Settings

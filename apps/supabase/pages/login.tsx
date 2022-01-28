@@ -117,7 +117,7 @@ const Login = ({ metadata }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
-    const { user, error } = await supabase.auth.api.getUserByCookie(req)
+    const { user } = await supabase.auth.api.getUserByCookie(req)
 
     if (user) {
         return {
@@ -135,4 +135,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
 }
+
 export default Login

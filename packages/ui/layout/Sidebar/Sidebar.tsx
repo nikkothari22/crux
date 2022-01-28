@@ -19,7 +19,7 @@ export const Sidebar = ({ children }: Props) => {
                 pos="fixed"
                 height="full"
                 boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.08)"
-                w={navSize == "small" ? "80px" : "200px"}
+                w={navSize == "small" ? "60px" : "160px"}
                 flexDirection="column"
                 justifyContent="space-between"
             >
@@ -50,7 +50,7 @@ export const Sidebar = ({ children }: Props) => {
                     <NavItem navSize={navSize} icon={FiSettings} title="Settings" link="/settings" />
                 </Flex>
             </Flex>
-            <Box pl={navSize == "small" ? "80px" : "200px"}>
+            <Box pl={navSize == "small" ? "80px" : "180px"} pt={4}>
                 <main>
                     {children}
                 </main>
