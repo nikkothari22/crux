@@ -14,6 +14,7 @@ interface Props {
 export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
 
     const colorLogo = useColorModeValue(logo?.light, logo?.dark)
+    const navBackgroundColor = useColorModeValue("white", "gray.800")
 
     return (
         <Flex
@@ -23,6 +24,7 @@ export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
             px="4"
             justifyContent='space-between'
             align='center'
+            bgColor={navBackgroundColor}
             boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.08)">
 
             <Box>
