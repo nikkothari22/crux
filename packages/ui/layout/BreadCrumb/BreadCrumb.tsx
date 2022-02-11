@@ -2,6 +2,7 @@ import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbLink,
+    Text,
     useColorModeValue,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -19,20 +20,32 @@ export const BreadCrumb = ({ currentPage, previousPage, previousPageLink }: Prop
 
     return (
         <>
-            <Breadcrumb spacing='8px' mb={10} separator={<ChevronRightIcon color='gray.500' />}>
+            <Breadcrumb spacing={{ base: '2px', md: '6px', lg: '8px' }} mb={{ base: 8, md: 10, lg: 10 }} separator={<ChevronRightIcon color='gray.500' />}>
 
                 <BreadcrumbItem>
-                    <BreadcrumbLink href='/' color={previousPageLinkColor}>Home</BreadcrumbLink>
+                    <BreadcrumbLink href='/' color={previousPageLinkColor}>
+                        <Text fontSize={{ base: 'xs', md: 'sm', lg: 'md' }}>
+                            Home
+                        </Text>
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
 
                 {previousPage &&
                     <BreadcrumbItem>
-                        <BreadcrumbLink href={previousPageLink} color={previousPageLinkColor}>{previousPage}</BreadcrumbLink>
+                        <BreadcrumbLink href={previousPageLink} color={previousPageLinkColor}>
+                            <Text fontSize={{ base: 'xs', md: 'sm', lg: 'md' }}>
+                                {previousPage}
+                            </Text>
+                        </BreadcrumbLink>
                     </BreadcrumbItem>
                 }
 
                 <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink href='#' color={currentPageLinkColor}>{currentPage}</BreadcrumbLink>
+                    <BreadcrumbLink href='#' color={currentPageLinkColor}>
+                        <Text fontSize={{ base: 'xs', md: 'sm', lg: 'md' }}>
+                            {currentPage}
+                        </Text>
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
 
             </Breadcrumb>

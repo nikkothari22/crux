@@ -1,2 +1,2 @@
 export { SettingsButton } from "../settings/SettingsButton/SettingsButton";
-export { LoginSettingsUI } from "./LoginSettingsUI/LoginSettingsUI";
+export { LoginSettingsFormLayout } from "./LoginSettingsUI/LoginSettingsFormLayout";

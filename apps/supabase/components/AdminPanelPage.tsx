@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { Navbar, Sidebar } from 'ui/layout';
 import { supabase } from '../config/supabaseInit';
-import getSettingsFromDatabase from '../utils/getSettingsFromDatabase';
+import getLoginSettingsFromDatabase from '../utils/getLoginSettingsFromDatabase';
 
 interface Props {
     children: React.ReactNode
@@ -24,7 +24,7 @@ const AdminPanelPage = ({ children }: Props) => {
         console.log("Mounted")
 
         //Fetch metadata
-        getSettingsFromDatabase().then(metadata => {
+        getLoginSettingsFromDatabase().then(metadata => {
             setLogo(metadata.logo)
             setLoading(false)
         })

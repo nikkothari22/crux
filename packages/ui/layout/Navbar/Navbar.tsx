@@ -22,6 +22,7 @@ export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
             width="full"
             h="50px"
             px="4"
+            zIndex="999"
             justifyContent='space-between'
             align='center'
             bgColor={navBackgroundColor}
@@ -33,7 +34,7 @@ export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
             </Box>
 
             <Flex px={4}>
-                <HStack spacing={{ base: '0', md: '6' }}>
+                <HStack spacing={{ base: '4', md: '6' }}>
                     <ColorModeButton size="sm" />
                     <Flex alignItems={'center'}>
                         <Menu>
@@ -44,24 +45,9 @@ export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
                                 <HStack>
                                     <Avatar
                                         size={'sm'}
-                                        src={
-                                            'https://en.wikipedia.org/wiki/File:Peter_Griffin.png'
-                                        }
                                         name={userEmail ?? 'User'}
                                     />
-                                    <VStack
-                                        display={{ base: 'none', md: 'flex' }}
-                                        alignItems="flex-start"
-                                        spacing="-0.5"
-                                        ml="2">
-                                        <Text fontSize="sm" color={useColorModeValue('gray.700', 'gray.400')}>{userEmail ?? 'User Email'}</Text>
-                                        {/* <Text fontSize="xs" color="gray.600">
-
-                                        </Text> */}
-                                    </VStack>
-                                    {/* <Box display={{ base: 'none', md: 'flex' }}>
-                                        <FiChevronDown />
-                                    </Box> */}
+                                    <Text fontSize="sm" color={useColorModeValue('gray.700', 'gray.400')}>{userEmail ?? 'User Email'}</Text>
                                 </HStack>
                             </MenuButton>
                             <MenuList

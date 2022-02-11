@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { LoginProvider, LoginSettings, CustomError } from 'types'
 import { LoginForm } from 'ui/auth'
 import { supabase } from '../config/supabaseInit'
-import getSettingsFromDatabase from '../utils/getSettingsFromDatabase'
+import getLoginSettingsFromDatabase from '../utils/getLoginSettingsFromDatabase'
 
 interface Props {
     metadata: LoginSettings
@@ -129,7 +129,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     } else {
         return {
             props: {
-                metadata: await getSettingsFromDatabase(),
+                metadata: await getLoginSettingsFromDatabase(),
             },
         };
     }

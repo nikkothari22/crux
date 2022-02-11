@@ -13,6 +13,7 @@ export const ColorModeButton = (props: Props) => {
     const label = useColorModeValue('Switch to dark mode', 'Switch to light mode')
 
     const icon = useColorModeValue(<FaMoon />, <BsFillSunFill />)
+
     return (
         <IconButton icon={icon} aria-label={label} onClick={toggleColorMode} {...props} />
     )

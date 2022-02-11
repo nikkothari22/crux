@@ -1,7 +1,8 @@
 import { Heading, SimpleGrid } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import AdminPanelPage from "../components/AdminPanelPage";
-import { SettingsButton, BreadCrumb } from "ui/layout/";
+import { BreadCrumb } from "ui/layout/";
+import { SettingsButton } from "ui/settings";
 import { FiLogIn, FiSettings, FiUser } from "react-icons/fi";
 import enforceAuthenticated from "../utils/enforceAuthenticated";
 
@@ -15,7 +16,7 @@ const Settings = (props: Props) => {
             <BreadCrumb currentPage="Settings" />
             <Heading>Settings</Heading>
             <SimpleGrid columns={3} spacing={6} mt={8} mr={8}>
-                <SettingsButton icon={FiLogIn} title="Login Settings" link="/settings/loginSettings" />
+                <SettingsButton icon={FiLogIn} title="Login Page Settings" link="/settings/loginPageSettings" />
                 <SettingsButton icon={FiUser} title="Account Settings" link="/settings/accountSettings" />
                 <SettingsButton icon={FiSettings} title="System Settings" link="/settings/systemSettings" />
             </SimpleGrid>

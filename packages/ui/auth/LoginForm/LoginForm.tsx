@@ -25,6 +25,7 @@ interface Props {
 export const LoginForm = ({ metadata, callback, state }: Props) => {
 
     const { heading, text, logo, signup_enabled, providers } = metadata
+
     return (
         <>
             <Flex
