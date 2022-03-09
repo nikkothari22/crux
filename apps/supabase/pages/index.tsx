@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import { Table } from "ui/layout";
 import AdminPanelPage from "../components/AdminPanelPage";
 import enforceAuthenticated from "../utils/enforceAuthenticated";
 interface Props {
@@ -11,7 +10,6 @@ export default function Index(props: Props) {
   return (
     <>
       <p>Hello</p>
-      <Table />
     </>
   );
 }
