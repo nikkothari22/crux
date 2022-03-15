@@ -23,8 +23,8 @@ export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
             h="50px"
             px="4"
             zIndex="999"
-            justifyContent='space-between'
-            align='center'
+            justifyContent="space-between"
+            align="center"
             bgColor={navBackgroundColor}
             boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.08)">
 

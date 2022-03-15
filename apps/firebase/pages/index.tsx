@@ -1,10 +1,14 @@
-// import { Button } from "ui";
+import { ReactElement } from "react";
 
-export default function Docs() {
+interface Props {
+
+}
+
+export default function Index(props: Props) {
+  // console.log(user)
   return (
-    <div>
-      <h1>Firebase</h1>
-      {/* <Button /> */}
-    </div>
+    <>
+      <p>Firebase</p>
+    </>
   );
 }

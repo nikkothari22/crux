@@ -9,7 +9,7 @@ export default function Index(props: Props) {
   // console.log(user)
   return (
     <>
-      <p>Hello</p>
+      <p>Supabase</p>
     </>
   );
 }
