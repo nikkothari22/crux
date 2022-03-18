@@ -5,7 +5,7 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react'
-import { DividerWithText } from '../../layout'
+import { AlertBanner, DividerWithText } from '../../layout'
 import { EmailPasswordForm, FormCard, getSocialButtonPropsFromProvider, Header, SocialButton } from '../common'
 import { CustomError, LoginProvider, LoginSettings } from 'types'
 import NextLink from 'next/link'
@@ -25,6 +25,7 @@ interface Props {
 export const LoginForm = ({ metadata, callback, state }: Props) => {
 
     const { heading, text, logo, signup_enabled, providers } = metadata
+
     return (
         <>
             <Flex
@@ -40,6 +41,9 @@ export const LoginForm = ({ metadata, callback, state }: Props) => {
                     <Header text={text?.login} heading={heading.login} logo={logo} />
 
                     <FormCard>
+                        {state?.error !== null &&
+                            <AlertBanner status='error' mb="3">{state?.error.message} [{state?.error.code}]</AlertBanner>
+                        }
                         {providers.includes("password") &&
                             <>
                                 <EmailPasswordForm

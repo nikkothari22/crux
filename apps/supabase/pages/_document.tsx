@@ -2,6 +2,7 @@
 
 import { ColorModeScript, extendTheme, ThemeConfig } from '@chakra-ui/react'
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
+
 // 2. Add your color mode config
 const config: ThemeConfig = {
   initialColorMode: 'dark',
@@ -10,7 +11,6 @@ const config: ThemeConfig = {
 
 // 3. extend the theme
 const theme = extendTheme({ config })
-
 export default class Document extends NextDocument {
   render() {
     return (

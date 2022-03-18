@@ -1,10 +1,26 @@
-import { Button } from "ui";
+import { ReactElement } from "react";
+import ProtectedPageProvider from "../auth/ProtectedPageProvider";
+import AdminPanelPage from "../components/AdminPanelPage";
 
-export default function Docs() {
+interface Props {
+
+}
+
+export default function Index(props: Props) {
+  // console.log(user)
   return (
-    <div>
-      <h1>Firebase</h1>
-      <Button />
-    </div>
+    <>
+      <ProtectedPageProvider>
+        <p>Firebase</p>
+      </ProtectedPageProvider>
+    </>
   );
+}
+
+Index.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AdminPanelPage>
+      {page}
+    </AdminPanelPage>
+  )
 }

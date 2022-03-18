@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { CustomError, LoginProvider, LoginSettings } from 'types'
 import { SignupForm } from 'ui/auth'
 import { supabase } from '../config/supabaseInit'
-import getSettingsFromDatabase from '../utils/getSettingsFromDatabase'
+import getLoginSettingsFromDatabase from '../utils/getLoginSettingsFromDatabase'
 
 interface Props {
     metadata: LoginSettings
@@ -116,7 +116,7 @@ const Signup = ({ metadata }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
-    const { user, error } = await supabase.auth.api.getUserByCookie(req)
+    const { user } = await supabase.auth.api.getUserByCookie(req)
 
     if (user) {
         return {
@@ -128,10 +128,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     } else {
         return {
             props: {
-                metadata: await getSettingsFromDatabase(),
+                metadata: await getLoginSettingsFromDatabase(),
             },
         };
     }
 
 }
+
 export default Signup
