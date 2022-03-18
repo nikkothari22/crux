@@ -1,6 +1,6 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react'
+import { Button, Flex, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, Switch, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
-import { ShowMoreOptions } from '../common/ShowMoreOptions/ShowMoreOptions'
+import { ShowFieldTypes } from '../common/ShowFieldTypes/ShowFieldTypes'
 // import Image from 'next/image'
 // import AddMetadataImage from '../../../assets/images/AddMetadataImage.svg'
 
@@ -11,7 +11,7 @@ interface Props {
 export const AddMetadata = (props: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [fieldType, setFieldType] = useState("")
+    const [dataType, setDataType] = useState("")
 
     return (
         <>
@@ -28,12 +28,13 @@ export const AddMetadata = (props: Props) => {
                 <Button colorScheme="blue" maxW="60" onClick={onOpen}>Add Field</Button>
             </Stack>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} size="2xl">
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Add Field</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
+
                         <FormControl>
                             <FormLabel>Name</FormLabel>
                             <Input placeholder="Column name" />
@@ -46,25 +47,44 @@ export const AddMetadata = (props: Props) => {
 
                         <FormControl mt={4}>
                             <Stack spacing={2}>
-                                <FormLabel>Field Type</FormLabel>
+                                <FormLabel>Data Type</FormLabel>
                                 <Select
                                     isRequired
-                                    // placeholder='Select field type'
-                                    value={fieldType}
-                                    onChange={(e) => setFieldType(e.target.value)}
-                                >
-                                    <option value='text'>Text</option>
-                                    <option value='number'>Number</option>
-                                    <option value='date'>Date</option>
+                                    placeholder='Select data type'
+                                    value={dataType}
+                                    onChange={(e) => setDataType(e.target.value)}>
+                                    <option value='string'>String</option>
+                                    <option value='int'>Int</option>
+                                    <option value='float'>Float</option>
+                                    <option value='timestamp'>Timestamp</option>
                                     <option value='boolean'>Boolean</option>
-                                    <option value='link'>Link</option>
-                                    <option value='options'>Options</option>
-                                    <option value='image'>Image</option>
                                 </Select>
                             </Stack>
                         </FormControl>
 
-                        <ShowMoreOptions fieldType={fieldType} />
+                        <ShowFieldTypes dataType={dataType} />
+
+                        <FormControl mt={4}>
+                            <Stack spacing={2}>
+                                <FormLabel>Default Validations</FormLabel>
+                                <Switch>isRequired</Switch>
+                                <Switch>readOnly</Switch>
+                            </Stack>
+                        </FormControl>
+
+                        <FormControl mt={4}>
+                            <HStack>
+                                <FormLabel>Default Value</FormLabel>
+                                <Input maxW="80%" />
+                            </HStack>
+                        </FormControl>
+
+                        <FormControl mt={4}>
+                            <HStack spacing={6}>
+                                <FormLabel>Discription</FormLabel>
+                                <Input maxW="80%" />
+                            </HStack>
+                        </FormControl>
 
                     </ModalBody>
 
@@ -74,6 +94,7 @@ export const AddMetadata = (props: Props) => {
                         </Button>
                         <Button onClick={onClose}>Cancel</Button>
                     </ModalFooter>
+
                 </ModalContent>
             </Modal>
         </>

@@ -46,7 +46,7 @@ export const Sidebar = ({ children }: Props) => {
                     />
                     <NavItem navSize={navSize} icon={FiCalendar} title="Calendar" link="/" />
                     <NavItem navSize={navSize} icon={FiUser} title="Clients" link="/calendar" />
-                    <NavItem navSize={navSize} icon={FiBriefcase} title="Reports" link="/calendar" />
+                    <NavItem navSize={navSize} icon={FiBriefcase} title="Doctypes" link="/doctypes" />
                     <NavItem navSize={navSize} icon={FiSettings} title="Settings" link="/settings" />
                 </Flex>
             </Flex>
