@@ -1,4 +1,4 @@
-import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Switch, Text, useDisclosure } from '@chakra-ui/react'
+import { Badge, Box, Button, chakra, Divider, Flex, FormLabel, Heading, HStack, Input, Stack, useDisclosure } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
 import { AddMetadata } from '../AddMetadata/AddMetadata'
 

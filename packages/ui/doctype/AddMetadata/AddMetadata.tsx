@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, Switch, useDisclosure } from '@chakra-ui/react'
+import { Button, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { ShowFieldTypes } from '../common/ShowFieldTypes/ShowFieldTypes'
 // import Image from 'next/image'
@@ -67,8 +67,8 @@ export const AddMetadata = (props: Props) => {
                         <FormControl mt={4}>
                             <Stack spacing={2}>
                                 <FormLabel>Default Validations</FormLabel>
-                                <Switch>isRequired</Switch>
-                                <Switch>readOnly</Switch>
+                                <Checkbox >isRequired</Checkbox>
+                                <Checkbox >readOnly</Checkbox>
                             </Stack>
                         </FormControl>
 
