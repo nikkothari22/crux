@@ -1,16 +1,21 @@
 import React, { ReactElement } from 'react'
 import AdminPanelPage from '../../components/AdminPanelPage'
-import { CreateNewDoctypeUI } from "ui/doctype";
+import { CreateDocTypeForm } from "ui/doctype";
 import ProtectedPageProvider from '../../auth/ProtectedPageProvider';
+import { DocField, DocType } from 'types/doctypes';
 
 interface Props {
 }
 
 const CreateNewDoctype = (props: Props) => {
+
+    const createDoctype = (doctypeData: DocType, docFields: DocField) => {
+
+    }
     return (
         <>
             <ProtectedPageProvider>
-                <CreateNewDoctypeUI />
+                <CreateDocTypeForm create={createDoctype} />
             </ProtectedPageProvider>
         </>
     );

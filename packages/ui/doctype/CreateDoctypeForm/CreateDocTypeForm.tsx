@@ -1,14 +1,19 @@
 import { Badge, Box, Button, chakra, Divider, Flex, FormLabel, Heading, HStack, Input, Stack, useDisclosure } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
-import { AddMetadata } from '../AddMetadata/AddMetadata'
+import { DocType, DocField } from 'types/doctypes'
+import { DocFieldForm } from '../common/DocFieldForm/DocFieldForm'
 
 interface props {
-
+    create: (doctypeData: DocType, docFields: DocField) => void
 }
 
-export const CreateNewDoctypeUI = (props: props) => {
+export const CreateDocTypeForm = ({ create }: props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const createDocType = () => {
+        // create()
+    }
 
     return (
         <>
@@ -63,7 +68,7 @@ export const CreateNewDoctypeUI = (props: props) => {
                         </Stack>
                     </Stack>
                     <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
-                    <AddMetadata />
+                    <DocFieldForm />
                 </Box>
 
             </chakra.form>

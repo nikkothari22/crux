@@ -1,6 +1,6 @@
 import { Button, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
-import { ShowFieldTypes } from '../common/ShowFieldTypes/ShowFieldTypes'
+import { ShowFieldTypes } from '../ShowFieldTypes/ShowFieldTypes'
 // import Image from 'next/image'
 // import AddMetadataImage from '../../../assets/images/AddMetadataImage.svg'
 
@@ -8,7 +8,7 @@ interface Props {
 
 }
 
-export const AddMetadata = (props: Props) => {
+export const DocFieldForm = (props: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [dataType, setDataType] = useState("")

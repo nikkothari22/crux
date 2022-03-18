@@ -1,10 +1,4 @@
-import React from 'react'
-
-interface Props {
-    dataType: string
-}
-
-export const getFieldTypes = ({ dataType }: Props) => {
+export const getFieldTypes = (dataType: string) => {
 
     var fieldTypes = [""]
 

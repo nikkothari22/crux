@@ -1,6 +1,6 @@
 import { FormControl, FormLabel, Select, Stack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { getFieldTypes } from '../GetFieldTypes/GetFieldTypes'
+import { getFieldTypes } from '../getFieldTypes'
 
 interface Props {
     dataType: string
@@ -8,7 +8,7 @@ interface Props {
 
 export const ShowFieldTypes = ({ dataType }: Props) => {
 
-    const fieldTypes = getFieldTypes({ dataType })
+    const fieldTypes = getFieldTypes(dataType)
     const [fieldType, setFieldType] = useState("")
 
     return (
