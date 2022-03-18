@@ -5,7 +5,7 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react'
-import { DividerWithText } from '../../layout'
+import { AlertBanner, DividerWithText } from '../../layout'
 import { EmailPasswordForm, FormCard, getSocialButtonPropsFromProvider, Header, SocialButton } from '../common'
 import { CustomError, LoginProvider, LoginSettings } from 'types'
 import NextLink from 'next/link'
@@ -41,6 +41,9 @@ export const SignupForm = ({ metadata, callback, state }: Props) => {
                     <Header text={text?.signup} heading={heading.signup} logo={logo} />
 
                     <FormCard>
+                        {state?.error !== null &&
+                            <AlertBanner status='error' mb="3">{state?.error.message} [{state?.error.code}]</AlertBanner>
+                        }
                         {providers.includes("password") &&
                             <>
                                 <EmailPasswordForm

@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { getApps, initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from "firebase/storage";
 import { getAuth } from 'firebase/auth'
@@ -14,8 +14,11 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase once
+if (!getApps().length) {
+    console.log("Test")
+    initializeApp(firebaseConfig);
+}
 
 const firestore = getFirestore()
 const storage = getStorage()

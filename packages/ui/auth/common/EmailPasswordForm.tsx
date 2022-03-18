@@ -21,7 +21,6 @@ import { HiEye, HiEyeOff } from 'react-icons/hi'
 import NextLink from 'next/link'
 import { useForm } from 'react-hook-form'
 import { CustomError } from 'types'
-import { AlertBanner } from '../../layout'
 
 interface Props extends HTMLChakraProps<'form'> {
     page: 'login' | 'signup',
@@ -49,9 +48,6 @@ export const EmailPasswordForm = ({ page, callback, state, ...props }: Props) =>
             onSubmit={handleSubmit(onSubmit)}
             {...props}
         >
-            {state?.error !== null &&
-                <AlertBanner status='error' mb="3">{state?.error.message} [{state?.error.code}]</AlertBanner>
-            }
             <Stack spacing="4">
                 <FormControl id="email">
                     <FormLabel>Email address</FormLabel>

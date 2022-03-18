@@ -1,13 +1,20 @@
-import { useFirestoreCollectionPathFetch } from "../customHooks/FirestoreHooks"
-import { LoginSettings } from 'types'
+import { doc, getDoc } from "firebase/firestore";
+import { LoginSettings } from "types";
+import { firestore } from "../config/firebaseInit";
 
-const GetLoginSettingsFromDatabase = () => {
+const GetLoginSettingsFromDatabase = async (): Promise<LoginSettings> => {
 
-    const [data, error] = useFirestoreCollectionPathFetch<LoginSettings>("crux_system_settings/settings")
+    const docRef = doc(firestore, "crux_system_settings", "login");
+    const docSnap = await getDoc(docRef);
 
-    if (data.length !== 0 && error === null) {
-        return data
+    if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        let loginSettings: LoginSettings = docSnap.data().settings as LoginSettings;
+        return loginSettings
     } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+
         return {
             logo: {
                 light: "https://supabase.com/brand-assets/supabase-logo-wordmark--light.svg",

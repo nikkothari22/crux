@@ -1,31 +1,38 @@
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LoginProvider, LoginSettings } from 'types'
 import { LoginForm } from 'ui/auth'
 import { auth } from "../config/firebaseInit";
 import { Error } from "../customHooks/FirestoreHooks";
 import { signInWithEmailAndPassword, getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import getLoginSettingsFromDatabase from '../utils/getLoginSettingsFromDatabase'
-import UserContext from '../commonFunctions/userContext'
+import { useAuth } from '../context/userContext';
+import { useRouter } from 'next/router';
 
-interface Props {
-    metadata: LoginSettings
-}
+const Login = () => {
 
-const Login = ({ metadata }: Props) => {
+    const { loading, authUser } = useAuth();
+    const router = useRouter();
 
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<Error | null>(null);
+    const [loginSettings, setLoginSettings] = useState<null | LoginSettings>(null)
+    const [loadingSettings, setLoadingSettings] = useState(true)
 
-    const router = useRouter()
-    const user = useContext(UserContext)
+    //State to track whether the system is attempting to login
+    const [isLoggingIn, setIsLoggingIn] = useState(false)
+    const [loginError, setLoginError] = useState<Error | null>(null);
 
+    //Fetch login settings on mount if user is not logged in. Else redirect to home page
     useEffect(() => {
-        if (user) {
-            router.replace('/')
+        if (!loading) {
+            if (authUser) {
+                router.replace('/')
+            } else {
+                getLoginSettingsFromDatabase().then(s => {
+                    setLoginSettings(s)
+                    setLoadingSettings(false)
+                })
+            }
         }
-    }, [user, router])
+    }, [loading, authUser])
 
     const loginWithProvider = (provider: LoginProvider,
         options?: { email?: string, password?: string }
@@ -41,16 +48,15 @@ const Login = ({ metadata }: Props) => {
     /** Function to login using email and password */
     const passwordLogin = (email: string, password: string) => {
 
-        setLoading(true)
+        setIsLoggingIn(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((result) => {
-                // router.replace('/')
                 // The signed-in user info.
                 // const user = result.user
             })
             .catch((error) => {
-                setError(error);
-                setLoading(false);
+                setLoginError(error);
+                setIsLoggingIn(false);
             });
     }
 
@@ -60,47 +66,28 @@ const Login = ({ metadata }: Props) => {
         const googleProvider = new GoogleAuthProvider();
         const googleAuth = getAuth();
 
+        setIsLoggingIn(true)
         signInWithPopup(googleAuth, googleProvider)
             .then((result) => {
                 // The signed-in user info.
                 // const user = result.user
             }).catch((error) => {
-                setError(error);
+                setLoginError(error);
+                setIsLoggingIn(false);
                 console.error(error)
             });
     };
 
     return (
         <>
-            <LoginForm metadata={metadata}
+            {loadingSettings ? <p>Loading...</p> : <LoginForm metadata={loginSettings}
                 callback={loginWithProvider}
                 state={{
-                    loading, error
-                }} />
+                    loading: isLoggingIn, error: loginError
+                }} />}
+
         </>
     )
-}
-
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-
-    const { user } = await auth.api.getUserByCookie(req)
-
-    if (user) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false
-            }
-        }
-    } else {
-        return {
-            props: {
-                metadata: await getLoginSettingsFromDatabase(),
-            },
-        };
-    }
-
 }
 
 export default Login
