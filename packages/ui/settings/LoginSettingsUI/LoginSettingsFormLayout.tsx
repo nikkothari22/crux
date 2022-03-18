@@ -1,5 +1,5 @@
 import { Box, chakra, Text, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input, Switch, Button, Heading } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LoginProvider, LoginSettings } from 'types';
 import { BreadCrumb } from '../../layout';
@@ -55,7 +55,7 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
                 signup: data.signupText,
             },
             signup_enabled: isSignupEnabled,
-            providers: []
+            providers: providers
         }).then((x) => {
             console.log("data from update", x)
         }).catch((error) => {
@@ -136,7 +136,7 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
                             Enable Email Signup
                         </Text>
                         <Switch
-                            defaultChecked={true}
+                            isChecked={isSignupEnabled}
                             onChange={() => setSignup(!isSignupEnabled)}
                         />
                     </HStack>
@@ -195,7 +195,7 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
                 }
                 <Divider mt={{ base: 5, md: 6, lg: 8 }} maxW="90vw" />
 
-                <LoginProviders />
+                <LoginProviders providers={providers} updateSettings={setProviders} />
 
                 <HStack spacing={4} mt={10} mb={16}>
                     <Button
