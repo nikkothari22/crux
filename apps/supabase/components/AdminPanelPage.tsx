@@ -30,7 +30,7 @@ const AdminPanelPage = ({ children }: Props) => {
         })
 
         //Fetch user
-        setUserEmail(supabase.auth.user().email)
+        setUserEmail(supabase.auth.user()?.email)
 
     }, [])
 
