@@ -11,15 +11,15 @@
   "dependencies": {
     "@chakra-ui/react": "^1.7.3",
     "@supabase/supabase-js": "^1.28.5",
-    "next": "12.0.7",
+    "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "ui": "*"
   },
   "devDependencies": {
-    "@types/react": "17.0.37",
+    "@types/react": "17.0.40",
     "config": "*",
-    "eslint": "7.32.0",
+    "eslint": "8.11.0",
     "next-transpile-modules": "9.0.0",
     "tsconfig": "*",
     "typescript": "^4.5.3",
