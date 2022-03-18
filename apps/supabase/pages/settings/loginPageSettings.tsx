@@ -13,11 +13,13 @@ const LoginPageSettings = (props: Props) => {
 
     const updateSettings = async (loginSettings: LoginSettings) => {
         // console.log("updated settings in db", loginSettings)
-        const { data, error } = await supabase
+        const { data, error, status, statusText } = await supabase
             .from('crux_system_settings')
-            .update({
-                settings: loginSettings
-            })
+            .update({ settings: loginSettings, updated_on: (new Date()).toISOString(), updated_by: supabase.auth.user().email ?? "admin" })
+            .match({ name: 'login' })
+
+
+        console.log(status, statusText)
         if (error) {
             console.error("test", error)
             throw error
