@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import AdminPanelPage from '../components/AdminPanelPage'
-import { DoctypesUI } from "ui/doctype";
+import { DocTypesList } from "ui/doctype";
 import enforceAuthenticated from '../utils/enforceAuthenticated'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 const Doctypes = (props: Props) => {
     return (
         <>
-            <DoctypesUI />
+            <DocTypesList />
         </>
     );
 }
