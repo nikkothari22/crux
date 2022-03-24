@@ -109,8 +109,9 @@ export const DocFieldForm = (props: Props) => {
                         <ModalFooter>
                             <Button colorScheme='blue' mr={3}
                                 type="submit"
-                                isLoading={updating}
-                                loadingText="Saving...">
+                            // isLoading={updating}
+                            // loadingText="Saving..."
+                            >
                                 Save
                             </Button>
                             <Button onClick={onClose}>Cancel</Button>

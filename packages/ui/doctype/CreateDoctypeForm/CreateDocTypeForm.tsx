@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface props {
-    create: (doctypeData: DocType, docFields: DocField) => Promise<any>
+    create: (doctypeData: DocType, docFields: DocField) => void
 }
 
 export const CreateDocTypeForm = ({ create }: props) => {
@@ -19,10 +19,9 @@ export const CreateDocTypeForm = ({ create }: props) => {
     const toast = useToast()
 
     const createDocType = (data: DocType) => {
-        //create
         console.log(data)
         // setUpdating(true)
-        setDocTypeName(data.name)
+        // setDocTypeName(data.name)
         // create().then((x) => {
         //     console.log("created doctype info:", x)
         //     toast({
@@ -64,8 +63,9 @@ export const CreateDocTypeForm = ({ create }: props) => {
                         ml={{ base: 16, md: 0, lg: 0 }}
                         colorScheme="blue"
                         type="submit"
-                        isLoading={updating}
-                        loadingText="Saving...">
+                    // isLoading={updating}
+                    // loadingText="Saving..."
+                    >
                         Save
                     </Button>
                 </Flex>
