@@ -222,7 +222,3 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
         </>
     )
 };
-
-function getLoginSettingsFromDatabase() {
-    throw new Error('Function not implemented.');
-}

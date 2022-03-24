@@ -1,5 +1,7 @@
-import { Button, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react'
+import { Button, chakra, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { DocField } from 'types/doctypes'
 import { ShowFieldTypes } from '../ShowFieldTypes/ShowFieldTypes'
 // import Image from 'next/image'
 // import AddMetadataImage from '../../../assets/images/AddMetadataImage.svg'
@@ -12,6 +14,14 @@ export const DocFieldForm = (props: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [dataType, setDataType] = useState("")
+    const [updating, setUpdating] = useState(false)
+    const { register, handleSubmit, formState: { errors } } = useForm<DocField>()
+
+    const createDocField = (data: DocField) => {
+        //create
+        // setUpdating(true)
+        console.log(data)
+    }
 
     return (
         <>
@@ -33,67 +43,80 @@ export const DocFieldForm = (props: Props) => {
                 <ModalContent>
                     <ModalHeader>Add Field</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody pb={6}>
 
-                        <FormControl>
-                            <FormLabel>Name</FormLabel>
-                            <Input placeholder="Column name" />
-                        </FormControl>
+                    <chakra.form id="docfieldForm" onSubmit={handleSubmit(createDocField)}>
 
-                        <FormControl mt={4}>
-                            <FormLabel>Selector</FormLabel>
-                            <Input placeholder="Variable name for this field in your table" />
-                        </FormControl>
+                        <ModalBody pb={6}>
 
-                        <FormControl mt={4}>
-                            <Stack spacing={2}>
-                                <FormLabel>Data Type</FormLabel>
-                                <Select
-                                    isRequired
-                                    placeholder='Select data type'
-                                    value={dataType}
-                                    onChange={(e) => setDataType(e.target.value)}>
-                                    <option value='string'>String</option>
-                                    <option value='int'>Int</option>
-                                    <option value='float'>Float</option>
-                                    <option value='timestamp'>Timestamp</option>
-                                    <option value='boolean'>Boolean</option>
-                                </Select>
-                            </Stack>
-                        </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Name</FormLabel>
+                                <Input
+                                    {...register("name")}
+                                    placeholder="Column name" />
+                            </FormControl>
 
-                        <ShowFieldTypes dataType={dataType} />
+                            <FormControl mt={4} isRequired>
+                                <FormLabel>Selector</FormLabel>
+                                <Input
+                                    {...register("label")}
+                                    placeholder="Variable name for this field in your table" />
+                            </FormControl>
 
-                        <FormControl mt={4}>
-                            <Stack spacing={2}>
-                                <FormLabel>Default Validations</FormLabel>
-                                <Checkbox >isRequired</Checkbox>
-                                <Checkbox >readOnly</Checkbox>
-                            </Stack>
-                        </FormControl>
+                            <FormControl mt={4}>
+                                <Stack spacing={2}>
+                                    <FormLabel>Data Type</FormLabel>
+                                    <Select
+                                        isRequired
+                                        {...register("dataType")}
+                                        placeholder='Select data type'
+                                        value={dataType}
+                                        onChange={(e) => setDataType(e.target.value)}>
+                                        <option value='string'>String</option>
+                                        <option value='int'>Int</option>
+                                        <option value='float'>Float</option>
+                                        <option value='timestamp'>Timestamp</option>
+                                        <option value='boolean'>Boolean</option>
+                                    </Select>
+                                </Stack>
+                            </FormControl>
 
-                        <FormControl mt={4}>
-                            <HStack>
-                                <FormLabel>Default Value</FormLabel>
-                                <Input maxW="80%" />
-                            </HStack>
-                        </FormControl>
+                            <ShowFieldTypes dataType={dataType} />
 
-                        <FormControl mt={4}>
-                            <HStack spacing={6}>
-                                <FormLabel>Discription</FormLabel>
-                                <Input maxW="80%" />
-                            </HStack>
-                        </FormControl>
+                            <FormControl mt={4}>
+                                <Stack spacing={2}>
+                                    <FormLabel>Default Validations</FormLabel>
+                                    <Checkbox {...register("metadata.isRequired")}>isRequired</Checkbox>
+                                    <Checkbox {...register("metadata.isReadOnly")}>readOnly</Checkbox>
+                                </Stack>
+                            </FormControl>
 
-                    </ModalBody>
+                            <FormControl mt={4}>
+                                <HStack>
+                                    <FormLabel>Default Value</FormLabel>
+                                    <Input maxW="80%" />
+                                </HStack>
+                            </FormControl>
 
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3}>
-                            Save
-                        </Button>
-                        <Button onClick={onClose}>Cancel</Button>
-                    </ModalFooter>
+                            <FormControl mt={4}>
+                                <HStack spacing={6}>
+                                    <FormLabel>Discription</FormLabel>
+                                    <Input maxW="80%" />
+                                </HStack>
+                            </FormControl>
+
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button colorScheme='blue' mr={3}
+                                type="submit"
+                                isLoading={updating}
+                                loadingText="Saving...">
+                                Save
+                            </Button>
+                            <Button onClick={onClose}>Cancel</Button>
+                        </ModalFooter>
+
+                    </chakra.form>
 
                 </ModalContent>
             </Modal>
