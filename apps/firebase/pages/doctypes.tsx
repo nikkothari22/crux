@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import AdminPanelPage from '../components/AdminPanelPage'
 import { DocTypesList } from "ui/doctype";
-import enforceAuthenticated from '../utils/enforceAuthenticated'
+import ProtectedPageProvider from '../auth/ProtectedPageProvider';
 
 interface Props {
 }
@@ -9,7 +9,9 @@ interface Props {
 const Doctypes = (props: Props) => {
     return (
         <>
-            <DocTypesList />
+            <ProtectedPageProvider>
+                <DocTypesList />
+            </ProtectedPageProvider>
         </>
     );
 }
@@ -21,7 +23,5 @@ Doctypes.getLayout = function getLayout(page: ReactElement) {
         </AdminPanelPage>
     )
 }
-
-export const getServerSideProps = enforceAuthenticated();
 
 export default Doctypes;
