@@ -1,39 +1,51 @@
 import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
-import { DocType, DocField } from 'types/doctypes'
+import { DocType } from 'types/doctypes'
 import { DocFieldForm } from '../common/DocFieldForm/DocFieldForm'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 
 interface props {
-    create: (doctypeData: DocType, docFields: DocField) => void
+    create: (doctypeData: DocType) => Promise<any>
 }
 
 export const CreateDocTypeForm = ({ create }: props) => {
 
-    const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
-    const [error, setError] = useState(null)
+    const [saved, isSaved] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm<DocType>()
     const [docTypeName, setDocTypeName] = useState("Untitled Doctype1")
     const toast = useToast()
+    const router = useRouter()
 
-    const createDocType = (data: DocType) => {
-        console.log(data)
-        // setUpdating(true)
-        // setDocTypeName(data.name)
-        // create().then((x) => {
-        //     console.log("created doctype info:", x)
-        //     toast({
-        //         title: 'DocType created',
-        //         status: 'success',
-        //         duration: 1000,
-        //         isClosable: true,
-        //     })
-        // }).catch((error) => {
-        //     console.error("error creating doctype", error)
-        // })
-        //     .finally(() => setUpdating(false))
+    const createDocType = (doctypeData: DocType) => {
+        setUpdating(true)
+        create(doctypeData).then((x) => {
+            console.log("created doctype:", x)
+            toast({
+                title: 'DocType created',
+                status: 'success',
+                duration: 1000,
+                position: 'bottom',
+                variant: 'solid',
+                isClosable: true,
+            })
+            isSaved(true)
+            setDocTypeName(doctypeData.name)
+            router.push(`/doctypes/${doctypeData.name}`)
+        }).catch((error) => {
+            console.error("error creating doctype", error)
+            toast({
+                duration: 1000,
+                position: 'bottom',
+                variant: 'solid',
+                isClosable: true,
+                status: 'error',
+                description: `There was an error while processing your request. ${error.message}`
+            })
+        })
+            .finally(() => setUpdating(false))
     }
 
     return (
@@ -53,18 +65,25 @@ export const CreateDocTypeForm = ({ create }: props) => {
                         <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
                             {docTypeName}
                         </Heading>
-                        <Badge ml="1"
-                            colorScheme="orange">
-                            not saved
-                        </Badge>
+                        {saved ?
+                            <Badge ml="1"
+                                colorScheme="green">
+                                saved
+                            </Badge>
+                            :
+                            <Badge ml="1"
+                                colorScheme="orange">
+                                not saved
+                            </Badge>
+                        }
                     </HStack>
                     <Button
                         fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                         ml={{ base: 16, md: 0, lg: 0 }}
                         colorScheme="blue"
                         type="submit"
-                    // isLoading={updating}
-                    // loadingText="Saving..."
+                        isLoading={updating}
+                        loadingText="Saving..."
                     >
                         Save
                     </Button>

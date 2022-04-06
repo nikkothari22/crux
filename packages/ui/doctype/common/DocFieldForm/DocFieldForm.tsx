@@ -1,7 +1,8 @@
-import { Button, chakra, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, chakra, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DocField } from 'types/doctypes'
+import { DocFieldTable } from '../DocFieldTable/DocFieldTable'
 import { ShowFieldTypes } from '../ShowFieldTypes/ShowFieldTypes'
 // import Image from 'next/image'
 // import AddMetadataImage from '../../../assets/images/AddMetadataImage.svg'
@@ -16,12 +17,14 @@ export const DocFieldForm = (props: Props) => {
     const [dataType, setDataType] = useState("")
     const [updating, setUpdating] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm<DocField>()
+    const toast = useToast()
 
     const createDocField = (data: DocField) => {
-        //create
-        // setUpdating(true)
         console.log(data)
+        // setUpdating(true)
+
     }
+    // console.log(errors)
 
     return (
         <>
@@ -35,6 +38,9 @@ export const DocFieldForm = (props: Props) => {
                     width={500}
                     height={500}
                 /> */}
+                <Box mt={10} pb={8} pr={16}>
+                    <DocFieldTable />
+                </Box>
                 <Button colorScheme="blue" maxW="60" onClick={onOpen}>Add Field</Button>
             </Stack>
 

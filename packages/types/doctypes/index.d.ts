@@ -1,8 +1,6 @@
 export interface DocType {
     /** Visual name of the doctype */
     name: string,
-    /** Formatted safe string name of the doctype */
-    id: string,
     /** Data source of the doctype - collection path for Firebase, table name for Supabase */
     source: string
 }
