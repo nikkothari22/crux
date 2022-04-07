@@ -12,6 +12,7 @@ const CreateNewDoctype = (props: Props) => {
     const createDoctype = (doctypeData: DocType, docFields: DocField) => {
 
     }
+
     return (
         <>
             <ProtectedPageProvider>

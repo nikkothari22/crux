@@ -51,14 +51,21 @@ export const CreateDocTypeForm = ({ create }: props) => {
     return (
         <>
             <BreadCrumb
-                currentPage="Create new doctype"
-                previousPage="Doctypes"
-                previousPageLink="/doctypes" />
+                pages={
+                    [{
+                        name: "Doctypes",
+                        url: '/doctypes',
+                    },
+                    {
+                        name: "Create New Doctype",
+                        url: '/doctypes/create',
+                        isCurrent: true
+                    }]
+                } />
 
             <chakra.form id="doctypeForm" onSubmit={handleSubmit(createDocType)}>
 
                 <Flex
-                    mr="16"
                     justifyContent="space-between"
                     align="center">
                     <HStack>

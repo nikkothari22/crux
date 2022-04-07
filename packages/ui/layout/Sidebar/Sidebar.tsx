@@ -14,7 +14,7 @@ export const Sidebar = ({ children }: Props) => {
     const [navSize, setNavSize] = useState("small")
 
     return (
-        <Box>
+        <Flex>
             <Flex
                 pos="fixed"
                 height="full"
@@ -45,16 +45,16 @@ export const Sidebar = ({ children }: Props) => {
                         }}
                     />
                     <NavItem navSize={navSize} icon={FiCalendar} title="Calendar" link="/" />
-                    <NavItem navSize={navSize} icon={FiUser} title="Clients" link="/calendar" />
+                    <NavItem navSize={navSize} icon={FiUser} title="Users" link="/" />
                     <NavItem navSize={navSize} icon={FiBriefcase} title="Doctypes" link="/doctypes" />
                     <NavItem navSize={navSize} icon={FiSettings} title="Settings" link="/settings" />
                 </Flex>
             </Flex>
-            <Box pl={navSize == "small" ? "80px" : "180px"} pt={4}>
+            <Box pl={navSize == "small" ? "80px" : "180px"} pt={4} pr="6" width="full">
                 <main>
                     {children}
                 </main>
             </Box>
-        </Box>
+        </Flex>
     )
 }

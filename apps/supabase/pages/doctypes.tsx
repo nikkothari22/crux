@@ -11,7 +11,7 @@ const Doctypes = (props: Props) => {
 
     const getDocTypesFromDatabase = async () => {
         let { data, error } = await supabase.from('crux_doctypes')
-            .select(`name`)
+            .select(`name, source, updated_on`)
         if (error) {
             console.error("error:", error)
             throw error

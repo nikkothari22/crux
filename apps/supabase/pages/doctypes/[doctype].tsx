@@ -16,6 +16,12 @@ const EditDoctype = (props: Props) => {
     const router = useRouter()
     const { doctype } = router.query
 
+    const doctypeName = typeof doctype === "string" ? doctype : doctype[0]
+
+    const getDoctypeData = () => {
+        return getDocTypeDetailsFromDatabase(doctypeName)
+    }
+
     const updateDoctypeMetadata = async (doctypeData: DocType) => {
 
         //TODO: Dev research: Check if primary key can be edited
@@ -29,7 +35,7 @@ const EditDoctype = (props: Props) => {
 
                 }
             }, { returning: 'minimal' })
-            .match({ name: doctypeData.name })
+            .match({ name: doctypeName })
         // console.log("edited doctype", DocType)
         console.log(status, statusText)
         if (error) {
@@ -40,12 +46,26 @@ const EditDoctype = (props: Props) => {
         }
     }
 
+    const deleteDoctype = async () => {
+        const { data, error } = await supabase
+            .from('crux_doctypes')
+            .delete()
+            .match({ name: doctypeName })
+
+        if (error) {
+            console.error("error:", error)
+            throw error
+        } else {
+            return
+        }
+    }
+
     return (
         <>
             <EditDocTypeForm
-                getData={getDocTypeDetailsFromDatabase}
+                getData={getDoctypeData}
                 edit={updateDoctypeMetadata}
-                doctype={typeof doctype === "string" ? doctype : doctype[0]} />
+                deleteDoctype={deleteDoctype} />
         </>
     );
 }

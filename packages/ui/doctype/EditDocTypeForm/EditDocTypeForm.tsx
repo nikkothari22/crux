@@ -1,34 +1,44 @@
-import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Spinner, Stack, useToast } from '@chakra-ui/react'
+import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons'
+import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Menu, MenuButton, MenuItem, MenuList, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { CustomError } from 'types'
 import { DocType } from 'types/doctypes'
-import { BreadCrumb } from '../../layout'
+import { AlertBanner, BreadCrumb } from '../../layout'
 import { DocFieldForm } from '../common'
-
+import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
+import { useRouter } from 'next/router'
 interface Props {
-    getData: (doctype: string) => Promise<any>,
-    edit: (doctypeData: DocType) => Promise<any>
-    doctype: string
+    getData: () => Promise<DocType>,
+    edit: (doctypeData: DocType) => Promise<any>,
+    deleteDoctype: () => Promise<void>,
 }
 
-export const EditDocTypeForm = ({ getData, edit, doctype }: Props) => {
+export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
 
     const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<CustomError | null>(null)
     const [saved, isSaved] = useState(true)
+    const [doctypeData, setDoctypeData] = useState<DocType | null>(null)
     const { register, setValue, handleSubmit, formState: { errors } } = useForm<DocType>()
-    const [docTypeName, setDocTypeName] = useState(doctype)
     const toast = useToast()
+    const { onOpen, isOpen, onClose } = useDisclosure()
+    const router = useRouter()
 
     useEffect(() => {
-        getData(doctype).then((data) => {
-            console.log(data)
-            setValue('name', data.name)
-            setValue('source', data.source)
-            setError(null)
-            setLoading(false)
-        });
+        getData()
+            .then((data) => {
+                console.log(data)
+                setDoctypeData(data)
+                setValue('name', data.name)
+                setValue('source', data.source)
+                setError(null)
+            })
+            .catch((e) => setError(e))
+            .finally(() => {
+                setLoading(false)
+            })
     }, []);
 
     const editDocType = (doctypeData: DocType) => {
@@ -44,105 +54,136 @@ export const EditDocTypeForm = ({ getData, edit, doctype }: Props) => {
                 isClosable: true,
             })
             isSaved(true)
-            setDocTypeName(doctypeData.name)
-        }).catch((error) => {
-            console.error("error creating doctype", error)
-            toast({
-                duration: 1000,
-                position: 'bottom',
-                variant: 'solid',
-                isClosable: true,
-                status: 'error',
-                description: `There was an error while processing your request. ${error.message}`
-            })
-        })
+        }).catch((error) => showErrorToast(error))
             .finally(() => setUpdating(false))
+    }
+
+    const deleteAction = async () => {
+        return deleteDoctype()
+            .then(() => {
+                //Reroute to list page
+                router.push(`/doctypes`)
+            })
+            .catch((error) => {
+                showErrorToast(error)
+            })
+
+    }
+
+    const showErrorToast = (error: Error) => {
+        console.error("error creating doctype", error)
+        toast({
+            duration: 1000,
+            position: 'bottom',
+            variant: 'solid',
+            isClosable: true,
+            status: 'error',
+            description: `There was an error while processing your request. ${error.message}`
+        })
     }
 
     return (
         <>
             <BreadCrumb
-                currentPage={doctype}
-                previousPage="Doctypes"
-                previousPageLink="/doctypes" />
+                pages={
+                    [{
+                        name: "Doctypes",
+                        url: '/doctypes',
+                    },
+                    {
+                        name: doctypeData?.name ?? "Edit Doctype",
+                        url: `/doctypes/${doctypeData?.name ?? ""}`,
+                        isCurrent: true
+                    }]
+                } />
 
             {loading ? <Flex align="center" justify="center" height="50vh" width="full"><Spinner /></Flex> :
 
-                <chakra.form id="doctypeForm" onSubmit={handleSubmit(editDocType)}>
+                error ? <AlertBanner status="error" heading="There was an error while fetching the request.">{error.message} - {error.code}</AlertBanner> :
 
-                    <Flex
-                        mr="16"
-                        justifyContent="space-between"
-                        align="center">
-                        <HStack>
-                            <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
-                                {docTypeName}
-                            </Heading>
-                            {saved ?
-                                <Badge ml="1"
-                                    colorScheme="green">
-                                    saved
-                                </Badge>
-                                :
-                                <Badge ml="1"
-                                    colorScheme="orange">
-                                    not saved
-                                </Badge>
-                            }
-                        </HStack>
-                        <Button
-                            fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                            ml={{ base: 16, md: 0, lg: 0 }}
-                            colorScheme="blue"
-                            type="submit"
-                            isLoading={updating}
-                            loadingText="Saving..."
-                        >
-                            Save
-                        </Button>
-                    </Flex>
-                    <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
+                    <chakra.form id="doctypeForm" onSubmit={handleSubmit(editDocType)}>
 
-                    <Box>
-                        <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
+                        <Flex
+                            justifyContent="space-between"
+                            align="center">
+                            <HStack>
+                                <Heading fontSize="3xl">
+                                    {doctypeData?.name ?? ""}
+                                </Heading>
+                                {saved ?
+                                    <Badge ml="1"
+                                        colorScheme="green">
+                                        saved
+                                    </Badge>
+                                    :
+                                    <Badge ml="1"
+                                        colorScheme="orange">
+                                        not saved
+                                    </Badge>
+                                }
+                            </HStack>
+                            <ButtonGroup size={'md'}>
+                                <Menu>
+                                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                                        Actions
+                                    </MenuButton>
+                                    <MenuList>
+                                        <MenuItem onClick={onOpen} icon={<DeleteIcon />}>Delete</MenuItem>
+                                    </MenuList>
+                                </Menu>
+                                <Button
+                                    colorScheme="blue"
+                                    type="submit"
+                                    isLoading={updating}
+                                    loadingText="Saving..."
+                                >
+                                    Save
+                                </Button>
+                            </ButtonGroup>
+                        </Flex>
+                        <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
 
-                            <FormControl
-                                isRequired>
-                                <Stack spacing={2}>
-                                    <FormLabel>
-                                        Name
-                                    </FormLabel>
-                                    <Input
-                                        isDisabled
-                                        {...register("name")}
-                                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                                        maxW="50vw"
-                                    />
-                                </Stack>
-                            </FormControl>
+                        <Box>
+                            <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
 
-                            <FormControl
-                                isRequired>
-                                <Stack spacing={2}>
-                                    <FormLabel>
-                                        Fetch from
-                                    </FormLabel>
-                                    <Input
-                                        isDisabled
-                                        {...register("source")}
-                                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                                        maxW="50vw"
-                                    />
-                                </Stack>
-                            </FormControl>
+                                <FormControl
+                                    isRequired>
+                                    <Stack spacing={2}>
+                                        <FormLabel>
+                                            Name
+                                        </FormLabel>
+                                        <Input
+                                            isDisabled
+                                            {...register("name")}
+                                            fontSize={{ base: '12px', md: '14px', lg: '16px' }}
+                                            maxW="50vw"
+                                        />
+                                    </Stack>
+                                </FormControl>
 
-                        </Stack>
-                        <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
-                        <DocFieldForm />
-                    </Box>
+                                <FormControl
+                                    isRequired>
+                                    <Stack spacing={2}>
+                                        <FormLabel>
+                                            Fetch from
+                                        </FormLabel>
+                                        <Input
+                                            isDisabled
+                                            {...register("source")}
+                                            fontSize={{ base: '12px', md: '14px', lg: '16px' }}
+                                            maxW="50vw"
+                                        />
+                                    </Stack>
+                                </FormControl>
 
-                </chakra.form>
+                            </Stack>
+                            <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
+                            <DocFieldForm />
+                        </Box>
+
+                    </chakra.form>
             }
+            <DeleteDoctype isOpen={isOpen} onClose={onClose} deleteAction={deleteAction} />
         </>
     )
 }
