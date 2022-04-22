@@ -1,4 +1,3 @@
-import { Heading } from '@chakra-ui/react';
 import React, { ReactElement } from 'react';
 import { BreadCrumb } from 'ui/layout';
 import ProtectedPageProvider from '../../auth/ProtectedPageProvider';
