@@ -1,10 +1,10 @@
 import { supabase } from '../config/supabaseInit'
 
-const getDocTypeDetailsFromDatabase = async (doctype: string) => {
+const getDoctypeDetailsFromDatabase = async (id: string) => {
 
     let { data, error } = await supabase.from('crux_doctypes')
-        .select(`name, source, metadata`)
-        .eq('name', doctype)
+        .select(`id, name, source, metadata`)
+        .eq('id', id)
         .maybeSingle()
 
     if (error) {
@@ -17,4 +17,4 @@ const getDocTypeDetailsFromDatabase = async (doctype: string) => {
     }
 }
 
-export default getDocTypeDetailsFromDatabase
+export default getDoctypeDetailsFromDatabase

@@ -1,50 +1,36 @@
-import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Stack, useToast } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
-import { DocType } from 'types/doctypes'
-import { DocFieldForm } from '../common/DocFieldForm/DocFieldForm'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { Doctype } from 'types/doctypes'
 
 interface props {
-    create: (doctypeData: DocType) => Promise<any>
+    create: (doctypeData: Doctype) => Promise<void>
 }
 
-export const CreateDocTypeForm = ({ create }: props) => {
+//TODO: Define better types for DocType form in useForm and form submission
+
+export const CreateDoctypeForm = ({ create }: props) => {
 
     const [updating, setUpdating] = useState(false)
-    const [saved, isSaved] = useState(false)
-    const { register, handleSubmit, formState: { errors } } = useForm<DocType>()
-    const [docTypeName, setDocTypeName] = useState("Untitled Doctype1")
+    const { register, handleSubmit, formState: { errors }, } = useForm<Doctype>()
     const toast = useToast()
-    const router = useRouter()
 
-    const createDocType = (doctypeData: DocType) => {
+    const createDoctype = (submittedData: Doctype) => {
         setUpdating(true)
-        create(doctypeData).then((x) => {
-            console.log("created doctype:", x)
-            toast({
-                title: 'DocType created',
-                status: 'success',
-                duration: 1000,
-                position: 'bottom',
-                variant: 'solid',
-                isClosable: true,
+        create(submittedData)
+            .catch((error) => {
+                console.error("error creating doctype", error)
+                toast({
+                    duration: 2000,
+                    position: 'bottom',
+                    variant: 'solid',
+                    isClosable: true,
+                    status: 'error',
+                    title: 'Error',
+                    description: `${error.message}`
+                })
             })
-            isSaved(true)
-            setDocTypeName(doctypeData.name)
-            router.push(`/doctypes/${doctypeData.name}`)
-        }).catch((error) => {
-            console.error("error creating doctype", error)
-            toast({
-                duration: 1000,
-                position: 'bottom',
-                variant: 'solid',
-                isClosable: true,
-                status: 'error',
-                description: `There was an error while processing your request. ${error.message}`
-            })
-        })
             .finally(() => setUpdating(false))
     }
 
@@ -63,26 +49,19 @@ export const CreateDocTypeForm = ({ create }: props) => {
                     }]
                 } />
 
-            <chakra.form id="doctypeForm" onSubmit={handleSubmit(createDocType)}>
+            <chakra.form id="doctypeForm" onSubmit={handleSubmit(createDoctype)}>
 
                 <Flex
                     justifyContent="space-between"
                     align="center">
                     <HStack>
                         <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
-                            {docTypeName}
+                            New Doctype
                         </Heading>
-                        {saved ?
-                            <Badge ml="1"
-                                colorScheme="green">
-                                saved
-                            </Badge>
-                            :
-                            <Badge ml="1"
-                                colorScheme="orange">
-                                not saved
-                            </Badge>
-                        }
+                        <Badge ml="1"
+                            colorScheme="orange">
+                            not saved
+                        </Badge>
                     </HStack>
                     <Button
                         fontSize={{ base: '12px', md: '14px', lg: '16px' }}
@@ -154,10 +133,10 @@ export const CreateDocTypeForm = ({ create }: props) => {
 
                     </Stack>
                     <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
-                    <DocFieldForm />
                 </Box>
 
             </chakra.form>
+
         </>
     )
 }

@@ -1,3 +1,3 @@
-export { DocTypesList } from "./DocTypesList/DocTypesList";
-export { CreateDocTypeForm } from "./CreateDoctypeForm/CreateDocTypeForm";
-export { EditDocTypeForm } from "./EditDocTypeForm/EditDocTypeForm";
+export { DoctypesList } from "./DoctypesList/DoctypesList";
+export { CreateDoctypeForm } from "./CreateDoctypeForm/CreateDoctypeForm";
+export { EditDoctypeForm } from "./EditDoctypeForm/EditDoctypeForm";

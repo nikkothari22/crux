@@ -3,18 +3,20 @@ import { BreadCrumb } from '../../layout'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
 
-interface DocTypeListElement {
+interface DoctypeListElement {
+    id: string,
     name: string,
     source: string,
-    updated_on: Date
+    updated_on: string,
+    created_at: string,
 }
 interface props {
     getDoctypes: () => Promise<any>,
 }
 
-export const DocTypesList = ({ getDoctypes }: props) => {
+export const DoctypesList = ({ getDoctypes }: props) => {
 
-    const [doctypeList, setDoctypeList] = useState<DocTypeListElement[]>([])
+    const [doctypeList, setDoctypeList] = useState<DoctypeListElement[]>([])
     useEffect(() => {
         getDoctypes().then((data) => {
             console.log(data)
@@ -53,6 +55,7 @@ export const DocTypesList = ({ getDoctypes }: props) => {
                                 <Th>Name</Th>
                                 <Th>Source</Th>
                                 <Th>Last Modified</Th>
+                                <Th>Created On</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -60,7 +63,7 @@ export const DocTypesList = ({ getDoctypes }: props) => {
                                 <Tr key={doctype.name}>
                                     <Td>
                                         <NextLink
-                                            href={`/doctypes/${doctype.name}`}>
+                                            href={`/doctypes/${doctype.id}`}>
                                             {doctype.name}
                                         </NextLink>
                                     </Td>
@@ -71,7 +74,12 @@ export const DocTypesList = ({ getDoctypes }: props) => {
                                     </Td>
                                     <Td>
                                         <Text>
-                                            {doctype.updated_on}
+                                            {doctype.updated_on.substring(0, 10)}
+                                        </Text>
+                                    </Td>
+                                    <Td>
+                                        <Text>
+                                            {doctype.created_at.substring(0, 10)}
                                         </Text>
                                     </Td>
                                 </Tr>

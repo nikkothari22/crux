@@ -3,31 +3,32 @@ import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, Fo
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CustomError } from 'types'
-import { DocType } from 'types/doctypes'
+import { Docfield, Doctype } from 'types/doctypes'
 import { AlertBanner, BreadCrumb } from '../../layout'
-import { DocFieldForm } from '../common'
 import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 import { useRouter } from 'next/router'
+
 interface Props {
-    getData: () => Promise<DocType>,
-    edit: (doctypeData: DocType) => Promise<any>,
-    deleteDoctype: () => Promise<void>,
+    getDoctypeData: () => Promise<Doctype>,
+    editDoctype: (id: string, doctypeData: Doctype) => Promise<Doctype>,
+    deleteDoctype: (id: string) => Promise<void>,
 }
 
-export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
+export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: Props) => {
 
     const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
     const [error, setError] = useState<CustomError | null>(null)
     const [saved, isSaved] = useState(true)
-    const [doctypeData, setDoctypeData] = useState<DocType | null>(null)
-    const { register, setValue, handleSubmit, formState: { errors } } = useForm<DocType>()
+    const [doctypeData, setDoctypeData] = useState<Doctype | null>(null)
+    const { register, setValue, handleSubmit, formState: { errors, isDirty }, reset } = useForm<Doctype>()
     const toast = useToast()
     const { onOpen, isOpen, onClose } = useDisclosure()
+    const [fields, setFields] = useState<Docfield[]>([])
     const router = useRouter()
 
     useEffect(() => {
-        getData()
+        getDoctypeData()
             .then((data) => {
                 console.log(data)
                 setDoctypeData(data)
@@ -41,44 +42,56 @@ export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
             })
     }, []);
 
-    const editDocType = (doctypeData: DocType) => {
-        setUpdating(true)
-        edit(doctypeData).then((x) => {
-            console.log("edited doctype:", x)
-            toast({
-                title: 'DocType saved',
-                status: 'success',
-                duration: 1000,
-                position: 'bottom',
-                variant: 'solid',
-                isClosable: true,
+    const updateDocType = (submittedData: Doctype) => {
+        if (doctypeData) {
+            console.log('Edit doctype called - form submission', submittedData)
+            setUpdating(true)
+            editDoctype(doctypeData?.id, submittedData).then((x) => {
+                console.log("edited doctype:", x)
+                toast({
+                    title: 'DocType saved',
+                    status: 'success',
+                    duration: 1000,
+                    position: 'bottom',
+                    variant: 'solid',
+                    isClosable: true,
+                })
+                isSaved(true)
+                reset({
+                    name: x.name,
+                    source: x.source
+                })
+                setDoctypeData(x)
             })
-            isSaved(true)
-        }).catch((error) => showErrorToast(error))
-            .finally(() => setUpdating(false))
+                .catch((error) => showErrorToast(error))
+                .finally(() => setUpdating(false))
+        }
+
     }
 
     const deleteAction = async () => {
-        return deleteDoctype()
-            .then(() => {
-                //Reroute to list page
-                router.push(`/doctypes`)
-            })
-            .catch((error) => {
-                showErrorToast(error)
-            })
-
+        if (doctypeData) {
+            return deleteDoctype(doctypeData.id)
+                .then(() => {
+                    //Reroute to list page
+                    router.push(`/doctypes`)
+                })
+                .catch((error) => {
+                    showErrorToast(error)
+                })
+        }
     }
 
     const showErrorToast = (error: Error) => {
         console.error("error creating doctype", error)
         toast({
-            duration: 1000,
+            duration: 2000,
             position: 'bottom',
             variant: 'solid',
             isClosable: true,
             status: 'error',
-            description: `There was an error while processing your request. ${error.message}`
+            title: 'Error',
+            description: `${error.message}`
         })
     }
 
@@ -92,7 +105,7 @@ export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
                     },
                     {
                         name: doctypeData?.name ?? "Edit Doctype",
-                        url: `/doctypes/${doctypeData?.name ?? ""}`,
+                        url: `/doctypes/${doctypeData?.id ?? ""}`,
                         isCurrent: true
                     }]
                 } />
@@ -101,7 +114,7 @@ export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
 
                 error ? <AlertBanner status="error" heading="There was an error while fetching the request.">{error.message} - {error.code}</AlertBanner> :
 
-                    <chakra.form id="doctypeForm" onSubmit={handleSubmit(editDocType)}>
+                    <chakra.form id="doctypeForm" onSubmit={handleSubmit(updateDocType)}>
 
                         <Flex
                             justifyContent="space-between"
@@ -110,7 +123,7 @@ export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
                                 <Heading fontSize="3xl">
                                     {doctypeData?.name ?? ""}
                                 </Heading>
-                                {saved ?
+                                {!isDirty ?
                                     <Badge ml="1"
                                         colorScheme="green">
                                         saved
@@ -147,38 +160,57 @@ export const EditDocTypeForm = ({ getData, edit, deleteDoctype }: Props) => {
                             <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
 
                                 <FormControl
-                                    isRequired>
+                                    isRequired
+                                    isInvalid={!!errors?.name}>
                                     <Stack spacing={2}>
                                         <FormLabel>
                                             Name
                                         </FormLabel>
                                         <Input
-                                            isDisabled
-                                            {...register("name")}
+                                            {...register("name", {
+                                                required: "The doctype name should not be blank",
+                                                maxLength: {
+                                                    value: 100,
+                                                    message: "The name can not be more than 100 characters."
+                                                }
+                                            })}
                                             fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                                             maxW="50vw"
                                         />
+                                        <FormErrorMessage>
+                                            {errors?.name?.message}
+                                        </FormErrorMessage>
                                     </Stack>
                                 </FormControl>
 
                                 <FormControl
-                                    isRequired>
+                                    isRequired
+                                    isInvalid={!!errors?.source}>
                                     <Stack spacing={2}>
                                         <FormLabel>
                                             Fetch from
                                         </FormLabel>
                                         <Input
-                                            isDisabled
-                                            {...register("source")}
+                                            {...register("source",
+                                                {
+                                                    required: "The table name should not be blank",
+                                                    maxLength: {
+                                                        value: 100,
+                                                        message: "The table name can not be more than 100 characters."
+                                                    }
+                                                })}
                                             fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                                             maxW="50vw"
                                         />
+                                        <FormErrorMessage>
+                                            {errors?.source?.message}
+                                        </FormErrorMessage>
                                     </Stack>
                                 </FormControl>
 
                             </Stack>
                             <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
-                            <DocFieldForm />
+
                         </Box>
 
                     </chakra.form>
