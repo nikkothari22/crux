@@ -11,9 +11,17 @@ const accountSettings = (props: Props) => {
         <>
             <ProtectedPageProvider>
                 <BreadCrumb
-                    currentPage="Account Settings"
-                    previousPage="Settings"
-                    previousPageLink="/settings" />
+                    pages={
+                        [{
+                            name: "Settings",
+                            url: '/settings',
+                        },
+                        {
+                            name: "Account Settings",
+                            url: '/settings/accountSettings',
+                            isCurrent: true
+                        }]
+                    } />
                 <Heading>Account Settings</Heading>
             </ProtectedPageProvider>
         </>

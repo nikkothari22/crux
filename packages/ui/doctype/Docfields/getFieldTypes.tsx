@@ -7,16 +7,16 @@ export const getFieldTypes = (dataType: string) => {
             fieldTypes = ["Short Text", "Long Text", "ID", "Email", "Phone number",]
             break;
         case 'int':
-            fieldTypes = [""]
+            fieldTypes = ["Number"]
             break;
         case 'float':
-            fieldTypes = [""]
+            fieldTypes = ["Decimal Number"]
             break;
         case 'timestamp':
-            fieldTypes = [""]
+            fieldTypes = ["DD-MM-YY", "YYYY", "DD-MM-YY h:m:s"]
             break;
         case 'boolean':
-            fieldTypes = [""]
+            fieldTypes = ["True/False", "Yes/No", "1/0"]
             break;
     }
 

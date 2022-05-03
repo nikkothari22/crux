@@ -1,57 +1,62 @@
-import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Stack, useToast } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
-import { DocType, DocField } from 'types/doctypes'
-import { DocFieldForm } from '../common/DocFieldForm/DocFieldForm'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Doctype } from 'types/doctypes'
 
 interface props {
-    create: (doctypeData: DocType, docFields: DocField) => void
+    create: (doctypeData: Doctype) => Promise<void>
 }
 
-export const CreateDocTypeForm = ({ create }: props) => {
+//TODO: Define better types for DocType form in useForm and form submission
 
-    const [loading, setLoading] = useState(true)
+export const CreateDoctypeForm = ({ create }: props) => {
+
     const [updating, setUpdating] = useState(false)
-    const [error, setError] = useState(null)
-    const { register, handleSubmit, formState: { errors } } = useForm<DocType>()
-    const [docTypeName, setDocTypeName] = useState("Untitled Doctype1")
+    const { register, handleSubmit, formState: { errors }, } = useForm<Doctype>()
     const toast = useToast()
 
-    const createDocType = (data: DocType) => {
-        console.log(data)
-        // setUpdating(true)
-        // setDocTypeName(data.name)
-        // create().then((x) => {
-        //     console.log("created doctype info:", x)
-        //     toast({
-        //         title: 'DocType created',
-        //         status: 'success',
-        //         duration: 1000,
-        //         isClosable: true,
-        //     })
-        // }).catch((error) => {
-        //     console.error("error creating doctype", error)
-        // })
-        //     .finally(() => setUpdating(false))
+    const createDoctype = (submittedData: Doctype) => {
+        setUpdating(true)
+        create(submittedData)
+            .catch((error) => {
+                console.error("error creating doctype", error)
+                toast({
+                    duration: 2000,
+                    position: 'bottom',
+                    variant: 'solid',
+                    isClosable: true,
+                    status: 'error',
+                    title: 'Error',
+                    description: `${error.message}`
+                })
+            })
+            .finally(() => setUpdating(false))
     }
 
     return (
         <>
             <BreadCrumb
-                currentPage="Create new doctype"
-                previousPage="Doctypes"
-                previousPageLink="/doctypes" />
+                pages={
+                    [{
+                        name: "Doctypes",
+                        url: '/doctypes',
+                    },
+                    {
+                        name: "Create New Doctype",
+                        url: '/doctypes/create',
+                        isCurrent: true
+                    }]
+                } />
 
-            <chakra.form id="doctypeForm" onSubmit={handleSubmit(createDocType)}>
+            <chakra.form id="doctypeForm" onSubmit={handleSubmit(createDoctype)}>
 
                 <Flex
-                    mr="16"
                     justifyContent="space-between"
                     align="center">
                     <HStack>
                         <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
-                            {docTypeName}
+                            New Doctype
                         </Heading>
                         <Badge ml="1"
                             colorScheme="orange">
@@ -63,8 +68,8 @@ export const CreateDocTypeForm = ({ create }: props) => {
                         ml={{ base: 16, md: 0, lg: 0 }}
                         colorScheme="blue"
                         type="submit"
-                    // isLoading={updating}
-                    // loadingText="Saving..."
+                        isLoading={updating}
+                        loadingText="Saving..."
                     >
                         Save
                     </Button>
@@ -128,10 +133,10 @@ export const CreateDocTypeForm = ({ create }: props) => {
 
                     </Stack>
                     <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
-                    <DocFieldForm />
                 </Box>
 
             </chakra.form>
+
         </>
     )
 }

@@ -1,15 +1,29 @@
 import React, { ReactElement } from 'react'
 import AdminPanelPage from '../components/AdminPanelPage'
-import { DocTypesList } from "ui/doctype";
+import { DoctypesList } from "ui/doctype";
 import enforceAuthenticated from '../utils/enforceAuthenticated'
+import { supabase } from '../config/supabaseInit';
 
 interface Props {
 }
 
 const Doctypes = (props: Props) => {
+
+    const getDoctypesFromDatabase = async () => {
+        let { data, error } = await supabase.from('crux_doctypes')
+            .select(`id, name, source, updated_on, created_at`)
+            .order('updated_on', { ascending: false })
+        if (error) {
+            console.error("error:", error)
+            throw error
+        } else {
+            return data
+        }
+    }
+
     return (
         <>
-            <DocTypesList />
+            <DoctypesList getDoctypes={getDoctypesFromDatabase} />
         </>
     );
 }

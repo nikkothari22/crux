@@ -7,6 +7,9 @@ interface Props {
 
 export default function Index(props: Props) {
   // console.log(user)
+  // const randomBoolean = randomBoolean()
+
+
   return (
     <>
       <p>Supabase</p>

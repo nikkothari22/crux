@@ -18,7 +18,6 @@ const LoginPageSettings = (props: Props) => {
             .update({ settings: loginSettings, updated_on: (new Date()).toISOString(), updated_by: supabase.auth.user().email ?? "admin" })
             .match({ name: 'login' })
 
-
         console.log(status, statusText)
         if (error) {
             console.error("test", error)

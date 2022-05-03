@@ -1,34 +1,44 @@
-export interface DocType {
+export interface Doctype {
     /** Visual name of the doctype */
     name: string,
-    /** Formatted safe string name of the doctype */
-    id: string,
     /** Data source of the doctype - collection path for Firebase, table name for Supabase */
-    source: string
+    source: string,
+    /** ID (primary key) of the doctype */
+    id: string,
 }
 
-export type DocField = DocStringField
+export type Docfield = DocStringField | DocBooleanField
 
-export interface DocFieldBasicDetails {
+export interface DocfieldBasicDetails {
     name: string,
     label: string,
     /** ID of the doctype */
-    docType: string,
+    doctype: string,
+    /** ID of docfield  */
+    id: string,
+    order: number,
     dataType: 'string' | 'int' | 'float' | 'boolean' | 'timestamp',
-    metadata: BasicDocFieldMetadata
-}
-
-export interface BasicDocFieldMetadata {
+    metadata: BasicDocfieldMetadata,
     isRequired: "YES" | "NO" | "CONDITION",
     isReadOnly: "YES" | "NO" | "CONDITION",
 }
 
-export interface DocStringField extends DocFieldBasicDetails {
+export interface DocStringField extends DocfieldBasicDetails {
     dataType: 'string',
     fieldType: 'shortText' | 'longText' | 'id' | 'email' | 'url' | 'phone' | 'select' | 'html' | 'markdown' | 'password'
     metadata: DocStringFieldMetadata
 }
 
-export interface DocStringFieldMetadata extends BasicDocFieldMetadata {
+export interface DocBooleanField extends DocfieldBasicDetails {
+    dataType: 'boolean',
+    fieldType: 'Yes/No' | '1/0' | 'True/False'
+}
+export interface BasicDocfieldMetadata {
+
+}
+
+
+
+export interface DocStringFieldMetadata extends BasicDocfieldMetadata {
 
 }
