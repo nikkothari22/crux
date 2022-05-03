@@ -1,4 +1,4 @@
-export { DoctypesList } from "./DoctypesList/DoctypesList";
+export { DoctypesList } from "./DoctypeList/DoctypeList";
 export { CreateDoctypeForm } from "./CreateDoctypeForm/CreateDoctypeForm";
 export { EditDoctypeForm } from "./EditDoctypeForm/EditDoctypeForm";
 export { GenerateDummyDataForm } from "./GenerateDummyData/GenerateDummyDataForm";
