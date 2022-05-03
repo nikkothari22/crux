@@ -39,7 +39,7 @@ export const DoctypesList = ({ getDoctypes }: props) => {
                     Doctypes
                 </Heading>
                 <NextLink href='/doctypes/create'>
-                    <Button colorScheme="blue" as="a">
+                    <Button colorScheme="blue" as="a" mr={12}>
                         Create New Doctype
                     </Button>
                 </NextLink>
@@ -56,6 +56,7 @@ export const DoctypesList = ({ getDoctypes }: props) => {
                                 <Th>Source</Th>
                                 <Th>Last Modified</Th>
                                 <Th>Created On</Th>
+                                <Th>Generate Dummy Data</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -80,6 +81,14 @@ export const DoctypesList = ({ getDoctypes }: props) => {
                                     <Td>
                                         <Text>
                                             {doctype.created_at.substring(0, 10)}
+                                        </Text>
+                                    </Td>
+                                    <Td>
+                                        <Text fontStyle="italic">
+                                            <NextLink
+                                                href={`/doctypes/generate-dummy-data/${doctype.id}`}>
+                                                generate data
+                                            </NextLink>
                                         </Text>
                                     </Td>
                                 </Tr>

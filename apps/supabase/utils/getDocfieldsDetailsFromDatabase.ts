@@ -1,6 +1,12 @@
+import { Docfield } from 'types/doctypes'
 import { supabase } from '../config/supabaseInit'
 
-const getDocfieldsDetailsFromDatabase = async (doctypeID: string) => {
+/**
+ * 
+ * @param doctypeID ID of the Doctype
+ * @returns Promise that resolves with an array of Docfields
+ */
+const getDocfieldsForDoctype = async (doctypeID: string): Promise<Docfield[]> => {
 
     let { data, error } = await supabase.from('crux_docfields')
         .select(`id, name, label, dataType, fieldType, isRequired, isReadOnly, order`)
@@ -15,4 +21,4 @@ const getDocfieldsDetailsFromDatabase = async (doctypeID: string) => {
     }
 }
 
-export default getDocfieldsDetailsFromDatabase
+export default getDocfieldsForDoctype

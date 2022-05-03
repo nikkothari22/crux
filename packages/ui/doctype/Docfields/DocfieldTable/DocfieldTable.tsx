@@ -70,62 +70,64 @@ export const DocfieldTable = ({ getDocfields, addField, editField, deleteField }
 
     return (
         <>
-            <Button
-                my={8}
-                colorScheme="blue"
-                onClick={openAddForm}>
-                Add Field
-            </Button>
-
             {loading ? <Flex width="full"><Stack><Skeleton height='20px' /><Skeleton height='20px' /><Skeleton height='20px' /></Stack></Flex> :
 
                 error ? <AlertBanner status="error" heading="There was an error while fetching the docfields.">{error.message} - {error.code}</AlertBanner> :
 
-                    <TableContainer>
-                        <Table variant="simple">
-                            <Thead>
-                                <Tr>
-                                    <Th>Name</Th>
-                                    <Th>Label</Th>
-                                    <Th>Data Type</Th>
-                                    <Th>Field Type</Th>
-                                    <Th>Default Validations</Th>
-                                    <Th></Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {fields.map((field) => <Tr key={field.name}>
-                                    <Td>{field.name}</Td>
-                                    <Td>{field.label}</Td>
-                                    <Td>{field.dataType}</Td>
-                                    <Td>{field.fieldType}</Td>
-                                    <Td>
-                                        <Text>isRequired: {field.isRequired}</Text>
-                                        <Text>isReadOnly: {field.isReadOnly}</Text>
-                                    </Td>
-                                    <Td>
-                                        <HStack spacing={2}>
-                                            <IconButton
-                                                size="lg"
-                                                variant="ghost"
-                                                colorScheme="blue"
-                                                aria-label='edit'
-                                                onClick={() => openEditForm(field)}
-                                                icon={<EditIcon />} />
-                                            <IconButton
-                                                size="lg"
-                                                variant="ghost"
-                                                colorScheme="red"
-                                                aria-label='delete'
-                                                onClick={() => deleteAction(field.id)}
-                                                icon={<DeleteIcon />} />
-                                        </HStack>
-                                    </Td>
-                                </Tr>)}
+                    <>
+                        <Button
+                            my={8}
+                            colorScheme="blue"
+                            onClick={openAddForm}>
+                            Add Field
+                        </Button>
 
-                            </Tbody>
-                        </Table>
-                    </TableContainer>
+                        <TableContainer>
+                            <Table variant="simple">
+                                <Thead>
+                                    <Tr>
+                                        <Th>Name</Th>
+                                        <Th>Label</Th>
+                                        <Th>Data Type</Th>
+                                        <Th>Field Type</Th>
+                                        <Th>Default Validations</Th>
+                                        <Th></Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {fields.map((field) => <Tr key={field.name}>
+                                        <Td>{field.name}</Td>
+                                        <Td>{field.label}</Td>
+                                        <Td>{field.dataType}</Td>
+                                        <Td>{field.fieldType}</Td>
+                                        <Td>
+                                            <Text>isRequired: {field.isRequired}</Text>
+                                            <Text>isReadOnly: {field.isReadOnly}</Text>
+                                        </Td>
+                                        <Td>
+                                            <HStack spacing={2}>
+                                                <IconButton
+                                                    size="lg"
+                                                    variant="ghost"
+                                                    colorScheme="blue"
+                                                    aria-label='edit'
+                                                    onClick={() => openEditForm(field)}
+                                                    icon={<EditIcon />} />
+                                                <IconButton
+                                                    size="lg"
+                                                    variant="ghost"
+                                                    colorScheme="red"
+                                                    aria-label='delete'
+                                                    onClick={() => deleteAction(field.id)}
+                                                    icon={<DeleteIcon />} />
+                                            </HStack>
+                                        </Td>
+                                    </Tr>)}
+
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
+                    </>
             }
 
             <DocfieldForm isOpen={isOpen} onClose={onClose} initFieldData={fieldBeingEdited ?? undefined} onSubmit={fieldBeingEdited ? editExistingField : addNewField} />

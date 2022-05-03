@@ -16,7 +16,7 @@ export const getFieldTypes = (dataType: string) => {
             fieldTypes = ["DD-MM-YY", "YYYY", "DD-MM-YY h:m:s"]
             break;
         case 'boolean':
-            fieldTypes = ["boolean"]
+            fieldTypes = ["True/False", "Yes/No", "1/0"]
             break;
     }
 

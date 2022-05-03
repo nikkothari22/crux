@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { useRouter } from 'next/router'
 import AdminPanelPage from '../../components/AdminPanelPage'
 import enforceAuthenticated from '../../utils/enforceAuthenticated'
@@ -6,7 +6,7 @@ import { Docfield, Doctype } from 'types/doctypes';
 import { supabase } from '../../config/supabaseInit';
 import { EditDoctypeForm } from 'ui/doctype';
 import getDoctypeDetailsFromDatabase from '../../utils/getDoctypeDetailsFromDatabase';
-import getDocfieldsDetailsFromDatabase from '../../utils/getDocfieldsDetailsFromDatabase';
+import getDocfieldsForDoctype from '../../utils/getDocfieldsDetailsFromDatabase';
 import { DocfieldTable } from 'ui/doctype/Docfields/DocfieldTable/DocfieldTable';
 
 interface Props {
@@ -20,12 +20,17 @@ const EditDoctype = (props: Props) => {
 
     const doctypeID = typeof doctype === "string" ? doctype : doctype[0]
 
+    const [doctypeFetched, setDoctypeFetched] = useState(false)
+
     const getDoctypeData = () => {
-        return getDoctypeDetailsFromDatabase(doctypeID)
+        return getDoctypeDetailsFromDatabase(doctypeID).then((data) => {
+            setDoctypeFetched(true)
+            return data
+        })
     }
 
     const getDocfieldData = () => {
-        return getDocfieldsDetailsFromDatabase(doctypeID)
+        return getDocfieldsForDoctype(doctypeID)
     }
 
     const editDoctype = async (id: string, doctypeData: Doctype) => {
@@ -171,11 +176,11 @@ const EditDoctype = (props: Props) => {
                 getDoctypeData={getDoctypeData}
                 editDoctype={updateDoctypeMetadata}
                 deleteDoctype={deleteDoctype} />
-            <DocfieldTable
+            {doctypeFetched && <DocfieldTable
                 deleteField={deleteDocfield}
                 addField={createDocfield}
                 editField={editDocfield}
-                getDocfields={getDocfieldData} />
+                getDocfields={getDocfieldData} />}
         </>
     );
 }

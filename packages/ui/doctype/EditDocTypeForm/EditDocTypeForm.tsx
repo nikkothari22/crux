@@ -3,7 +3,7 @@ import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, Fo
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CustomError } from 'types'
-import { Docfield, Doctype } from 'types/doctypes'
+import { Doctype } from 'types/doctypes'
 import { AlertBanner, BreadCrumb } from '../../layout'
 import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 import { useRouter } from 'next/router'
@@ -24,7 +24,6 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
     const { register, setValue, handleSubmit, formState: { errors, isDirty }, reset } = useForm<Doctype>()
     const toast = useToast()
     const { onOpen, isOpen, onClose } = useDisclosure()
-    const [fields, setFields] = useState<Docfield[]>([])
     const router = useRouter()
 
     useEffect(() => {
@@ -104,7 +103,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                         url: '/doctypes',
                     },
                     {
-                        name: doctypeData?.name ?? "Edit Doctype",
+                        name: doctypeData?.name ?? " ",
                         url: `/doctypes/${doctypeData?.id ?? ""}`,
                         isCurrent: true
                     }]

@@ -1,0 +1,12 @@
+{
+  "name": "dummy_data_generation",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "tsconfig": "*",
+    "types": "*",
+    "typescript": "^4.5.3",
+    "@faker-js/faker": "^6.2.0"
+  }
+}
