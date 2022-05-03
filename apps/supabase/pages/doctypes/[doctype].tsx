@@ -5,7 +5,7 @@ import enforceAuthenticated from '../../utils/enforceAuthenticated'
 import { Docfield, Doctype } from 'types/doctypes';
 import { supabase } from '../../config/supabaseInit';
 import { EditDoctypeForm } from 'ui/doctype';
-import getDoctypeDetailsFromDatabase from '../../utils/getDoctypeDetailsFromDatabase';
+import { getDoctypeData } from '../../utils/getDoctypeData';
 import getDocfieldsForDoctype from '../../utils/getDocfieldsDetailsFromDatabase';
 import { DocfieldTable } from 'ui/doctype/Docfields/DocfieldTable/DocfieldTable';
 
@@ -22,8 +22,8 @@ const EditDoctype = (props: Props) => {
 
     const [doctypeFetched, setDoctypeFetched] = useState(false)
 
-    const getDoctypeData = () => {
-        return getDoctypeDetailsFromDatabase(doctypeID).then((data) => {
+    const getDoctypeDataCallback = async () => {
+        return getDoctypeData(doctypeID).then((data) => {
             setDoctypeFetched(true)
             return data
         })
@@ -173,7 +173,7 @@ const EditDoctype = (props: Props) => {
     return (
         <>
             <EditDoctypeForm
-                getDoctypeData={getDoctypeData}
+                getDoctypeData={getDoctypeDataCallback}
                 editDoctype={updateDoctypeMetadata}
                 deleteDoctype={deleteDoctype} />
             {doctypeFetched && <DocfieldTable

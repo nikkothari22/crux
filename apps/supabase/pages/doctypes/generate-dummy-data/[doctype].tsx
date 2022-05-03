@@ -5,7 +5,7 @@ import { GenerateDummyDataForm } from 'ui/doctype'
 import AdminPanelPage from '../../../components/AdminPanelPage'
 import enforceAuthenticated from '../../../utils/enforceAuthenticated'
 import getDocfieldsForDoctype from '../../../utils/getDocfieldsDetailsFromDatabase'
-import getDoctypeDetailsFromDatabase from '../../../utils/getDoctypeDetailsFromDatabase'
+import { getDoctypeData } from '../../../utils/getDoctypeData'
 
 type Props = {}
 
@@ -15,8 +15,8 @@ const GenerateDummyData = (props: Props) => {
     const { doctype } = router.query
     const doctypeID = typeof doctype === "string" ? doctype : doctype[0]
 
-    const getDoctypeData = (): Promise<Doctype> => {
-        return getDoctypeDetailsFromDatabase(doctypeID)
+    const getDoctypeDataCallback = (): Promise<Doctype> => {
+        return getDoctypeData(doctypeID)
     }
 
     const getDocfields = (): Promise<Docfield[]> => {
@@ -25,7 +25,7 @@ const GenerateDummyData = (props: Props) => {
 
     return (
         <>
-            <GenerateDummyDataForm getDoctypeData={getDoctypeData} getDocfields={getDocfields} />
+            <GenerateDummyDataForm getDoctypeData={getDoctypeDataCallback} getDocfields={getDocfields} />
         </>
     );
 

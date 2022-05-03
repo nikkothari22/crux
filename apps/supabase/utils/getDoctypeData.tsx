@@ -1,7 +1,7 @@
 import { Doctype } from 'types/doctypes'
 import { supabase } from '../config/supabaseInit'
 
-const getDoctypeDetailsFromDatabase = async (id: string): Promise<Doctype> => {
+const getDoctypeData = async (id: string): Promise<Doctype> => {
 
     let { data, error } = await supabase.from('crux_doctypes')
         .select(`id, name, source, metadata`)
@@ -18,4 +18,4 @@ const getDoctypeDetailsFromDatabase = async (id: string): Promise<Doctype> => {
     }
 }
 
-export default getDoctypeDetailsFromDatabase
+export { getDoctypeData }
