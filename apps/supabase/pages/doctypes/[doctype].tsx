@@ -122,7 +122,7 @@ const EditDoctype = (props: Props) => {
             console.error("error:", error)
             throw error
         } else {
-            return count > 0
+            return count > 1
         }
     }
 

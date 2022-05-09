@@ -82,12 +82,12 @@ export const DocfieldTable = ({ getDocfields, addField, editField, deleteField }
                             Add Field
                         </Button>
 
-                        <TableContainer>
+                        <TableContainer mb={16}>
                             <Table variant="simple">
                                 <Thead>
                                     <Tr>
-                                        <Th>Name</Th>
                                         <Th>Label</Th>
+                                        <Th>Name</Th>
                                         <Th>Data Type</Th>
                                         <Th>Field Type</Th>
                                         <Th>Default Validations</Th>
@@ -96,8 +96,8 @@ export const DocfieldTable = ({ getDocfields, addField, editField, deleteField }
                                 </Thead>
                                 <Tbody>
                                     {fields.map((field) => <Tr key={field.name}>
-                                        <Td>{field.name}</Td>
                                         <Td>{field.label}</Td>
+                                        <Td>{field.name}</Td>
                                         <Td>{field.dataType}</Td>
                                         <Td>{field.fieldType}</Td>
                                         <Td>

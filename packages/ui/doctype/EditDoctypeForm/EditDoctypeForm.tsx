@@ -7,6 +7,8 @@ import { Doctype } from 'types/doctypes'
 import { AlertBanner, BreadCrumb } from '../../layout'
 import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
+import { FaClipboardList } from 'react-icons/fa'
 
 interface Props {
     getDoctypeData: () => Promise<Doctype>,
@@ -134,13 +136,18 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                     </Badge>
                                 }
                             </HStack>
-                            <ButtonGroup size={'md'}>
+                            <ButtonGroup size={'md'} mr={10}>
                                 <Menu>
                                     <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
                                         Actions
                                     </MenuButton>
                                     <MenuList>
                                         <MenuItem onClick={onOpen} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        <NextLink href={`/doctypes/generate-dummy-data/${doctypeData?.id}`}>
+                                            <MenuItem icon={<FaClipboardList />}>
+                                                Generate dummy data
+                                            </MenuItem>
+                                        </NextLink>
                                     </MenuList>
                                 </Menu>
                                 <Button

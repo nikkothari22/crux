@@ -25,8 +25,23 @@ export interface DocfieldBasicDetails {
 
 export interface DocStringField extends DocfieldBasicDetails {
     dataType: 'string',
-    fieldType: 'shortText' | 'longText' | 'id' | 'email' | 'url' | 'phone' | 'select' | 'html' | 'markdown' | 'password'
+    fieldType: 'Short Text' | 'Long Text' | 'Select' | 'Email' | 'Phone' | 'Image' | 'URL'
     metadata: DocStringFieldMetadata
+}
+
+export interface DocIntegerNumberField extends DocfieldBasicDetails {
+    dataType: 'int'
+    fieldType: 'Number' | 'Currency' | 'Measurement'
+}
+
+export interface DocFloatingNumberField extends DocfieldBasicDetails {
+    dataType: 'float'
+    fieldType: 'Number' | 'Percentage' | 'Currency' | 'Measurement' | 'Temperature'
+}
+
+export interface DocTimestampField extends DocfieldBasicDetails {
+    dataType: 'timestamp'
+    fieldType: 'Date' | 'Time' | 'Date and Time' | 'Date Range'
 }
 
 export interface DocBooleanField extends DocfieldBasicDetails {

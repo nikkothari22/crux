@@ -32,11 +32,12 @@ interface FormContentProps {
 }
 
 interface DocfieldFormProps {
-    name: string,
     label: string,
+    name: string,
     dataType: string,
     fieldType: string,
 }
+
 const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentProps) => {
 
     const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<DocfieldFormProps>({
@@ -63,16 +64,16 @@ const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
         <ModalBody pb={6}>
 
             <FormControl isRequired>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Label</FormLabel>
                 <Input
-                    {...register("name")}
+                    {...register("label")}
                     placeholder="Column name" />
             </FormControl>
 
             <FormControl mt={4} isRequired>
-                <FormLabel>Label</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <Input
-                    {...register("label")}
+                    {...register("name")}
                     placeholder="Variable name for this field in your table" />
             </FormControl>
 
