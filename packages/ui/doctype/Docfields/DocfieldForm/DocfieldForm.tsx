@@ -1,8 +1,9 @@
-import { Text, Button, chakra, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Flex } from '@chakra-ui/react'
+import { Text, Button, chakra, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Flex, SimpleGrid } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import { Docfield } from 'types/doctypes'
 import { getFieldTypes } from '../getFieldTypes'
+import { FormFieldsForMetadataBasedOnDataType } from '../FormFieldsForMetadataBasedOnDataType/FormFieldsForMetadataBasedOnDataType'
 
 interface Props {
     isOpen: boolean,
@@ -14,7 +15,7 @@ interface Props {
 export const DocfieldForm = ({ isOpen, onClose, initFieldData, onSubmit }: Props) => {
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+        <Modal isOpen={isOpen} onClose={onClose} size="5xl">
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Add Field</ModalHeader>
@@ -36,13 +37,16 @@ interface DocfieldFormProps {
     name: string,
     dataType: string,
     fieldType: string,
+    metadata: any
 }
 
 const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentProps) => {
 
-    const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<DocfieldFormProps>({
+    const methods = useForm<DocfieldFormProps>({
         defaultValues: initFieldData
     })
+
+    const { register, handleSubmit, formState: { errors }, watch, setValue } = methods
     const dataType = watch("dataType")
     const fieldTypes = useMemo(() => getFieldTypes(dataType), [dataType])
     const [isRequired, setIsRequired] = useState<string>(initFieldData?.isRequired ?? "NO")
@@ -52,119 +56,135 @@ const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
         setValue('fieldType', getFieldTypes(dataType)[0])
     }, [dataType])
     const formSubmitted = (data: DocfieldFormProps) => {
-        onSubmit({
-            ...data,
-            isReadOnly,
-            isRequired
-        } as Docfield)
+        console.log(data)
+        // onSubmit({
+        //     ...data,
+        //     isReadOnly,
+        //     isRequired
+        // } as Docfield)
     }
 
-    return <chakra.form id="docfieldForm" onSubmit={handleSubmit(formSubmitted)}>
+    return <FormProvider {...methods}>
 
-        <ModalBody pb={6}>
+        <chakra.form id="docfieldForm" onSubmit={handleSubmit(formSubmitted)}>
 
-            <FormControl isRequired>
-                <FormLabel>Label</FormLabel>
-                <Input
-                    {...register("label")}
-                    placeholder="Column name" />
-            </FormControl>
+            <ModalBody pb={6}>
 
-            <FormControl mt={4} isRequired>
-                <FormLabel>Name</FormLabel>
-                <Input
-                    {...register("name")}
-                    placeholder="Variable name for this field in your table" />
-            </FormControl>
+                <SimpleGrid columns={2} spacingX={6} spacingY={4}>
 
-            <FormControl mt={4} isRequired>
-                <Stack spacing={2}>
-                    <FormLabel>Data Type</FormLabel>
-                    <Select
-                        {...register("dataType")}
-                        placeholder='Select data type'
-                    >
-                        <option value='string'>String</option>
-                        <option value='int'>Int</option>
-                        <option value='float'>Float</option>
-                        <option value='timestamp'>Timestamp</option>
-                        <option value='boolean'>Boolean</option>
-                    </Select>
-                </Stack>
-            </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Label</FormLabel>
+                        <Input
+                            {...register("label")}
+                            placeholder="Column name" />
+                    </FormControl>
 
-            <FormControl mt={4} isRequired>
-                <Stack spacing={2}>
-                    <FormLabel>Field Type</FormLabel>
-                    <Select
-                        placeholder='Select field type'
-                        {...register("fieldType")}
-                    >
-                        {fieldTypes.map((fieldTypes, index) =>
-                            <option key={index}>{fieldTypes}</option>)}
-                    </Select>
-                </Stack>
-            </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Name</FormLabel>
+                        <Input
+                            {...register("name")}
+                            placeholder="Variable name for this field in your table" />
+                    </FormControl>
 
-            <FormLabel mt={4}>Default Validations</FormLabel>
-
-            <FormControl mt={4}>
-                <RadioGroup
-                    onChange={setIsRequired}
-                    value={isRequired}
-                >
-                    <Flex justifyContent="space-between">
-                        <Text>isRequired</Text>
-                        <Stack direction='row' pr={240}>
-                            <Radio value='YES'>Yes</Radio>
-                            <Radio value='NO'>No</Radio>
-                            <Radio value='CONDITION'>Add condition</Radio>
+                    <FormControl isRequired>
+                        <Stack spacing={2}>
+                            <FormLabel>Data Type</FormLabel>
+                            <Select
+                                {...register("dataType")}
+                                placeholder='Select data type'
+                            >
+                                <option value='string'>String</option>
+                                <option value='int'>Int</option>
+                                <option value='float'>Float</option>
+                                <option value='timestamp'>Timestamp</option>
+                                <option value='boolean'>Boolean</option>
+                            </Select>
                         </Stack>
-                    </Flex>
-                    {/* if value is set to condition show input box to enter condition */}
-                </RadioGroup>
-            </FormControl>
+                    </FormControl>
 
-            <FormControl mt={4}>
-                <RadioGroup
-                    onChange={setIsReadOnly}
-                    value={isReadOnly}>
-                    <Flex justifyContent="space-between">
-                        <Text>readOnly</Text>
-                        <Stack direction='row' pr={240}>
-                            <Radio value='YES'>Yes</Radio>
-                            <Radio value='NO'>No</Radio>
-                            <Radio value='CONDITION'>Add condition</Radio>
+                    <FormControl isRequired>
+                        <Stack spacing={2}>
+                            <FormLabel>Field Type</FormLabel>
+                            <Select
+                                {...register("fieldType")}
+                                placeholder='Select field type'
+                            >
+                                {fieldTypes.map((fieldTypes, index) =>
+                                    <option key={index}>{fieldTypes}</option>)}
+                            </Select>
                         </Stack>
-                    </Flex>
-                    {/* if value is set to condition show input box to enter condition */}
-                </RadioGroup>
-            </FormControl>
+                    </FormControl>
 
-            <FormControl mt={4}>
-                <HStack>
-                    <FormLabel>Default Value</FormLabel>
-                    <Input maxW="80%" />
+                </SimpleGrid>
+
+                <FormFieldsForMetadataBasedOnDataType dataType={dataType} />
+
+                {/* <ValidationMetadataForFieldType fieldType={fieldType} /> */}
+
+                <HStack spacing={10} mt={4}>
+
+                    <FormLabel mt={2}>Validations</FormLabel>
+
+                    <SimpleGrid columns={2} spacingX={6}>
+                        <FormControl>
+                            <RadioGroup
+                                onChange={setIsRequired}
+                                value={isRequired}
+                            >
+                                <HStack>
+                                    <Text fontWeight="medium">isRequired</Text>
+                                    <Stack direction='row'>
+                                        <Radio value='YES'>Yes</Radio>
+                                        <Radio value='NO'>No</Radio>
+                                        <Radio value='CONDITION'>Add condition</Radio>
+                                    </Stack>
+                                </HStack>
+                                {/* if value is set to condition show input box to enter condition */}
+                            </RadioGroup>
+                        </FormControl>
+
+                        <FormControl>
+                            <RadioGroup
+                                onChange={setIsReadOnly}
+                                value={isReadOnly}>
+                                <HStack>
+                                    <Text fontWeight="medium">readOnly</Text>
+                                    <Stack direction='row'>
+                                        <Radio value='YES'>Yes</Radio>
+                                        <Radio value='NO'>No</Radio>
+                                        <Radio value='CONDITION'>Add condition</Radio>
+                                    </Stack>
+                                </HStack>
+                                {/* if value is set to condition show input box to enter condition */}
+                            </RadioGroup>
+                        </FormControl>
+                    </SimpleGrid>
                 </HStack>
-            </FormControl>
 
-            <FormControl mt={4}>
-                <HStack spacing={6}>
-                    <FormLabel>Description</FormLabel>
-                    <Input maxW="80%" />
-                </HStack>
-            </FormControl>
+                <FormControl mt={4}>
+                    <HStack>
+                        <FormLabel>Default Value</FormLabel>
+                        <Input maxW="80%" />
+                    </HStack>
+                </FormControl>
 
-        </ModalBody>
+                <FormControl mt={4}>
+                    <HStack spacing={6}>
+                        <FormLabel>Description</FormLabel>
+                        <Input maxW="80%" />
+                    </HStack>
+                </FormControl>
 
-        <ModalFooter>
-            <Button colorScheme='blue' mr={3}
-                type="submit"
-            >
-                Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-        </ModalFooter>
+            </ModalBody>
 
-    </chakra.form>
+            <ModalFooter>
+                <Button colorScheme='blue' mr={3}
+                    type="submit">
+                    Save
+                </Button>
+                <Button onClick={onClose}>Cancel</Button>
+            </ModalFooter>
+
+        </chakra.form>
+    </FormProvider>
 }
