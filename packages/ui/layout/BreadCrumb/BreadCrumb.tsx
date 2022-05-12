@@ -20,11 +20,11 @@ interface Props {
     previousPage?: string,
     previousPageLink?: string,
 };
-
+//TODO: BreadCrumb needs to be changed to other name - maybe "Page Breadcrumb or Page Nav"
 export const BreadCrumb = ({ pages, showHome }: Props) => {
 
     const previousPageLinkColor = useColorModeValue("gray.600", "gray.400")
-    const currentPageLinkColor = useColorModeValue("gray.800", "gray.200")
+    const currentPageLinkColor = useColorModeValue("blue.500", "gray.200")
 
     return (
         <>
@@ -38,8 +38,8 @@ export const BreadCrumb = ({ pages, showHome }: Props) => {
                     color='gray.500' />}>
 
                 {pages && pages.map(({ name, url, isCurrent }) => <BreadcrumbItem isCurrentPage={isCurrent} key={url}>
-                    <BreadcrumbLink textTransform="uppercase" fontWeight={"600"} color={isCurrent ? currentPageLinkColor : previousPageLinkColor} fontSize={{ base: 'xs', md: 'xs', lg: 'xs' }}>
-                        <Text textTransform="uppercase" as={Link} href={url} color={isCurrent ? currentPageLinkColor : previousPageLinkColor}>
+                    <BreadcrumbLink as={Link} href={url} color={isCurrent ? currentPageLinkColor : previousPageLinkColor}>
+                        <Text textTransform="uppercase" fontWeight={"600"} color={isCurrent ? currentPageLinkColor : previousPageLinkColor} fontSize={{ base: 'xs', md: 'xs', lg: 'xs' }}>
                             {name}
                         </Text>
                     </BreadcrumbLink>
