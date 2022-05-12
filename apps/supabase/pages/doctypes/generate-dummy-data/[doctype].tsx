@@ -3,9 +3,8 @@ import React, { ReactElement } from 'react'
 import { Docfield, Doctype } from 'types/doctypes'
 import { GenerateDummyDataForm } from 'ui/doctype'
 import AdminPanelPage from '../../../components/AdminPanelPage'
-import enforceAuthenticated from '../../../utils/enforceAuthenticated'
-import getDocfieldsForDoctype from '../../../utils/getDocfieldsDetailsFromDatabase'
-import { getDoctypeData } from '../../../utils/getDoctypeData'
+import { enforceAuthenticated } from '../../../utils/auth'
+import { getDoctype, getDocfields } from '../../../utils/db'
 
 type Props = {}
 
@@ -16,16 +15,16 @@ const GenerateDummyData = (props: Props) => {
     const doctypeID = typeof doctype === "string" ? doctype : doctype[0]
 
     const getDoctypeDataCallback = (): Promise<Doctype> => {
-        return getDoctypeData(doctypeID)
+        return getDoctype(doctypeID)
     }
 
-    const getDocfields = (): Promise<Docfield[]> => {
-        return getDocfieldsForDoctype(doctypeID)
+    const getDocfieldsCallback = (): Promise<Docfield[]> => {
+        return getDocfields(doctypeID)
     }
 
     return (
         <>
-            <GenerateDummyDataForm getDoctypeData={getDoctypeDataCallback} getDocfields={getDocfields} />
+            <GenerateDummyDataForm getDoctypeData={getDoctypeDataCallback} getDocfields={getDocfieldsCallback} />
         </>
     );
 

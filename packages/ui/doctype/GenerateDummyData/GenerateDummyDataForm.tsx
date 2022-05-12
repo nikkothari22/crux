@@ -1,11 +1,10 @@
 import { Box, Button, Divider, Flex, FormControl, FormLabel, Heading, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { Docfield, Doctype } from 'types/doctypes'
 import { CustomError } from 'types/error';
 import { AlertBanner, BreadCrumb } from '../../layout';
 import { DummyDataTable } from './DummyDataTable';
-import { randomBoolean, randomString } from 'dummy_data_generation'
+import { getDummyDataObjectFromDocfields } from 'dummy_data_generation'
 interface Props {
     getDoctypeData: () => Promise<Doctype>,
     getDocfields: () => Promise<Docfield[]>,
@@ -16,7 +15,6 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<CustomError | null>(null)
     const [doctypeData, setDoctypeData] = useState<Doctype | null>(null)
-    const { register, setValue } = useForm<Doctype>()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [dummyData, setDummyData] = useState<any[]>([])
     const [docfields, setDocfields] = useState<Docfield[] | null>([])
@@ -27,8 +25,6 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
             .then((doctypeData) => {
                 console.log(doctypeData)
                 setDoctypeData(doctypeData)
-                setValue('name', doctypeData.name)
-                setValue('source', doctypeData.source)
                 setError(null)
             })
             .then(() => getDocfields())
@@ -43,25 +39,19 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
 
     const generateDummyData = (numberOfRows: number) => {
         console.log("form submitted", numberOfRows)
+
         //1. Create dummy data - need number of rows, docfields
         //2. Show dummy data
-        let dummyBooleanData = []
-        for (let i = 0; i < numberOfRows; i++) {
-            let data: any = {
-                id: i
-            }
 
-            docfields?.forEach(df => {
-                if (df.dataType === "string") {
-                    data[df.label] = randomString("name", "firstName")
-                } else if (df.dataType === "boolean") {
-                    data[df.label] = randomBoolean()
-                }
-            })
-            console.log(data)
-            dummyBooleanData.push(data)
+        if (docfields) {
+            let fakeData = []
+            for (let i = 0; i < numberOfRows; i++) {
+                let data = getDummyDataObjectFromDocfields(docfields)
+                fakeData.push(data)
+            }
+            console.log(fakeData)
+            setDummyData(fakeData)
         }
-        setDummyData(dummyBooleanData)
     }
 
     return (
@@ -82,6 +72,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
             {loading ? <Flex align="center" justify="center" height="50vh" width="full"><Spinner /></Flex> :
 
                 error ? <AlertBanner status="error" heading="There was an error while fetching the request.">{error.message} - {error.code}</AlertBanner> :
+
                     <>
 
                         <Flex
@@ -106,35 +97,27 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                         <Box>
                             <HStack spacing={10} mt={{ base: 4, md: 4, lg: 6 }}>
 
-                                <FormControl
-                                    isDisabled
-                                    isRequired>
-                                    <Stack spacing={2}>
-                                        <FormLabel>
-                                            Name
-                                        </FormLabel>
-                                        <Input
-                                            {...register("name")}
-                                            fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                                            maxW="40vw"
-                                        />
-                                    </Stack>
-                                </FormControl>
+                                <Stack spacing={4}>
+                                    <FormLabel pl={2}>
+                                        Name
+                                    </FormLabel>
+                                    <Input
+                                        isDisabled
+                                        value={doctypeData?.name}
+                                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}
+                                    />
+                                </Stack>
 
-                                <FormControl
-                                    isDisabled
-                                    isRequired>
-                                    <Stack spacing={2}>
-                                        <FormLabel>
-                                            Fetch from
-                                        </FormLabel>
-                                        <Input
-                                            {...register("source")}
-                                            fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                                            maxW="40vw"
-                                        />
-                                    </Stack>
-                                </FormControl>
+                                <Stack spacing={4}>
+                                    <FormLabel pl={2}>
+                                        Fetch from
+                                    </FormLabel>
+                                    <Input
+                                        isDisabled
+                                        value={doctypeData?.source}
+                                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}
+                                    />
+                                </Stack>
 
                             </HStack>
                             <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
@@ -160,6 +143,7 @@ const GenerateDummyDataModal = ({ isOpen, onClose, onSubmit }: DummyDataModalPro
 
     const onButtonClicked = () => {
         onSubmit(numberOfRows)
+        onClose()
     }
 
     return <Modal isOpen={isOpen} onClose={onClose}>

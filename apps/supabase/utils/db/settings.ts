@@ -1,6 +1,6 @@
-import { supabase } from '../config/supabaseInit'
+import { supabase } from '../../config/supabaseInit'
 
-const getLoginSettingsFromDatabase = async () => {
+export const getLoginSettings = async () => {
 
     let { data, error } = await supabase.from('crux_system_settings')
         .select('settings')
@@ -27,5 +27,3 @@ const getLoginSettingsFromDatabase = async () => {
         }
     }
 }
-
-export default getLoginSettingsFromDatabase

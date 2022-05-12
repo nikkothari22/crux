@@ -6,7 +6,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
-import Link from 'next/link'
+import NextLink from 'next/link'
 
 interface PageLink {
     name: string,
@@ -14,14 +14,10 @@ interface PageLink {
     isCurrent?: boolean
 }
 interface Props {
-    currentPage?: string,
-    showHome?: boolean,
-    pages?: PageLink[],
-    previousPage?: string,
-    previousPageLink?: string,
+    pages: PageLink[],
 };
-
-export const BreadCrumb = ({ pages, showHome }: Props) => {
+//TODO: BreadCrumb needs to be changed to other name - maybe "Page Breadcrumb or Page Nav"
+export const BreadCrumb = ({ pages }: Props) => {
 
     const previousPageLinkColor = useColorModeValue("gray.600", "gray.400")
     const currentPageLinkColor = useColorModeValue("gray.800", "gray.200")
@@ -37,12 +33,14 @@ export const BreadCrumb = ({ pages, showHome }: Props) => {
                 separator={<ChevronRightIcon
                     color='gray.500' />}>
 
-                {pages && pages.map(({ name, url, isCurrent }) => <BreadcrumbItem isCurrentPage={isCurrent} key={url}>
-                    <BreadcrumbLink textTransform="uppercase" fontWeight={"600"} color={isCurrent ? currentPageLinkColor : previousPageLinkColor} fontSize={{ base: 'xs', md: 'xs', lg: 'xs' }}>
-                        <Text textTransform="uppercase" as={Link} href={url} color={isCurrent ? currentPageLinkColor : previousPageLinkColor}>
-                            {name}
-                        </Text>
-                    </BreadcrumbLink>
+                {pages.map(({ name, url, isCurrent }) => <BreadcrumbItem isCurrentPage={isCurrent} key={url}>
+                    <NextLink href={url} passHref>
+                        <BreadcrumbLink color={isCurrent ? currentPageLinkColor : previousPageLinkColor}>
+                            <Text textTransform="uppercase" fontWeight={"600"} color={isCurrent ? currentPageLinkColor : previousPageLinkColor} fontSize={{ base: 'xs', md: 'xs', lg: 'xs' }}>
+                                {name}
+                            </Text>
+                        </BreadcrumbLink>
+                    </NextLink>
                 </BreadcrumbItem>)}
 
             </Breadcrumb>

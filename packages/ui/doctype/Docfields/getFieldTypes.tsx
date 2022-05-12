@@ -4,16 +4,16 @@ export const getFieldTypes = (dataType: string) => {
 
     switch (dataType) {
         case 'string':
-            fieldTypes = ["Short Text", "Long Text", "ID", "Email", "Phone number",]
+            fieldTypes = ["Short Text", "Long Text", "Select", "Email", "Phone", "Image", "URL"]
             break;
         case 'int':
-            fieldTypes = ["Number"]
+            fieldTypes = ["Number", "Currency", "Measurement"]
             break;
         case 'float':
-            fieldTypes = ["Decimal Number"]
+            fieldTypes = ["Number", "Percentage", "Currency", "Measurement", "Temperature"]
             break;
         case 'timestamp':
-            fieldTypes = ["DD-MM-YY", "YYYY", "DD-MM-YY h:m:s"]
+            fieldTypes = ["Date", "Time", "Date and Time", "Date Range"]
             break;
         case 'boolean':
             fieldTypes = ["True/False", "Yes/No", "1/0"]

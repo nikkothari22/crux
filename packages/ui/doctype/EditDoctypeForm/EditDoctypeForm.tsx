@@ -7,6 +7,8 @@ import { Doctype } from 'types/doctypes'
 import { AlertBanner, BreadCrumb } from '../../layout'
 import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
+import { FaClipboardList } from 'react-icons/fa'
 
 interface Props {
     getDoctypeData: () => Promise<Doctype>,
@@ -141,6 +143,11 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                     </MenuButton>
                                     <MenuList>
                                         <MenuItem onClick={onOpen} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        <NextLink href={`/doctypes/generate-dummy-data/${doctypeData?.id}`}>
+                                            <MenuItem icon={<FaClipboardList />}>
+                                                Generate dummy data
+                                            </MenuItem>
+                                        </NextLink>
                                     </MenuList>
                                 </Menu>
                                 <Button
@@ -153,7 +160,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                 </Button>
                             </ButtonGroup>
                         </Flex>
-                        <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
+                        <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
                         <Box>
                             <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
@@ -208,7 +215,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                 </FormControl>
 
                             </Stack>
-                            <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
+                            <Divider mt={{ base: 4, md: 6, lg: 8 }} />
 
                         </Box>
 

@@ -3,8 +3,8 @@ import { LoginSettings } from 'types'
 import { LoginSettingsFormLayout } from 'ui/settings'
 import AdminPanelPage from '../../components/AdminPanelPage'
 import { supabase } from '../../config/supabaseInit'
-import enforceAuthenticated from '../../utils/enforceAuthenticated'
-import getLoginSettingsFromDatabase from '../../utils/getLoginSettingsFromDatabase'
+import { enforceAuthenticated } from '../../utils/auth'
+import { getLoginSettings } from '../../utils/db'
 
 interface Props {
 }
@@ -31,7 +31,7 @@ const LoginPageSettings = (props: Props) => {
     return (
         <>
             <LoginSettingsFormLayout
-                getSettings={getLoginSettingsFromDatabase}
+                getSettings={getLoginSettings}
                 updateSettings={updateSettings} />
         </>
     );

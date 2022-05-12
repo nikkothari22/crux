@@ -1,12 +1,11 @@
 import React, { ReactElement, useState } from 'react'
 import { useRouter } from 'next/router'
 import AdminPanelPage from '../../components/AdminPanelPage'
-import enforceAuthenticated from '../../utils/enforceAuthenticated'
+import { enforceAuthenticated } from '../../utils/auth'
 import { Docfield, Doctype } from 'types/doctypes';
 import { supabase } from '../../config/supabaseInit';
 import { EditDoctypeForm } from 'ui/doctype';
-import { getDoctypeData } from '../../utils/getDoctypeData';
-import getDocfieldsForDoctype from '../../utils/getDocfieldsDetailsFromDatabase';
+import { getDoctype, getDocfields } from '../../utils/db';
 import { DocfieldTable } from 'ui/doctype/Docfields/DocfieldTable/DocfieldTable';
 
 interface Props {
@@ -23,14 +22,14 @@ const EditDoctype = (props: Props) => {
     const [doctypeFetched, setDoctypeFetched] = useState(false)
 
     const getDoctypeDataCallback = async () => {
-        return getDoctypeData(doctypeID).then((data) => {
+        return getDoctype(doctypeID).then((data) => {
             setDoctypeFetched(true)
             return data
         })
     }
 
     const getDocfieldData = () => {
-        return getDocfieldsForDoctype(doctypeID)
+        return getDocfields(doctypeID)
     }
 
     const editDoctype = async (id: string, doctypeData: Doctype) => {
@@ -122,7 +121,7 @@ const EditDoctype = (props: Props) => {
             console.error("error:", error)
             throw error
         } else {
-            return count > 0
+            return count > 1
         }
     }
 
