@@ -40,10 +40,10 @@ const AdminPanelPage = ({ children }: Props) => {
 
     return <>
         <Navbar logout={logout} logo={logo} userEmail={userEmail} loading={loading} />
-        <Box pt="50px">
-            <Sidebar>
-                {children}
-            </Sidebar>
+        <Box pt="70px" px="8">
+            {/* <Sidebar> */}
+            {children}
+            {/* </Sidebar> */}
         </Box>
     </>
 };
