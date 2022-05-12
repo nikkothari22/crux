@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import AdminPanelPage from "../components/AdminPanelPage";
-import enforceAuthenticated from "../utils/enforceAuthenticated";
+import { enforceAuthenticated } from "../utils/auth";
 interface Props {
 
 }

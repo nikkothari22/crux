@@ -1,0 +1,1 @@
+export { enforceAuthenticated } from "./enforceAuthenticated";

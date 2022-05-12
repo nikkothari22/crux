@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import AdminPanelPage from '../../components/AdminPanelPage'
 import { CreateDoctypeForm } from "ui/doctype";
-import enforceAuthenticated from '../../utils/enforceAuthenticated'
+import { enforceAuthenticated } from '../../utils/auth'
 import { Doctype } from 'types/doctypes';
 import { supabase } from '../../config/supabaseInit';
 import { useRouter } from 'next/router';

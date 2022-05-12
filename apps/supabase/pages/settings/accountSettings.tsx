@@ -2,7 +2,7 @@ import { Heading } from '@chakra-ui/react';
 import React, { ReactElement } from 'react';
 import { BreadCrumb } from 'ui/layout';
 import AdminPanelPage from '../../components/AdminPanelPage';
-import enforceAuthenticated from '../../utils/enforceAuthenticated';
+import { enforceAuthenticated } from '../../utils/auth'
 
 type Props = {};
 

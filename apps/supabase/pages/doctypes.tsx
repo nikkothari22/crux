@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import AdminPanelPage from '../components/AdminPanelPage'
 import { DoctypesList } from "ui/doctype";
-import enforceAuthenticated from '../utils/enforceAuthenticated'
+import { enforceAuthenticated } from '../utils/auth'
 import { supabase } from '../config/supabaseInit';
 
 interface Props {
