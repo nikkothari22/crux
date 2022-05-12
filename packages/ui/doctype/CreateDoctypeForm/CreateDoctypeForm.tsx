@@ -58,10 +58,10 @@ export const CreateDoctypeForm = ({ create }: props) => {
                         <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
                             New Doctype
                         </Heading>
-                        <Badge ml="1"
+                        {/* <Badge ml="1"
                             colorScheme="orange">
                             not saved
-                        </Badge>
+                        </Badge> */}
                     </HStack>
                     <Button
                         fontSize={{ base: '12px', md: '14px', lg: '16px' }}
@@ -74,7 +74,7 @@ export const CreateDoctypeForm = ({ create }: props) => {
                         Save
                     </Button>
                 </Flex>
-                <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
+                <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
                 <Box>
                     <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
@@ -132,7 +132,7 @@ export const CreateDoctypeForm = ({ create }: props) => {
                         </FormControl>
 
                     </Stack>
-                    <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
+                    <Divider mt={{ base: 4, md: 6, lg: 8 }} />
                 </Box>
 
             </chakra.form>

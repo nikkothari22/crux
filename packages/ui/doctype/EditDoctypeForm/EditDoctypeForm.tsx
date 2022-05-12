@@ -136,7 +136,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                     </Badge>
                                 }
                             </HStack>
-                            <ButtonGroup size={'md'} mr={10}>
+                            <ButtonGroup size={'md'}>
                                 <Menu>
                                     <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
                                         Actions
@@ -160,7 +160,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                 </Button>
                             </ButtonGroup>
                         </Flex>
-                        <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
+                        <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
                         <Box>
                             <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
@@ -215,7 +215,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                 </FormControl>
 
                             </Stack>
-                            <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
+                            <Divider mt={{ base: 4, md: 6, lg: 8 }} />
 
                         </Box>
 

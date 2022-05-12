@@ -39,13 +39,13 @@ export const DoctypesList = ({ getDoctypes }: props) => {
                     Doctypes
                 </Heading>
                 <NextLink href='/doctypes/create'>
-                    <Button colorScheme="blue" as="a" mr={12}>
+                    <Button colorScheme="blue" as="a">
                         Create New Doctype
                     </Button>
                 </NextLink>
             </Flex>
 
-            <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
+            <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
             <Stack spacing={2}>
                 <TableContainer mt={10}>
