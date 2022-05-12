@@ -6,47 +6,42 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
+import NextLink from 'next/link'
 
-type Props = {
-    currentPage: string,
-    previousPage?: string,
-    previousPageLink?: string,
+interface PageLink {
+    name: string,
+    url: string,
+    isCurrent?: boolean
+}
+interface Props {
+    pages: PageLink[],
 };
-
-export const BreadCrumb = ({ currentPage, previousPage, previousPageLink }: Props) => {
+//TODO: BreadCrumb needs to be changed to other name - maybe "Page Breadcrumb or Page Nav"
+export const BreadCrumb = ({ pages }: Props) => {
 
     const previousPageLinkColor = useColorModeValue("gray.600", "gray.400")
     const currentPageLinkColor = useColorModeValue("gray.800", "gray.200")
 
     return (
         <>
-            <Breadcrumb spacing={{ base: '2px', md: '6px', lg: '8px' }} mb={{ base: 8, md: 10, lg: 10 }} separator={<ChevronRightIcon color='gray.500' />}>
+            <Breadcrumb
+                alignItems={'center'}
+                display="flex"
+                alignContent={'center'}
+                spacing={{ base: '2px', md: '6px', lg: '8px' }}
+                mb="2"
+                separator={<ChevronRightIcon
+                    color='gray.500' />}>
 
-                <BreadcrumbItem>
-                    <BreadcrumbLink href='/' color={previousPageLinkColor}>
-                        <Text fontSize={{ base: 'xs', md: 'sm', lg: 'md' }}>
-                            Home
-                        </Text>
-                    </BreadcrumbLink>
-                </BreadcrumbItem>
-
-                {previousPage &&
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href={previousPageLink} color={previousPageLinkColor}>
-                            <Text fontSize={{ base: 'xs', md: 'sm', lg: 'md' }}>
-                                {previousPage}
+                {pages.map(({ name, url, isCurrent }) => <BreadcrumbItem isCurrentPage={isCurrent} key={url}>
+                    <NextLink href={url} passHref>
+                        <BreadcrumbLink color={isCurrent ? currentPageLinkColor : previousPageLinkColor}>
+                            <Text textTransform="uppercase" fontWeight={"600"} color={isCurrent ? currentPageLinkColor : previousPageLinkColor} fontSize={{ base: 'xs', md: 'xs', lg: 'xs' }}>
+                                {name}
                             </Text>
                         </BreadcrumbLink>
-                    </BreadcrumbItem>
-                }
-
-                <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink href='#' color={currentPageLinkColor}>
-                        <Text fontSize={{ base: 'xs', md: 'sm', lg: 'md' }}>
-                            {currentPage}
-                        </Text>
-                    </BreadcrumbLink>
-                </BreadcrumbItem>
+                    </NextLink>
+                </BreadcrumbItem>)}
 
             </Breadcrumb>
         </>

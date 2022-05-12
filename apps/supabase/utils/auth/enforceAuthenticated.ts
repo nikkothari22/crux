@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
-import { supabase } from '../config/supabaseInit';
+import { supabase } from '../../config/supabaseInit';
 
-const enforceAuthenticated: (inner?: GetServerSideProps) => GetServerSideProps = inner => {
+export const enforceAuthenticated: (inner?: GetServerSideProps) => GetServerSideProps = inner => {
     return async context => {
         const { req } = context;
         const { user } = await supabase.auth.api.getUserByCookie(req);
@@ -17,5 +17,3 @@ const enforceAuthenticated: (inner?: GetServerSideProps) => GetServerSideProps =
         return { props: {} };
     };
 };
-
-export default enforceAuthenticated;

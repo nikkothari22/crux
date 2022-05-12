@@ -4,7 +4,7 @@ import { LoginSettingsFormLayout } from 'ui/settings'
 import ProtectedPageProvider from '../../auth/ProtectedPageProvider'
 import AdminPanelPage from '../../components/AdminPanelPage'
 import getLoginSettingsFromDatabase from '../../utils/getLoginSettingsFromDatabase'
-import { doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { firestore } from "../../config/firebaseInit";
 import { useAuth } from '../../context/userContext'
 

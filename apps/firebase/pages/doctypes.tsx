@@ -1,16 +1,17 @@
-import React, { ReactElement } from 'react'
-import AdminPanelPage from '../components/AdminPanelPage'
-import { DocTypesList } from "ui/doctype";
-import ProtectedPageProvider from '../auth/ProtectedPageProvider';
+import { ReactElement } from "react";
+import AdminPanelPage from "../components/AdminPanelPage";
+import ProtectedPageProvider from "../auth/ProtectedPageProvider";
+import { Heading } from "@chakra-ui/react";
 
 interface Props {
+
 }
 
 const Doctypes = (props: Props) => {
     return (
         <>
             <ProtectedPageProvider>
-                <DocTypesList />
+                <Heading>Doctypes</Heading>
             </ProtectedPageProvider>
         </>
     );
@@ -24,4 +25,4 @@ Doctypes.getLayout = function getLayout(page: ReactElement) {
     )
 }
 
-export default Doctypes;
+export default Doctypes

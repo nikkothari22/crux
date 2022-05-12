@@ -11,9 +11,17 @@ const systemSettings = (props: Props) => {
         <>
             <ProtectedPageProvider>
                 <BreadCrumb
-                    currentPage="System Settings"
-                    previousPage="Settings"
-                    previousPageLink="/settings" />
+                    pages={
+                        [{
+                            name: "Settings",
+                            url: '/settings',
+                        },
+                        {
+                            name: "System Settings",
+                            url: '/settings/systemSettings',
+                            isCurrent: true
+                        }]
+                    } />
                 <Heading>System Settings</Heading>
             </ProtectedPageProvider>
         </>

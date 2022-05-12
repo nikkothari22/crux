@@ -78,9 +78,17 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
     return (
         <>
             <BreadCrumb
-                currentPage="Login Page Settings"
-                previousPage="Settings"
-                previousPageLink="/settings" />
+                pages={
+                    [{
+                        name: "Settings",
+                        url: '/settings',
+                    },
+                    {
+                        name: "Login Page Settings",
+                        url: '/settings/loginPageSettings',
+                        isCurrent: true
+                    }]
+                } />
             <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
                 Login Page Settings
             </Heading>
