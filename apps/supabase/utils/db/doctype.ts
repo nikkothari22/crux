@@ -26,7 +26,7 @@ export const getDoctype = async (id: string): Promise<Doctype> => {
 export const getDocfields = async (doctypeID: string): Promise<Docfield[]> => {
 
     let { data, error } = await supabase.from('crux_docfields')
-        .select(`id, name, label, dataType, fieldType, isRequired, isReadOnly, order`)
+        .select(`id, name, label, dataType, fieldType, isRequired, isReadOnly, order, metadata`)
         .eq('doctype', doctypeID)
         .order('order', { ascending: true })
 
