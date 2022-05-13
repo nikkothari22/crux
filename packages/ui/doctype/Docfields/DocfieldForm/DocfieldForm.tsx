@@ -1,15 +1,15 @@
-import { Text, Button, chakra, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Flex, SimpleGrid } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { Text, Button, chakra, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Flex, SimpleGrid, StackDivider, Heading, Checkbox, Box, ButtonGroup, FormErrorMessage } from '@chakra-ui/react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import { Docfield } from 'types/doctypes'
+import { BooleanOrCondition, Docfield } from 'types/doctypes'
 import { getFieldTypes } from '../getFieldTypes'
-import { FormFieldsForMetadataBasedOnDataType } from '../FormFieldsForMetadataBasedOnDataType/FormFieldsForMetadataBasedOnDataType'
-
+import { DataTypeValidationFields } from '../DataTypeFormFields/DataTypeValidationFields'
+import { FieldTypeMetadataFields } from '../FieldTypeFormFields/FieldTypeMetadataFields'
 interface Props {
     isOpen: boolean,
     onClose: VoidFunction,
     initFieldData?: Docfield,
-    onSubmit: (field: Docfield) => void
+    onSubmit: (field: Partial<Docfield>) => void
 }
 
 export const DocfieldForm = ({ isOpen, onClose, initFieldData, onSubmit }: Props) => {
@@ -18,9 +18,9 @@ export const DocfieldForm = ({ isOpen, onClose, initFieldData, onSubmit }: Props
         <Modal isOpen={isOpen} onClose={onClose} size="5xl">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Add Field</ModalHeader>
+                <ModalHeader>{initFieldData ? "Edit Field" : "Add Field"}</ModalHeader>
                 <ModalCloseButton />
-                <DocFieldFormContent onClose={onClose} initFieldData={initFieldData} onSubmit={onSubmit} />
+                <DocfieldFormContent onClose={onClose} initFieldData={initFieldData} onSubmit={onSubmit} />
             </ModalContent>
         </Modal>
     )
@@ -28,40 +28,63 @@ export const DocfieldForm = ({ isOpen, onClose, initFieldData, onSubmit }: Props
 
 interface FormContentProps {
     onClose: VoidFunction,
-    initFieldData?: Docfield,
-    onSubmit: (field: Docfield) => void
+    initFieldData?: Partial<Docfield>,
+    onSubmit: (field: Partial<Docfield>) => void
 }
 
-interface DocfieldFormProps {
+interface DocfieldFormFields {
     label: string,
     name: string,
+    defaultValue: string,
+    description: string,
     dataType: string,
     fieldType: string,
     metadata: any
 }
 
-const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentProps) => {
+const DocfieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentProps) => {
 
-    const methods = useForm<DocfieldFormProps>({
-        defaultValues: initFieldData
-    })
-
+    const methods = useForm<DocfieldFormFields>({ defaultValues: initFieldData })
     const { register, handleSubmit, formState: { errors }, watch, setValue } = methods
-    const dataType = watch("dataType")
-    const fieldTypes = useMemo(() => getFieldTypes(dataType), [dataType])
-    const [isRequired, setIsRequired] = useState<string>(initFieldData?.isRequired ?? "NO")
-    const [isReadOnly, setIsReadOnly] = useState<string>(initFieldData?.isReadOnly ?? "NO")
 
+    const dataType = watch("dataType")
+    const fieldType = watch("fieldType")
+    const fieldTypes = useMemo(() => getFieldTypes(dataType), [dataType])
+
+    const [isRequired, setIsRequired] = useState<BooleanOrCondition>(initFieldData?.isRequired ?? "NO")
+    const [isReadOnly, setIsReadOnly] = useState<BooleanOrCondition>(initFieldData?.isReadOnly ?? "NO")
+
+    /** Reset fieldType and metadata if dataType is changed. */
     useEffect(() => {
         setValue('fieldType', getFieldTypes(dataType)[0])
+
+        //Get default metadata for the new dataType
+
+        const getDefaultMetadataForDatatype = (d: string) => {
+            switch (d) {
+                case "string":
+                    setValue('metadata.length_validation_type', 'minMax')
+                    break;
+                case "int":
+                    setValue('metadata.limit_validation_type', 'minMax')
+                    break;
+                case "float":
+                    setValue('metadata.limit_validation_type', 'minMax')
+                    setValue('metadata.precision', '2')
+                    break;
+            }
+        }
+        getDefaultMetadataForDatatype(dataType)
     }, [dataType])
-    const formSubmitted = (data: DocfieldFormProps) => {
+
+    const formSubmitted = (data: DocfieldFormFields) => {
         console.log(data)
-        // onSubmit({
-        //     ...data,
-        //     isReadOnly,
-        //     isRequired
-        // } as Docfield)
+        console.log(errors)
+        onSubmit({
+            ...data,
+            isReadOnly,
+            isRequired
+        } as Partial<Docfield>)
     }
 
     return <FormProvider {...methods}>
@@ -69,25 +92,35 @@ const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
         <chakra.form id="docfieldForm" onSubmit={handleSubmit(formSubmitted)}>
 
             <ModalBody pb={6}>
+                <Stack divider={<StackDivider />} spacing="6">
 
-                <SimpleGrid columns={2} spacingX={6} spacingY={4}>
 
-                    <FormControl isRequired>
-                        <FormLabel>Label</FormLabel>
-                        <Input
-                            {...register("label")}
-                            placeholder="Column name" />
-                    </FormControl>
+                    <SimpleGrid columns={2} spacingX={6} spacingY={4}>
 
-                    <FormControl isRequired>
-                        <FormLabel>Name</FormLabel>
-                        <Input
-                            {...register("name")}
-                            placeholder="Variable name for this field in your table" />
-                    </FormControl>
+                        <FormControl isRequired isInvalid={!!errors?.label}>
+                            <FormLabel>Label</FormLabel>
+                            <Input
+                                {...register("label", {
+                                    required: "Label is required"
+                                })}
+                                placeholder="e.g. Employee Name" />
+                            {errors?.label && <FormErrorMessage>{errors.label?.message}</FormErrorMessage>}
+                        </FormControl>
 
-                    <FormControl isRequired>
-                        <Stack spacing={2}>
+                        <FormControl isRequired isInvalid={!!errors?.name}>
+                            <FormLabel>Variable Name</FormLabel>
+                            <Input
+                                {...register("name", {
+                                    validate: (name) => {
+                                        return !name.includes(" ") || "Variable name cannot contain spaces"
+                                    },
+                                    required: "Variable name is required"
+                                })}
+                                placeholder="e.g. employee_name" />
+                            {errors?.name && <FormErrorMessage>{errors.name?.message}</FormErrorMessage>}
+                        </FormControl>
+
+                        <FormControl isRequired>
                             <FormLabel>Data Type</FormLabel>
                             <Select
                                 {...register("dataType")}
@@ -99,11 +132,9 @@ const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
                                 <option value='timestamp'>Timestamp</option>
                                 <option value='boolean'>Boolean</option>
                             </Select>
-                        </Stack>
-                    </FormControl>
+                        </FormControl>
 
-                    <FormControl isRequired>
-                        <Stack spacing={2}>
+                        <FormControl isRequired>
                             <FormLabel>Field Type</FormLabel>
                             <Select
                                 {...register("fieldType")}
@@ -112,79 +143,77 @@ const DocFieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
                                 {fieldTypes.map((fieldTypes, index) =>
                                     <option key={index}>{fieldTypes}</option>)}
                             </Select>
-                        </Stack>
-                    </FormControl>
-
-                </SimpleGrid>
-
-                <FormFieldsForMetadataBasedOnDataType dataType={dataType} />
-
-                {/* <ValidationMetadataForFieldType fieldType={fieldType} /> */}
-
-                <HStack spacing={10} mt={4}>
-
-                    <FormLabel mt={2}>Validations</FormLabel>
-
-                    <SimpleGrid columns={2} spacingX={6}>
-                        <FormControl>
-                            <RadioGroup
-                                onChange={setIsRequired}
-                                value={isRequired}
-                            >
-                                <HStack>
-                                    <Text fontWeight="medium">isRequired</Text>
-                                    <Stack direction='row'>
-                                        <Radio value='YES'>Yes</Radio>
-                                        <Radio value='NO'>No</Radio>
-                                        <Radio value='CONDITION'>Add condition</Radio>
-                                    </Stack>
-                                </HStack>
-                                {/* if value is set to condition show input box to enter condition */}
-                            </RadioGroup>
                         </FormControl>
 
-                        <FormControl>
-                            <RadioGroup
-                                onChange={setIsReadOnly}
-                                value={isReadOnly}>
-                                <HStack>
-                                    <Text fontWeight="medium">readOnly</Text>
-                                    <Stack direction='row'>
-                                        <Radio value='YES'>Yes</Radio>
-                                        <Radio value='NO'>No</Radio>
-                                        <Radio value='CONDITION'>Add condition</Radio>
-                                    </Stack>
-                                </HStack>
-                                {/* if value is set to condition show input box to enter condition */}
-                            </RadioGroup>
-                        </FormControl>
                     </SimpleGrid>
-                </HStack>
 
-                <FormControl mt={4}>
-                    <HStack>
-                        <FormLabel>Default Value</FormLabel>
-                        <Input maxW="80%" />
-                    </HStack>
-                </FormControl>
+                    <Stack>
+                        <FormSectionHeading>Validations</FormSectionHeading>
+                        <Stack spacing="4">
+                            <HStack spacing="8">
+                                <Box>
+                                    <Checkbox
+                                        isChecked={isRequired === "YES"}
+                                        onChange={(e) => setIsRequired(e.target.checked ? "YES" : "NO")}>
+                                        Required
+                                    </Checkbox>
+                                </Box>
+                                <Box>
+                                    <Checkbox
+                                        isChecked={isReadOnly === "YES"}
+                                        onChange={(e) => setIsReadOnly(e.target.checked ? "YES" : "NO")}>
+                                        Read only
+                                    </Checkbox>
+                                </Box>
+                            </HStack>
+                            {dataType &&
+                                <DataTypeValidationFields dataType={dataType} />
+                            }
+                        </Stack>
+                    </Stack>
 
-                <FormControl mt={4}>
-                    <HStack spacing={6}>
-                        <FormLabel>Description</FormLabel>
-                        <Input maxW="80%" />
-                    </HStack>
-                </FormControl>
+                    {fieldType &&
+                        <Stack>
+                            <FormSectionHeading>Field details</FormSectionHeading>
+                            <FieldTypeMetadataFields fieldType={fieldType} />
+                        </Stack>
+                    }
+
+                    <Stack>
+                        <FormSectionHeading>Other Details</FormSectionHeading>
+                        <SimpleGrid columns={2} spacingX={6} spacingY={4}>
+
+                            <FormControl>
+                                <FormLabel>Default Value</FormLabel>
+                                <Input {...register("defaultValue")}
+                                    placeholder="e.g. John Smith" />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel>Description</FormLabel>
+                                <Input  {...register("description")}
+                                    placeholder="e.g. Full name of employee" />
+                            </FormControl>
+                        </SimpleGrid>
+                    </Stack>
+
+                </Stack>
 
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='blue' mr={3}
-                    type="submit">
-                    Save
-                </Button>
-                <Button onClick={onClose}>Cancel</Button>
+                <ButtonGroup spacing={4}>
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button colorScheme='blue'
+                        type="submit">
+                        Save
+                    </Button>
+                </ButtonGroup>
             </ModalFooter>
 
         </chakra.form>
     </FormProvider>
 }
+
+
+const FormSectionHeading = ({ children }: { children: string }) => <Heading mb="1" size="xs" color="gray.500" textTransform='uppercase' fontWeight="medium">{children}</Heading>
