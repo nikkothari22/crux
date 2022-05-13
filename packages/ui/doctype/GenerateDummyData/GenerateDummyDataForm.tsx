@@ -84,7 +84,6 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                             </Heading>
 
                             <Button
-                                mr={10}
                                 onClick={onOpen}
                                 colorScheme="blue">
                                 Generate data
@@ -92,7 +91,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
 
                         </Flex>
 
-                        <Divider mt={{ base: 4, md: 4, lg: 6 }} maxW="90vw" />
+                        <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
                         <Box>
                             <HStack spacing={10} mt={{ base: 4, md: 4, lg: 6 }}>
@@ -120,7 +119,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                                 </Stack>
 
                             </HStack>
-                            <Divider mt={{ base: 4, md: 6, lg: 8 }} maxW="90vw" />
+                            <Divider mt={{ base: 4, md: 6, lg: 8 }} />
                         </Box>
 
                         <GenerateDummyDataModal isOpen={isOpen} onClose={onClose} onSubmit={generateDummyData} />

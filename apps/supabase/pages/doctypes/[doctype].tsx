@@ -66,7 +66,8 @@ const EditDoctype = (props: Props) => {
                 isRequired: docfieldData.isRequired,
                 isReadOnly: docfieldData.isReadOnly,
                 doctype: docfieldData.doctype,
-                order: docfieldData.order
+                order: docfieldData.order,
+                metadata: docfieldData.metadata
             })
             .match({ id: docfieldData.id })
         console.log("edited docfield", docfieldData)
@@ -89,7 +90,8 @@ const EditDoctype = (props: Props) => {
                 isRequired: docfieldData.isRequired,
                 isReadOnly: docfieldData.isReadOnly,
                 doctype: doctypeID,
-                order: docfieldData.order
+                order: docfieldData.order,
+                metadata: docfieldData.metadata
             })
         console.log("created docfield: ", docfieldData)
         if (error) {

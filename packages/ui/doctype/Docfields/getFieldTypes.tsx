@@ -7,10 +7,10 @@ export const getFieldTypes = (dataType: string) => {
             fieldTypes = ["Short Text", "Long Text", "Select", "Email", "Phone", "Image", "URL"]
             break;
         case 'int':
-            fieldTypes = ["Number", "Currency", "Measurement"]
+            fieldTypes = ["Number", "Currency", "Percentage"]
             break;
         case 'float':
-            fieldTypes = ["Number", "Percentage", "Currency", "Measurement", "Temperature"]
+            fieldTypes = ["Number", "Currency", "Percentage"]
             break;
         case 'timestamp':
             fieldTypes = ["Date", "Time", "Date and Time", "Date Range"]
