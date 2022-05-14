@@ -56,24 +56,47 @@ const DocfieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
 
     /** Reset fieldType and metadata if dataType is changed. */
     useEffect(() => {
-        setValue('fieldType', getFieldTypes(dataType)[0])
+        //If dataType is changed to something else, reset fields
+        if (!(initFieldData?.dataType === dataType)) {
+            setValue('fieldType', getFieldTypes(dataType)[0])
 
-        //Get default metadata for the new dataType
-        const getDefaultMetadataForDatatype = (d: string) => {
-            switch (d) {
-                case "string":
-                    setValue('metadata.length_validation_type', 'minMax')
-                    break;
-                case "int":
-                    setValue('metadata.limit_validation_type', 'minMax')
-                    break;
-                case "float":
-                    setValue('metadata.limit_validation_type', 'minMax')
-                    setValue('metadata.precision', '2')
-                    break;
+            //Get default metadata for the new dataType
+            const getDefaultMetadataForDatatype = (d: string) => {
+                switch (d) {
+                    case "string":
+                        setValue('metadata.length_validation_type', 'minMax')
+                        break;
+                    case "int":
+                        setValue('metadata.limit_validation_type', 'minMax')
+                        break;
+                    case "float":
+                        setValue('metadata.limit_validation_type', 'minMax')
+                        setValue('metadata.precision', '2')
+                        break;
+                }
             }
+            getDefaultMetadataForDatatype(dataType)
+        } else {
+            //Else, reset metadata to default values
+            setValue('fieldType', initFieldData?.fieldType ?? getFieldTypes(dataType)[0])
+
+            //Get default metadata for the new dataType
+            const getInitialMetadataForDatatype = (d: string) => {
+                switch (d) {
+                    case "string":
+                        setValue('metadata.length_validation_type', initFieldData?.metadata?.length_validation_type ?? 'minMax')
+                        break;
+                    case "int":
+                        setValue('metadata.limit_validation_type', initFieldData?.metadata?.limit_validation_type ?? 'minMax')
+                        break;
+                    case "float":
+                        setValue('metadata.limit_validation_type', initFieldData?.metadata?.limit_validation_type ?? 'minMax')
+                        setValue('metadata.precision', initFieldData?.metadata?.precision ?? '2')
+                        break;
+                }
+            }
+            getInitialMetadataForDatatype(dataType)
         }
-        getDefaultMetadataForDatatype(dataType)
     }, [dataType])
 
     const formSubmitted = (data: DocfieldFormFields) => {
