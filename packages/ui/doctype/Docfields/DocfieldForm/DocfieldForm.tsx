@@ -1,5 +1,5 @@
-import { Text, Button, chakra, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Flex, SimpleGrid, StackDivider, Heading, Checkbox, Box, ButtonGroup, FormErrorMessage } from '@chakra-ui/react'
-import React, { useEffect, useMemo, useState } from 'react'
+import { Button, chakra, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, SimpleGrid, StackDivider, Heading, Checkbox, Box, ButtonGroup, FormErrorMessage } from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { BooleanOrCondition, Docfield } from 'types/doctypes'
 import { getFieldTypes } from '../getFieldTypes'
@@ -56,25 +56,47 @@ const DocfieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
 
     /** Reset fieldType and metadata if dataType is changed. */
     useEffect(() => {
-        setValue('fieldType', getFieldTypes(dataType)[0])
+        //If dataType is changed to something else, reset fields
+        if (!(initFieldData?.dataType === dataType)) {
+            setValue('fieldType', getFieldTypes(dataType)[0])
 
-        //Get default metadata for the new dataType
-
-        const getDefaultMetadataForDatatype = (d: string) => {
-            switch (d) {
-                case "string":
-                    setValue('metadata.length_validation_type', 'minMax')
-                    break;
-                case "int":
-                    setValue('metadata.limit_validation_type', 'minMax')
-                    break;
-                case "float":
-                    setValue('metadata.limit_validation_type', 'minMax')
-                    setValue('metadata.precision', '2')
-                    break;
+            //Get default metadata for the new dataType
+            const getDefaultMetadataForDatatype = (d: string) => {
+                switch (d) {
+                    case "string":
+                        setValue('metadata.length_validation_type', 'minMax')
+                        break;
+                    case "int":
+                        setValue('metadata.limit_validation_type', 'minMax')
+                        break;
+                    case "float":
+                        setValue('metadata.limit_validation_type', 'minMax')
+                        setValue('metadata.precision', '2')
+                        break;
+                }
             }
+            getDefaultMetadataForDatatype(dataType)
+        } else {
+            //Else, reset metadata to default values
+            setValue('fieldType', initFieldData?.fieldType ?? getFieldTypes(dataType)[0])
+
+            //Get default metadata for the new dataType
+            const getInitialMetadataForDatatype = (d: string) => {
+                switch (d) {
+                    case "string":
+                        setValue('metadata.length_validation_type', initFieldData?.metadata?.length_validation_type ?? 'minMax')
+                        break;
+                    case "int":
+                        setValue('metadata.limit_validation_type', initFieldData?.metadata?.limit_validation_type ?? 'minMax')
+                        break;
+                    case "float":
+                        setValue('metadata.limit_validation_type', initFieldData?.metadata?.limit_validation_type ?? 'minMax')
+                        setValue('metadata.precision', initFieldData?.metadata?.precision ?? '2')
+                        break;
+                }
+            }
+            getInitialMetadataForDatatype(dataType)
         }
-        getDefaultMetadataForDatatype(dataType)
     }, [dataType])
 
     const formSubmitted = (data: DocfieldFormFields) => {
@@ -93,7 +115,6 @@ const DocfieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
 
             <ModalBody pb={6}>
                 <Stack divider={<StackDivider />} spacing="6">
-
 
                     <SimpleGrid columns={2} spacingX={6} spacingY={4}>
 

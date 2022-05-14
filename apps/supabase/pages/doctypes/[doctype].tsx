@@ -67,7 +67,9 @@ const EditDoctype = (props: Props) => {
                 isReadOnly: docfieldData.isReadOnly,
                 doctype: docfieldData.doctype,
                 order: docfieldData.order,
-                metadata: docfieldData.metadata
+                metadata: docfieldData.metadata,
+                defaultValue: docfieldData.defaultValue,
+                description: docfieldData.description
             })
             .match({ id: docfieldData.id })
         console.log("edited docfield", docfieldData)
@@ -91,7 +93,9 @@ const EditDoctype = (props: Props) => {
                 isReadOnly: docfieldData.isReadOnly,
                 doctype: doctypeID,
                 order: docfieldData.order,
-                metadata: docfieldData.metadata
+                metadata: docfieldData.metadata,
+                defaultValue: docfieldData.defaultValue,
+                description: docfieldData.description
             })
         console.log("created docfield: ", docfieldData)
         if (error) {

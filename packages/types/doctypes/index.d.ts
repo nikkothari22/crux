@@ -6,11 +6,10 @@ export interface Doctype {
     /** ID (primary key) of the doctype */
     id: string,
 }
+
 export type BooleanOrCondition = "YES" | "NO" | "CONDITION"
 
-
 export type Docfield = DocStringField | DocBooleanField | DocIntegerField | DocFloatField | DocTimestampField
-
 
 export interface DocfieldBasicDetails {
     name: string,
@@ -20,6 +19,8 @@ export interface DocfieldBasicDetails {
     /** ID of docfield  */
     id: string,
     order: number,
+    defaultValue: string,
+    description: string,
     dataType: 'string' | 'int' | 'float' | 'boolean' | 'timestamp',
     isRequired: BooleanOrCondition,
     isReadOnly: BooleanOrCondition,
@@ -57,8 +58,6 @@ export interface DocBooleanField extends DocfieldBasicDetails {
 export interface BasicDocfieldMetadata {
 
 }
-
-
 
 export interface DocStringFieldMetadata extends BasicDocfieldMetadata {
 

@@ -40,11 +40,13 @@ export const getDummyDataObjectFromDocfields = (docfields: Docfield[]) => {
     docfields?.forEach(df => {
         if (df.dataType === "string") {
             if (df.fieldType === "Short Text") {
-                data[df.label] = randomString("name", "firstName")
+                // data[df.label] = randomString(metadata.fake_data_category, metadata.fake_data_type)
             } else if (df.fieldType === "Email") {
                 data[df.label] = randomString("internet", "email")
             } else if (df.fieldType === "Phone") {
                 data[df.label] = randomString("phone", "phoneNumber")
+            } else if (df.fieldType === "URL") {
+                data[df.label] = randomString("internet", "url")
             }
         } else if (df.dataType === "boolean") {
             data[df.label] = randomBoolean()

@@ -1,5 +1,5 @@
-import { FormControl, FormErrorMessage, FormHelperText, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, SimpleGrid, Stack } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import { FormControl, FormErrorMessage, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, SimpleGrid, Stack } from "@chakra-ui/react";
+import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
 interface Props {
@@ -59,6 +59,7 @@ const StringMetadataFormFields = () => {
             }
         }
     }, [typeOfValidation])
+
     return (
         <Stack spacing="4">
             <FormControl isRequired>
