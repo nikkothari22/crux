@@ -47,7 +47,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
             let fakeData = []
             for (let i = 0; i < numberOfRows; i++) {
                 let data = getDummyDataObjectFromDocfields(docfields)
-                fakeData.push(data)
+                fakeData.push({ ...data, id: i })
             }
             console.log(fakeData)
             setDummyData(fakeData)
@@ -63,7 +63,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                         url: '/doctypes/',
                     },
                     {
-                        name: doctypeData?.name ?? " ",
+                        name: doctypeData?.name ?? "",
                         url: `/doctypes/generate-dummy-data/${doctypeData?.id ?? ""}`,
                         isCurrent: true
                     }]
@@ -80,20 +80,20 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                             align="center">
 
                             <Heading fontSize="3xl" mt={4}>
-                                {doctypeData?.name ?? ""}
+                                Generate Dummy Data - {doctypeData?.name ?? ""}
                             </Heading>
 
                             <Button
                                 onClick={onOpen}
                                 colorScheme="blue">
-                                Generate data
+                                Generate Data
                             </Button>
 
                         </Flex>
 
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
-                        <Box>
+                        {/* <Box>
                             <HStack spacing={10} mt={{ base: 4, md: 4, lg: 6 }}>
 
                                 <Stack spacing={4}>
@@ -120,7 +120,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
 
                             </HStack>
                             <Divider mt={{ base: 4, md: 6, lg: 8 }} />
-                        </Box>
+                        </Box> */}
 
                         <GenerateDummyDataModal isOpen={isOpen} onClose={onClose} onSubmit={generateDummyData} />
                         {docfields && <DummyDataTable docfields={docfields} data={dummyData} />}
@@ -156,7 +156,7 @@ const GenerateDummyDataModal = ({ isOpen, onClose, onSubmit }: DummyDataModalPro
                     isRequired>
                     <Stack spacing={2}>
                         <FormLabel>Rows: </FormLabel>
-                        <NumberInput onChange={(s, n) => setNumberOfRows(n)} value={numberOfRows} isRequired step={5} defaultValue={10} min={5} max={50}>
+                        <NumberInput onChange={(s, n) => setNumberOfRows(n)} value={numberOfRows} isRequired step={5} defaultValue={10} min={5} max={100}>
                             <NumberInputField />
                             <NumberInputStepper>
                                 <NumberIncrementStepper />
@@ -168,7 +168,7 @@ const GenerateDummyDataModal = ({ isOpen, onClose, onSubmit }: DummyDataModalPro
             </ModalBody>
 
             <ModalFooter>
-                <Button variant="outline" mr={3} onClick={onClose}>Cancel</Button>
+                <Button variant="outline" mr={3} onClick={onClose}>Close</Button>
                 <Button
                     onClick={onButtonClicked}
                     colorScheme="blue">

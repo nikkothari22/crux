@@ -34,14 +34,27 @@ export interface DocStringField extends DocfieldBasicDetails {
 
 export interface DocIntegerField extends DocfieldBasicDetails {
     dataType: 'int'
-    fieldType: 'Number' | 'Currency' | 'Measurement'
-    metadata: any
+    fieldType: 'Number' | 'Currency' | 'Percentage'
+    metadata: {
+        min?: string,
+        max?: string,
+        limit_validation_type?: 'minMax' | 'min' | 'max' | 'none',
+        suffix?: string,
+        currency?: string,
+    }
 }
 
 export interface DocFloatField extends DocfieldBasicDetails {
     dataType: 'float'
-    fieldType: 'Number' | 'Percentage' | 'Currency' | 'Measurement' | 'Temperature'
-    metadata: any
+    fieldType: 'Number' | 'Currency' | 'Percentage'
+    metadata: {
+        min?: string,
+        max?: string,
+        limit_validation_type?: 'minMax' | 'min' | 'max' | 'none',
+        suffix?: string,
+        precision?: number,
+        currency?: string,
+    }
 }
 
 export interface DocTimestampField extends DocfieldBasicDetails {

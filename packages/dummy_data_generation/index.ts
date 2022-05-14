@@ -1,19 +1,31 @@
 import { faker, Faker } from '@faker-js/faker';
 import { Docfield } from 'types/doctypes'
-
+import { Chance } from 'chance';
 export const randomBoolean = () => Math.random() < 0.5;
+
 
 export const randomNumber = (min?: number, max?: number, type?: 'Int' | 'Float', precision?: number) => {
 
-    let random = Math.random();
-
+    let chance = new Chance();
     if (type === 'Int') {
-        return Math.round(random)
-    } else {
-        if (precision) {
-            //TODO: Round off number to x digits
+        if (min && max) {
+            return chance.integer({ min, max })
+        } else if (min) {
+            return chance.integer({ min })
+        } else if (max) {
+            return chance.integer({ max })
         } else {
-            return Math.random()
+            return chance.integer()
+        }
+    } else {
+        if (min && max) {
+            return chance.floating({ min, max, fixed: precision })
+        } else if (min) {
+            return chance.floating({ min, fixed: precision })
+        } else if (max) {
+            return chance.floating({ max, fixed: precision })
+        } else {
+            return chance.floating({ fixed: precision })
         }
     }
 
@@ -28,30 +40,10 @@ export const randomTimestamp = () => {
 // type FakerTypes = "firstName" | "lastName"
 export const randomString = (category: string, type: string) => {
     // @ts-ignore
-    return faker[category][type]()
+    // return faker[category][type]()
+    let chance = new Chance();
+    return chance.string()
 }
 
-export const getDummyDataObjectFromDocfields = (docfields: Docfield[]) => {
 
-    let data: any = {
-        id: faker.random.alphaNumeric(12)
-    }
-
-    docfields?.forEach(df => {
-        if (df.dataType === "string") {
-            if (df.fieldType === "Short Text") {
-                // data[df.label] = randomString(metadata.fake_data_category, metadata.fake_data_type)
-            } else if (df.fieldType === "Email") {
-                data[df.label] = randomString("internet", "email")
-            } else if (df.fieldType === "Phone") {
-                data[df.label] = randomString("phone", "phoneNumber")
-            } else if (df.fieldType === "URL") {
-                data[df.label] = randomString("internet", "url")
-            }
-        } else if (df.dataType === "boolean") {
-            data[df.label] = randomBoolean()
-        }
-    })
-
-    return data
-}
+export { getDummyDataObjectFromDocfields } from './docfields';
