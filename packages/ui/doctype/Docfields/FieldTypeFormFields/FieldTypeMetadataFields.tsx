@@ -1,12 +1,14 @@
-import { FormControl, FormLabel, Input, Select, SimpleGrid, Stack, Textarea } from "@chakra-ui/react"
+import { FormControl, FormHelperText, FormLabel, Input, Select, SimpleGrid, Stack, Text, Textarea } from "@chakra-ui/react"
 import { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
+import { CurrencyField, SuffixField } from "./Fields"
 
 type Props = {
     fieldType: string
 }
 
 export const FieldTypeMetadataFields = ({ fieldType }: Props) => {
+
 
     switch (fieldType) {
         case 'Short Text':
@@ -17,7 +19,7 @@ export const FieldTypeMetadataFields = ({ fieldType }: Props) => {
             return <NumberFieldFormField />
         case 'Currency':
             return <CurrencyFieldFormField />
-        default: return null
+        default: return <EmptyFieldDetailsBanner />
     }
 }
 
@@ -71,32 +73,25 @@ const SelectMetadataFormField = () => {
 
 const NumberFieldFormField = () => {
 
-    const { register } = useFormContext();
-
     return (
-        <FormControl>
-            <FormLabel>Suffix</FormLabel>
-            <Input {...register("metadata.suffix")} />
-        </FormControl>
+        <SimpleGrid columns={2} spacingX={6} spacingY={4}>
+            <SuffixField />
+        </SimpleGrid>
     )
 }
 
 const CurrencyFieldFormField = () => {
 
-    const { register } = useFormContext();
-
     return (
         <SimpleGrid columns={2} spacingX={6} spacingY={4}>
-            <FormControl>
-                <FormLabel>Suffix</FormLabel>
-                <Input {...register("metadata.suffix")} />
-            </FormControl>
-            <FormControl>
-                <FormLabel>Currency</FormLabel>
-                <Input {...register("metadata.currency")} />
-            </FormControl>
+            <CurrencyField />
+            <SuffixField />
         </SimpleGrid>
     )
+}
+
+const EmptyFieldDetailsBanner = () => {
+    return <Text color="gray.400">Nothing to show.</Text>
 }
 
 const getFieldTypesForFakeData = (fakeDataMetadata: string) => {
