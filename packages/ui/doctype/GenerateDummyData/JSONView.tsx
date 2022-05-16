@@ -1,8 +1,8 @@
 import { Box, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import React from 'react'
 import { CodeContainer, CopyButton } from '../../CodeViewer/CodeContainer'
 import Highlight from '../../CodeViewer/Highlight'
 import theme from 'prism-react-renderer/themes/nightOwl'
+
 type Props = {
     data: any,
     isOpen: boolean,
@@ -33,9 +33,6 @@ export const JSONView = ({ data, isOpen, onClose }: Props) => {
                     </Box>
                 </ModalBody>
             </ModalContent>
-
-
         </Modal>
-
     )
 }

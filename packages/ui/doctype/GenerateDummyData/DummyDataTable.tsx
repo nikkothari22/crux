@@ -1,11 +1,12 @@
-import { Box, BoxProps, Button, ButtonGroup, ButtonProps, Code, Flex, FormControl, FormLabel, HStack, Switch, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useBoolean, useClipboard, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, ButtonGroup, Code, FormControl, FormLabel, HStack, Switch, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useBoolean, useDisclosure } from "@chakra-ui/react"
 import { Docfield } from "types/doctypes"
 import { VscJson } from 'react-icons/vsc'
-import { GrDocumentCsv } from 'react-icons/gr'
 import { useMemo } from "react"
 import { getBooleanField, getIntegerField, getStringField } from "../DataVisualization/DocfieldVisualRepresentation"
 import { JSONView } from "./JSONView"
 import { FiDatabase } from "react-icons/fi"
+import { CSVDownloadButton } from "./CSVDownloadButton"
+
 interface Props {
     docfields: Docfield[]
     data: any[]
@@ -48,15 +49,13 @@ export const DummyDataTable = ({ docfields, data }: Props) => {
                     <Button leftIcon={<VscJson />} onClick={jsonModal.onOpen}>
                         JSON
                     </Button>
-                    <Button leftIcon={<GrDocumentCsv />}>
-                        CSV
-                    </Button>
+                    <CSVDownloadButton data={data} docfields={docfields} />
                     <Button leftIcon={<FiDatabase />}>
                         Upload to Database
                     </Button>
                 </ButtonGroup>
-
             </HStack>
+
             <Box mt={6}>
                 <TableContainer mb={16}>
                     <Table variant="striped" size={'sm'} colorScheme="gray">
