@@ -1,5 +1,5 @@
 
-import { DocBooleanField, Docfield, DocFloatField, DocIntegerField } from "types/doctypes";
+import { DocBooleanField, Docfield, DocFloatField, DocIntegerField, DocStringField } from "types/doctypes";
 
 export const getBooleanField = (docfield: DocBooleanField, data: any) => {
 
@@ -28,4 +28,14 @@ export const getIntegerField = (docfield: DocIntegerField | DocFloatField, data:
 
     return output
 
+}
+
+export const getStringField = (docfield: DocStringField, data: any) => {
+
+    switch (docfield.fieldType) {
+        case "Email": return <a href={`mailto:${data[docfield.name]}`}>{data[docfield.name]}</a>
+        case "Phone": return <a href={`tel:${data[docfield.name]}`}>{data[docfield.name]}</a>
+        case "URL": return <a href={data[docfield.name]}>{data[docfield.name]}</a>
+        default: return data[docfield.name]
+    }
 }

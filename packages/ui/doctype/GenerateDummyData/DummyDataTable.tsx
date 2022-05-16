@@ -3,8 +3,9 @@ import { Docfield } from "types/doctypes"
 import { VscJson } from 'react-icons/vsc'
 import { GrDocumentCsv } from 'react-icons/gr'
 import { useMemo } from "react"
-import { getBooleanField, getIntegerField } from "../DataVisualization/DocfieldVisualRepresentation"
+import { getBooleanField, getIntegerField, getStringField } from "../DataVisualization/DocfieldVisualRepresentation"
 import { JSONView } from "./JSONView"
+import { FiDatabase } from "react-icons/fi"
 interface Props {
     docfields: Docfield[]
     data: any[]
@@ -26,6 +27,7 @@ export const DummyDataTable = ({ docfields, data }: Props) => {
                     case "int": return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
                     case 'float': return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
                     case "boolean": return <Td key={field.id}>{getBooleanField(field, row)}</Td>
+                    case "string": return <Td key={field.id}>{getStringField(field, row)}</Td>
                     default: return <Td key={field.id}></Td>
                 }
             })}
@@ -49,6 +51,9 @@ export const DummyDataTable = ({ docfields, data }: Props) => {
                     <Button leftIcon={<GrDocumentCsv />}>
                         CSV
                     </Button>
+                    <Button leftIcon={<FiDatabase />}>
+                        Upload to Database
+                    </Button>
                 </ButtonGroup>
 
             </HStack>
@@ -57,9 +62,9 @@ export const DummyDataTable = ({ docfields, data }: Props) => {
                     <Table variant="striped" size={'sm'} colorScheme="gray">
                         <Thead>
                             <Tr>
-                                <Th>#</Th>
+                                <Th py="4">#</Th>
                                 {docfields.map((df) =>
-                                    <Th key={df.id} isNumeric={df.dataType === "int" || df.dataType === "float"}>{df.label} {df.isRequired && <Text as="span" color="red.400">*</Text>}</Th>
+                                    <Th py="4" key={df.id} isNumeric={df.dataType === "int" || df.dataType === "float"}>{df.label} {df.isRequired && <Text as="span" color="red.400">*</Text>}</Th>
                                 )}
                             </Tr>
                         </Thead>

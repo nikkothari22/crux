@@ -31,10 +31,12 @@ export const generateDataForFloat = (docfield: DocFloatField) => {
     //1. Check type of limit
     //2. Generate random number
     //3. Return number
-
+    console.log("Docfield", docfield)
     let min = docfield.metadata.min ? Number(docfield.metadata.min) : undefined
     let max = docfield.metadata.max ? Number(docfield.metadata.max) : undefined
     let precision = docfield.metadata.precision ? Number(docfield.metadata.precision) : undefined
+
+    console.log(min, max, precision)
     switch (docfield.metadata.limit_validation_type) {
         case "minMax":
             return randomNumber(min, max, 'Float', precision)

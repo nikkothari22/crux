@@ -15,34 +15,11 @@ export const getDummyDataObjectFromDocfields = (docfields: Docfield[]) => {
     })
 
     return dummyDataObject
-
-
-    // let data: any = {
-    //     id: faker.random.alphaNumeric(12)
-    // }
-
-    // docfields?.forEach(df => {
-    //     if (df.dataType === "string") {
-    //         if (df.fieldType === "Short Text") {
-    //             // data[df.label] = randomString(metadata.fake_data_category, metadata.fake_data_type)
-    //         } else if (df.fieldType === "Email") {
-    //             data[df.label] = randomString("internet", "email")
-    //         } else if (df.fieldType === "Phone") {
-    //             data[df.label] = randomString("phone", "phoneNumber")
-    //         } else if (df.fieldType === "URL") {
-    //             data[df.label] = randomString("internet", "url")
-    //         }
-    //     } else if (df.dataType === "boolean") {
-    //         data[df.label] = randomBoolean()
-    //     }
-    // })
-
-    // return data
 }
 
 export const getDataForDocfield = (docfield: Docfield) => {
     switch (docfield.dataType) {
-        case "string": return randomString("", "")
+        case "string": return randomString(docfield)
         case "boolean": return randomBoolean()
         case "int": return generateDataForInt(docfield)
         case "float": return generateDataForFloat(docfield)
