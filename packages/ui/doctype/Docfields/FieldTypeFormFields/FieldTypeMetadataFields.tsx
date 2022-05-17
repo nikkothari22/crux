@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, FormLabel, Input, Select, SimpleGrid, Stack, Text, Textarea } from "@chakra-ui/react"
+import { FormControl, FormHelperText, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, SimpleGrid, Text, Textarea } from "@chakra-ui/react"
 import { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { CurrencyField, SuffixField } from "./Fields"
@@ -9,10 +9,11 @@ type Props = {
 
 export const FieldTypeMetadataFields = ({ fieldType }: Props) => {
 
-
     switch (fieldType) {
         case 'Short Text':
             return <ShortTextMetadataFormFields />
+        case 'Long Text':
+            return <LongTextFormField />
         case 'Select':
             return <SelectMetadataFormField />
         case 'Number':
@@ -67,7 +68,42 @@ const SelectMetadataFormField = () => {
                 {...register("metadata.options", {
                     required: "You need to add options for the select field type."
                 })} />
+            <FormHelperText>Press enter to add new option.</FormHelperText>
         </FormControl>
+    )
+}
+
+const LongTextFormField = () => {
+
+    const { register, formState: { errors } } = useFormContext();
+
+    return (
+        <SimpleGrid columns={2} spacingX={6} spacingY={4}>
+            <FormControl
+                isRequired
+                isInvalid={!!errors?.metadata?.long_text_type}>
+                <FormLabel>Select type</FormLabel>
+                <Select placeholder="Select category"
+                    {...register("metadata.long_text_type")}>
+                    <option value='lines'>Lines</option>
+                    <option value='sentences'>Sentences</option>
+                    <option value='paragraphs'>Paragraphs</option>
+                    <option value='slug'>Slug</option>
+                    <option value='words'>Words</option>
+                    <option value='text'>Text</option>
+                </Select>
+            </FormControl>
+            <FormControl>
+                <FormLabel>Number of lines/ words to be generated:</FormLabel>
+                <NumberInput defaultValue={2} min={1} max={1000}>
+                    <NumberInputField {...register("metadata.num_of_words_or_lines")} />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+            </FormControl>
+        </SimpleGrid>
     )
 }
 
@@ -100,7 +136,7 @@ const getFieldTypesForFakeData = (fakeDataMetadata: string) => {
 
     switch (fakeDataMetadata) {
         case 'name':
-            fieldTypes = ["firstName", "lastName", "middleName", "gender", "jobArea", "jobDescriptor", "jobTitle", "jobType", "prefix", "suffix"]
+            fieldTypes = ["firstName", "lastName", "middleName", "fullName", "fullName with middleName", "gender", "jobArea", "jobDescriptor", "jobTitle", "jobType", "prefix", "suffix"]
             break;
         case 'address':
             fieldTypes = ["buildingNumber", "cardinalDirection", "city", "cityName", "cityPrefix", "citySuffix", "country", "countryCode", "county", "direction", "latitude", "longitude", "secondaryAddress", "state", "streetAddress", "streetName", "timeZone", "zipCode"]

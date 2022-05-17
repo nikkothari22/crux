@@ -28,8 +28,17 @@ export interface DocfieldBasicDetails {
 
 export interface DocStringField extends DocfieldBasicDetails {
     dataType: 'string',
-    fieldType: 'Short Text' | 'Long Text' | 'Select' | 'Email' | 'Phone' | 'Image' | 'URL'
-    metadata: DocStringFieldMetadata
+    fieldType: 'Short Text' | 'Long Text' | 'Select' | 'Email' | 'Phone' | 'URL' | 'ID'
+    metadata: {
+        min?: string,
+        max?: string,
+        length_validation_type?: 'minMax' | 'min' | 'max' | 'none',
+        options?: string,
+        fake_data_category?: string,
+        fake_data_type?: string,
+        long_text_type?: string,
+        num_of_words_or_lines?: string
+    }
 }
 
 export interface DocIntegerField extends DocfieldBasicDetails {

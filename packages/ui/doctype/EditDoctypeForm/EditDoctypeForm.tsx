@@ -1,5 +1,5 @@
 import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons'
-import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Menu, MenuButton, MenuItem, MenuList, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Badge, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Menu, MenuButton, MenuItem, MenuList, SimpleGrid, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CustomError } from 'types'
@@ -162,9 +162,9 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                         </Flex>
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
-                        <Box>
-                            <Stack spacing={8} mt={{ base: 4, md: 4, lg: 6 }}>
+                        <SimpleGrid columns={2} mt={6}>
 
+                            <HStack spacing={4}>
                                 <FormControl
                                     isRequired
                                     isInvalid={!!errors?.name}>
@@ -213,11 +213,11 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                         </FormErrorMessage>
                                     </Stack>
                                 </FormControl>
+                            </HStack>
 
-                            </Stack>
-                            <Divider mt={{ base: 4, md: 6, lg: 8 }} />
+                        </SimpleGrid>
 
-                        </Box>
+                        <Divider mt={{ base: 4, md: 6, lg: 8 }} />
 
                     </chakra.form>
             }

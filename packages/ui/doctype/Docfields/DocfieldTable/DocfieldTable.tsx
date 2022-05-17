@@ -83,38 +83,40 @@ export const DocfieldTable = ({ getDocfields, addField, editField, deleteField }
                         </Button>
 
                         <TableContainer mb={16}>
-                            <Table variant="simple">
+                            <Table variant="simple" size="sm">
                                 <Thead>
                                     <Tr>
+                                        <Th py={4}>#</Th>
                                         <Th>Label</Th>
                                         <Th>Name</Th>
                                         <Th>Data Type</Th>
                                         <Th>Field Type</Th>
                                         <Th>Default Validations</Th>
-                                        <Th></Th>
+                                        <Th>Actions</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {fields.map((field) => <Tr key={field.name}>
+                                    {fields.map((field, index) => <Tr key={field.name}>
+                                        <Td>{index}</Td>
                                         <Td>{field.label}</Td>
                                         <Td>{field.name}</Td>
                                         <Td>{field.dataType}</Td>
                                         <Td>{field.fieldType}</Td>
                                         <Td>
-                                            <Text>isRequired: {field.isRequired}</Text>
-                                            <Text>isReadOnly: {field.isReadOnly}</Text>
+                                            <Text>Required: {field.isRequired}</Text>
+                                            <Text>ReadOnly: {field.isReadOnly}</Text>
                                         </Td>
                                         <Td>
                                             <HStack spacing={2}>
                                                 <IconButton
-                                                    size="lg"
+                                                    size="md"
                                                     variant="ghost"
                                                     colorScheme="blue"
                                                     aria-label='edit'
                                                     onClick={() => openEditForm(field)}
                                                     icon={<EditIcon />} />
                                                 <IconButton
-                                                    size="lg"
+                                                    size="md"
                                                     variant="ghost"
                                                     colorScheme="red"
                                                     aria-label='delete'

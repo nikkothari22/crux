@@ -69,7 +69,6 @@ export const DummyDataTable = ({ docfields, data }: Props) => {
                         </Thead>
                         <Tbody>
                             {visualOn ? visualData :
-
                                 data.map(d => <Tr key={d.id}>
                                     <Td>{d.id}.</Td>
                                     {docfields.map(df => <Td isNumeric={df.dataType === "float" || df.dataType === "int"}>{

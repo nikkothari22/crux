@@ -4,7 +4,7 @@ export const getFieldTypes = (dataType: string) => {
 
     switch (dataType) {
         case 'string':
-            fieldTypes = ["Short Text", "Long Text", "Select", "Email", "Phone", "Image", "URL"]
+            fieldTypes = ["Short Text", "Long Text", "Select", "Email", "Phone", "URL", "ID"]
             break;
         case 'int':
             fieldTypes = ["Number", "Currency", "Percentage"]

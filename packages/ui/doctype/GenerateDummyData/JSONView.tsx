@@ -1,6 +1,6 @@
 import { Box, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import { CodeContainer, CopyButton } from '../../CodeViewer/CodeContainer'
-import Highlight from '../../CodeViewer/Highlight'
+import { CodeContainer, CopyButton } from '../../layout/CodeViewer/CodeContainer'
+import Highlight from '../../layout/CodeViewer/Highlight'
 import theme from 'prism-react-renderer/themes/nightOwl'
 
 type Props = {

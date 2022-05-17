@@ -1,5 +1,5 @@
 import { DocFloatField, DocIntegerField, DocStringField } from "types/doctypes";
-import { randomNumber } from ".";
+import { randomNumber, randomString } from ".";
 
 export const generateDataForInt = (docfield: DocIntegerField) => {
 
@@ -31,12 +31,14 @@ export const generateDataForFloat = (docfield: DocFloatField) => {
     //1. Check type of limit
     //2. Generate random number
     //3. Return number
-    console.log("Docfield", docfield)
+
+    // console.log("Docfield", docfield)
+
     let min = docfield.metadata.min ? Number(docfield.metadata.min) : undefined
     let max = docfield.metadata.max ? Number(docfield.metadata.max) : undefined
     let precision = docfield.metadata.precision ? Number(docfield.metadata.precision) : undefined
 
-    console.log(min, max, precision)
+    // console.log(min, max, precision)
     switch (docfield.metadata.limit_validation_type) {
         case "minMax":
             return randomNumber(min, max, 'Float', precision)
@@ -52,5 +54,11 @@ export const generateDataForFloat = (docfield: DocFloatField) => {
 
 export const generateDataForString = (docfield: DocStringField) => {
 
+    //For string, dummy data does depend on fieldType. 
 
+    //1. Check type of limit
+    //2. Check fieldType
+    //3. Return string
+
+    return randomString(docfield)
 }
