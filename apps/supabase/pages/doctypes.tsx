@@ -3,6 +3,7 @@ import AdminPanelPage from '../components/AdminPanelPage'
 import { DoctypesList } from "ui/doctype";
 import { enforceAuthenticated } from '../utils/auth'
 import { supabase } from '../config/supabaseInit';
+import { deleteDoctype } from '../utils/db';
 
 interface Props {
 }
@@ -23,7 +24,7 @@ const Doctypes = (props: Props) => {
 
     return (
         <>
-            <DoctypesList getDoctypes={getDoctypesFromDatabase} />
+            <DoctypesList getDoctypes={getDoctypesFromDatabase} deleteDoctype={deleteDoctype} />
         </>
     );
 }

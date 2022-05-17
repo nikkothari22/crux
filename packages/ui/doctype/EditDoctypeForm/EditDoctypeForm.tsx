@@ -1,5 +1,5 @@
 import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons'
-import { Badge, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Menu, MenuButton, MenuItem, MenuList, SimpleGrid, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Menu, MenuButton, MenuItem, MenuList, SimpleGrid, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CustomError } from 'types'
@@ -9,6 +9,7 @@ import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { FaClipboardList } from 'react-icons/fa'
+import { RiFileList3Line } from 'react-icons/ri'
 
 interface Props {
     getDoctypeData: () => Promise<Doctype>,
@@ -137,7 +138,12 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                 }
                             </HStack>
                             <ButtonGroup size={'md'}>
-                                <Menu>
+                                <Button onClick={onOpen} leftIcon={<DeleteIcon />} colorScheme="red" variant={'ghost'}>Delete</Button>
+                                <NextLink href={`/doctypes/generate-dummy-data/${doctypeData?.id}`} passHref>
+                                    <Button colorScheme={'gray'} leftIcon={<RiFileList3Line />}>Generate Fake Data</Button>
+                                </NextLink>
+
+                                {/* <Menu>
                                     <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
                                         Actions
                                     </MenuButton>
@@ -149,22 +155,15 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                             </MenuItem>
                                         </NextLink>
                                     </MenuList>
-                                </Menu>
-                                <Button
-                                    colorScheme="blue"
-                                    type="submit"
-                                    isLoading={updating}
-                                    loadingText="Saving..."
-                                >
-                                    Save
-                                </Button>
+                                </Menu> */}
+
                             </ButtonGroup>
                         </Flex>
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
-                        <SimpleGrid columns={2} mt={6}>
+                        <Box w="60vw" mt={6}>
 
-                            <HStack spacing={4}>
+                            <HStack spacing={6} align="end">
                                 <FormControl
                                     isRequired
                                     isInvalid={!!errors?.name}>
@@ -213,9 +212,21 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                         </FormErrorMessage>
                                     </Stack>
                                 </FormControl>
+                                <Box>
+                                    <Button
+                                        colorScheme="blue"
+                                        type="submit"
+                                        w="100px"
+                                        variant={'outline'}
+                                        isLoading={updating}
+                                        loadingText="Saving..."
+                                    >
+                                        Save
+                                    </Button>
+                                </Box>
                             </HStack>
 
-                        </SimpleGrid>
+                        </Box>
 
                         <Divider mt={{ base: 4, md: 6, lg: 8 }} />
 

@@ -1,23 +1,25 @@
-import { Box, Button, Divider, Image, HStack, Text, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure, Icon, Input, FormControl, FormHelperText, ButtonGroup } from "@chakra-ui/react";
+import { Box, Button, Divider, HStack, Img, Text, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure, Icon, Input, FormControl, FormHelperText, ButtonGroup, FormLabel } from "@chakra-ui/react";
 import { FaMoon } from 'react-icons/fa'
 import { BsFillSunFill } from 'react-icons/bs'
 import { useFormContext } from "react-hook-form";
-// import Image from 'next/image'
+import Image from 'next/image'
+const logoUploadGraphic = require("../../assets/logoUpload.svg") as string;
 
 type Props = {
-    logoLightMode: string,
-    logoDarkMode: string,
 };
 
-const LogoUpload = ({ logoLightMode, logoDarkMode }: Props) => {
+const LogoUpload = (props: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { register } = useFormContext();
-    const logoUploadGraphic = require("../../assets/logoUpload.svg") as string;
+    const { register, watch } = useFormContext();
+
 
     const onButtonClicked = () => {
         onClose()
     }
+
+    const logoLightMode = watch('light')
+    const logoDarkMode = watch('dark')
 
     return (
         <>
@@ -29,7 +31,7 @@ const LogoUpload = ({ logoLightMode, logoDarkMode }: Props) => {
                         Logo
                     </Text>
                     <Text color="gray.600" fontSize={{ base: '12px', md: '14px', lg: '14px' }}>
-                        Upload the logo that you want to be displayed on the login screen
+                        Add the url of the logo that you want to be displayed on the application screen
                     </Text>
                 </Stack>
                 <Button
@@ -43,14 +45,14 @@ const LogoUpload = ({ logoLightMode, logoDarkMode }: Props) => {
                     {logoLightMode ?
                         <Stack>
                             <Box p="4" border="1px">
-                                <Image src={logoLightMode} width={100} />
+                                <img src={logoLightMode} width={100} />
                             </Box>
                             <Text fontSize="sm" fontWeight="light">logo: light mode</Text>
                         </Stack> : null}
                     {logoDarkMode ?
                         <Stack>
                             <Box backgroundColor="blackAlpha.800" p="4">
-                                <Image src={logoDarkMode} width={100} />
+                                <img src={logoDarkMode} width={100} />
                             </Box>
                             <Text fontSize="sm" fontWeight="light">logo: dark mode</Text>
                         </Stack> : null}
@@ -63,33 +65,33 @@ const LogoUpload = ({ logoLightMode, logoDarkMode }: Props) => {
             <Modal isOpen={isOpen} onClose={onClose} size="2xl">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Upload your logo</ModalHeader>
+                    <ModalHeader>Add your logo</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack>
                             <Box py={2}>
-                                <Image src={logoUploadGraphic} alt="empty state graphic" height={200} />
+                                <Image src={logoUploadGraphic} alt="Empty state graphic" height={200} />
                             </Box>
                             <Text as="p" fontSize="sm" mt="2" color="gray.600" align="center">To support both light and dark color mode please enter your logo URLs accordingly.</Text>
-                            <HStack pl={24} py={4} spacing={6}>
-                                <HStack>
-                                    <FormControl>
-                                        <Stack>
+                            <HStack align='center' justify={'center'} py={4} px="4" spacing={4}>
+                                <FormControl>
+                                    <Stack>
+                                        <FormLabel>
                                             <HStack><Icon as={BsFillSunFill} /><Text color="gray.600" fontWeight="semibold">light mode:</Text></HStack>
-                                            <Input {...register("light")} />
-                                            <FormHelperText fontSize="xs">Add image URL (light)</FormHelperText>
-                                        </Stack>
-                                    </FormControl>
-                                </HStack>
-                                <HStack>
-                                    <FormControl>
-                                        <Stack>
+                                        </FormLabel>
+                                        <Input {...register("light")} />
+                                        <FormHelperText fontSize="xs">Add image URL</FormHelperText>
+                                    </Stack>
+                                </FormControl>
+                                <FormControl>
+                                    <Stack>
+                                        <FormLabel>
                                             <HStack><Icon as={FaMoon} height="3" /><Text color="gray.600" fontWeight="semibold">dark mode:</Text></HStack>
-                                            <Input {...register("dark")} />
-                                            <FormHelperText fontSize="xs">Add image URL (dark)</FormHelperText>
-                                        </Stack>
-                                    </FormControl>
-                                </HStack>
+                                        </FormLabel>
+                                        <Input {...register("dark")} />
+                                        <FormHelperText fontSize="xs">Add image URL</FormHelperText>
+                                    </Stack>
+                                </FormControl>
                             </HStack>
                         </Stack>
                     </ModalBody>

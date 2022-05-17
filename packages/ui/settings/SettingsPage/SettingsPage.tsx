@@ -11,8 +11,13 @@ export const SettingsPage = (props: Props) => {
             <BreadCrumb
                 pages={
                     [{
+                        name: "Home",
+                        url: '/',
+                    },
+                    {
                         name: "Settings",
                         url: '/settings',
+                        isCurrent: true
                     }]
                 } />
             <Heading>Settings</Heading>

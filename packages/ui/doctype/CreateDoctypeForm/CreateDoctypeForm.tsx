@@ -1,8 +1,9 @@
-import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Stack, useToast } from '@chakra-ui/react'
+import { Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, HStack, Input, Stack, useToast } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Doctype } from 'types/doctypes'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 
 interface props {
     create: (doctypeData: Doctype) => Promise<void>
@@ -19,6 +20,17 @@ export const CreateDoctypeForm = ({ create }: props) => {
     const createDoctype = (submittedData: Doctype) => {
         setUpdating(true)
         create(submittedData)
+            .then((x) => {
+                console.log("created doctype:", x)
+                toast({
+                    title: 'DocType saved',
+                    status: 'success',
+                    duration: 2000,
+                    position: 'bottom',
+                    variant: 'solid',
+                    isClosable: true,
+                })
+            })
             .catch((error) => {
                 console.error("error creating doctype", error)
                 toast({
@@ -70,8 +82,9 @@ export const CreateDoctypeForm = ({ create }: props) => {
                         type="submit"
                         isLoading={updating}
                         loadingText="Saving..."
+                        rightIcon={<ChevronRightIcon />}
                     >
-                        Save
+                        Next
                     </Button>
                 </Flex>
                 <Divider mt={{ base: 4, md: 4, lg: 6 }} />
@@ -97,11 +110,13 @@ export const CreateDoctypeForm = ({ create }: props) => {
                                         })}
                                     fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                                     maxW="50vw"
-                                    placeholder="The display label for your doctype"
+                                    placeholder="e.g. Employee, User, Product"
                                 />
-                                <FormErrorMessage>
+                                {errors?.name ? <FormErrorMessage>
                                     {errors?.name?.message}
-                                </FormErrorMessage>
+                                </FormErrorMessage> : <FormHelperText>Name of your doctype</FormHelperText>
+                                }
+
                             </Stack>
                         </FormControl>
 
@@ -123,11 +138,12 @@ export const CreateDoctypeForm = ({ create }: props) => {
                                         })}
                                     fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                                     maxW="50vw"
-                                    placeholder="The table name from where we will fetch your data"
+                                    placeholder="e.g. employee_list, table_products"
                                 />
-                                <FormErrorMessage>
+                                {errors?.source ? <FormErrorMessage>
                                     {errors?.source?.message}
-                                </FormErrorMessage>
+                                </FormErrorMessage> : <FormHelperText>Name of the table in your database</FormHelperText>
+                                }
                             </Stack>
                         </FormControl>
 

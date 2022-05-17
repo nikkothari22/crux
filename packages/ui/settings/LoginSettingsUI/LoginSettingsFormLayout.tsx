@@ -32,8 +32,6 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
     const { register, setValue, handleSubmit, formState: { errors } } = methods
     const toast = useToast()
     const router = useRouter()
-    const [logoLightMode, setLogoLightMode] = useState("");
-    const [logoDarkMode, setLogoDarkMode] = useState("");
 
     useEffect(() => {
         getSettings().then((settings) => {
@@ -45,8 +43,6 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
             setValue('signupText', settings.text?.signup ?? "")
             setValue('light', settings.logo?.light ?? "")
             setValue('dark', settings.logo?.dark ?? "")
-            setLogoDarkMode(settings.logo?.dark)
-            setLogoLightMode(settings.logo?.light)
             setError(null)
             setLoading(false)
         });
@@ -128,7 +124,7 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
 
                             <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
-                            <LogoUpload logoLightMode={logoLightMode} logoDarkMode={logoDarkMode} />
+                            <LogoUpload />
 
                             {/* Input Login Heading */}
                             <FormControl

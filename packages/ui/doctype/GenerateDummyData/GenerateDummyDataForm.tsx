@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, FormControl, FormLabel, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, FormControl, FormLabel, Heading, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Docfield, Doctype } from 'types/doctypes'
 import { CustomError } from 'types/error';
@@ -78,16 +78,22 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                         <Flex
                             justifyContent="space-between"
                             align="center">
-
-                            <Heading fontSize="3xl" mt={4}>
-                                Generate Dummy Data - {doctypeData?.name ?? ""}
-                            </Heading>
-
-                            <Button
-                                onClick={onOpen}
-                                colorScheme="blue">
-                                Generate Data
-                            </Button>
+                            <Stack>
+                                <Heading fontSize="3xl" mt={4}>
+                                    Generate Fake Data
+                                </Heading>
+                                {doctypeData?.name && <Text
+                                    fontSize='lg'
+                                    fontWeight={'500'}
+                                    color={useColorModeValue('gray.500', 'gray.400')}>{doctypeData?.name} ({doctypeData?.source})</Text>}
+                            </Stack>
+                            {docfields !== null && docfields.length > 0 &&
+                                <Button
+                                    onClick={onOpen}
+                                    colorScheme="blue">
+                                    Generate Data
+                                </Button>
+                            }
 
                         </Flex>
 
@@ -123,7 +129,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                         </Box> */}
 
                         <GenerateDummyDataModal isOpen={isOpen} onClose={onClose} onSubmit={generateDummyData} />
-                        {docfields && <DummyDataTable docfields={docfields} data={dummyData} />}
+                        {docfields && doctypeData && <DummyDataTable docfields={docfields} data={dummyData} doctype={doctypeData?.id} />}
                     </>
             }
         </>
