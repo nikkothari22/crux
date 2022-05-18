@@ -19,7 +19,6 @@ export const randomNumber = (min?: number, max?: number, type?: 'Int' | 'Float',
         }
     } else {
         if (min !== undefined && max !== undefined) {
-            console.log("Min max")
             return chance.floating({ min: min, max: max, fixed: precision })
         } else if (min !== undefined) {
             return chance.floating({ min, fixed: precision })

@@ -186,7 +186,7 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
                                                     </ButtonGroup>
                                                 </Td>
                                                 <Td>
-                                                    <NextLink href={`/doctypes/generate-dummy-data/${doctype.id}`} passHref>
+                                                    <NextLink href={`/doctypes/generate-fake-data/${doctype.id}`} passHref>
                                                         <Button variant="outline" colorScheme={'blue'} size="sm">
                                                             Generate
                                                         </Button>
@@ -214,7 +214,7 @@ export const EmptyStateForDoctypeList = () => {
                 <Stack align="center" spacing={10}>
                     <Stack align="center" spacing={1} px={2}>
                         <Text as="p" fontSize="xl" fontWeight="semibold" mt="2" color={useColorModeValue('gray.800', 'gray.100')} align="center">Get started by creating your first doctype.</Text>
-                        <Text as="p" fontSize="md" maxW="40vw" mt="2" color={useColorModeValue('gray.600', 'gray.300')} align="center">Doctypes are essential metadata about your data tables, which allows the tool to generate high-quality fake data.</Text>
+                        <Text as="p" fontSize="md" maxW="40vw" mt="2" color={useColorModeValue('gray.600', 'gray.300')} align="center">Doctypes are essential metadata about your data tables, which allow the tool to generate high-quality fake data.</Text>
                     </Stack>
                     <Box>
                         <Image src={emptyStateGraphic} alt="empty state graphic" height={260} />

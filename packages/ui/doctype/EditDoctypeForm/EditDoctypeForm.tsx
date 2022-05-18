@@ -52,7 +52,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                 toast({
                     title: 'Doctype saved',
                     status: 'success',
-                    duration: 2000,
+                    duration: 1000,
                     position: 'bottom',
                     variant: 'solid',
                     isClosable: true,
@@ -86,7 +86,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
     const showErrorToast = (error: Error) => {
         console.error("error creating doctype", error)
         toast({
-            duration: 2000,
+            duration: 1000,
             position: 'bottom',
             variant: 'solid',
             isClosable: true,
@@ -138,7 +138,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                             </HStack>
                             <ButtonGroup size={'md'}>
                                 <Button onClick={onOpen} leftIcon={<DeleteIcon />} colorScheme="red" variant={'ghost'}>Delete</Button>
-                                <NextLink href={`/doctypes/generate-dummy-data/${doctypeData?.id}`} passHref>
+                                <NextLink href={`/doctypes/generate-fake-data/${doctypeData?.id}`} passHref>
                                     <Button colorScheme={'gray'} leftIcon={<RiFileList3Line />}>Generate Fake Data</Button>
                                 </NextLink>
                             </ButtonGroup>

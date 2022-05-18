@@ -8,6 +8,7 @@ import { FiDatabase } from "react-icons/fi"
 import { CSVDownloadButton } from "./CSVDownloadButton"
 import Image from 'next/image'
 import NextLink from 'next/link'
+import { UploadToDatabase } from "./UploadToDatabase"
 const emptyStateGraphic = require("../../assets/noDataFound.svg") as string;
 const noDataStateGraphic = require("../../assets/almostThereGenerateData.svg") as string;
 
@@ -15,17 +16,20 @@ interface Props {
     docfields: Docfield[]
     data: any[]
     doctype: string
+    uploadData: () => Promise<any>,
+    tableName: string,
 }
 
-export const DummyDataTable = ({ docfields, data, doctype }: Props) => {
+export const DummyDataTable = ({ docfields, data, doctype, uploadData, tableName }: Props) => {
 
     // console.log(docfieldData)
 
     const [visualOn, { toggle }] = useBoolean(true);
     const jsonModal = useDisclosure();
+    const uploadDataModal = useDisclosure();
     const visualData = useMemo(() => {
-        return data.map((row) => <Tr key={row.id}>
-            <Td>{row.id}.</Td>
+        return data.map((row, index) => <Tr key={index}>
+            <Td>{index}.</Td>
             {docfields.map((field) => {
                 switch (field.dataType) {
                     case "int": return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
@@ -59,11 +63,15 @@ export const DummyDataTable = ({ docfields, data, doctype }: Props) => {
                             <Switch id='visual' isChecked={visualOn} onChange={toggle} />
                         </FormControl>
                         <ButtonGroup size={'sm'}>
-                            <Button leftIcon={<VscJson />} onClick={jsonModal.onOpen}>
+                            <Button
+                                leftIcon={<VscJson />}
+                                onClick={jsonModal.onOpen}>
                                 JSON
                             </Button>
                             <CSVDownloadButton data={data} docfields={docfields} />
-                            <Button leftIcon={<FiDatabase />}>
+                            <Button
+                                leftIcon={<FiDatabase />}
+                                onClick={uploadDataModal.onOpen}>
                                 Upload to Database
                             </Button>
                         </ButtonGroup>
@@ -76,14 +84,14 @@ export const DummyDataTable = ({ docfields, data, doctype }: Props) => {
                                     <Tr>
                                         <Th py="4">#</Th>
                                         {docfields.map((df) =>
-                                            <Th py="4" key={df.id} isNumeric={df.dataType === "int" || df.dataType === "float"}>{df.label} {df.isRequired && <Text as="span" color="red.400">*</Text>}</Th>
+                                            <Th py="4" key={df.id} isNumeric={df.dataType === "int" || df.dataType === "float"}>{df.label} {df.isRequired === "YES" && <Text as="span" color="red.400">*</Text>}</Th>
                                         )}
                                     </Tr>
                                 </Thead>
                                 <Tbody>
                                     {visualOn ? visualData :
-                                        data.map(d => <Tr key={d.id}>
-                                            <Td>{d.id}.</Td>
+                                        data.map((d, index) => <Tr key={index}>
+                                            <Td>{index}.</Td>
                                             {docfields.map(df => <Td isNumeric={df.dataType === "float" || df.dataType === "int"}>{
                                                 df.dataType === "boolean" ? <Code>{d[df.name] ? "true" : "false"}</Code> : d[df.name]}</Td>)}
                                         </Tr>
@@ -92,6 +100,7 @@ export const DummyDataTable = ({ docfields, data, doctype }: Props) => {
                             </Table>
                         </TableContainer>
                         <JSONView data={data} {...jsonModal} />
+                        <UploadToDatabase data={data} {...uploadDataModal} uploadData={uploadData} tableName={tableName} />
                     </Box>
                 </Box>
             }

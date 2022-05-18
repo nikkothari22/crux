@@ -25,7 +25,7 @@ export const CreateDoctypeForm = ({ create }: props) => {
                 toast({
                     title: 'Doctype saved',
                     status: 'success',
-                    duration: 2000,
+                    duration: 1000,
                     position: 'bottom',
                     variant: 'solid',
                     isClosable: true,
@@ -34,7 +34,7 @@ export const CreateDoctypeForm = ({ create }: props) => {
             .catch((error) => {
                 console.error("error creating doctype", error)
                 toast({
-                    duration: 2000,
+                    duration: 1000,
                     position: 'bottom',
                     variant: 'solid',
                     isClosable: true,

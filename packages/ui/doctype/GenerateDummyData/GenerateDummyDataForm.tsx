@@ -8,9 +8,10 @@ import { getDummyDataObjectFromDocfields } from 'dummy_data_generation'
 interface Props {
     getDoctypeData: () => Promise<Doctype>,
     getDocfields: () => Promise<Docfield[]>,
+    uploadData: (data: any[], doctype: Doctype) => Promise<void>,
 }
 
-export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) => {
+export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields, uploadData }: Props) => {
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<CustomError | null>(null)
@@ -18,12 +19,13 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [dummyData, setDummyData] = useState<any[]>([])
     const [docfields, setDocfields] = useState<Docfield[] | null>([])
+    const subTextColor = useColorModeValue('gray.500', 'gray.400')
 
     //Fetch Doctype and it's fields when the component mounts
     useEffect(() => {
         getDoctypeData()
             .then((doctypeData) => {
-                console.log(doctypeData)
+                // console.log(doctypeData)
                 setDoctypeData(doctypeData)
                 setError(null)
             })
@@ -37,8 +39,18 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
             })
     }, []);
 
+    const uploadDummyDataToDatabase = () => {
+        if (doctypeData) {
+            // console.log(dummyData)
+            return uploadData(dummyData, doctypeData)
+        } else {
+            return Promise.resolve()
+        }
+
+    }
+
     const generateDummyData = (numberOfRows: number) => {
-        console.log("form submitted", numberOfRows)
+        // console.log("form submitted", numberOfRows)
 
         //1. Create dummy data - need number of rows, docfields
         //2. Show dummy data
@@ -47,9 +59,9 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
             let fakeData = []
             for (let i = 0; i < numberOfRows; i++) {
                 let data = getDummyDataObjectFromDocfields(docfields)
-                fakeData.push({ ...data, id: i })
+                fakeData.push({ ...data })
             }
-            console.log(fakeData)
+            // console.log(fakeData)
             setDummyData(fakeData)
         }
     }
@@ -64,7 +76,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                     },
                     {
                         name: doctypeData?.name ?? "",
-                        url: `/doctypes/generate-dummy-data/${doctypeData?.id ?? ""}`,
+                        url: `/doctypes/generate-fake-data/${doctypeData?.id ?? ""}`,
                         isCurrent: true
                     }]
                 } />
@@ -85,7 +97,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                                 {doctypeData?.name && <Text
                                     fontSize='lg'
                                     fontWeight={'500'}
-                                    color={useColorModeValue('gray.500', 'gray.400')}>{doctypeData?.name} ({doctypeData?.source})</Text>}
+                                    color={subTextColor}>{doctypeData?.name} ({doctypeData?.source})</Text>}
                             </Stack>
                             {docfields !== null && docfields.length > 0 &&
                                 <Button
@@ -100,7 +112,7 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
                         <GenerateDummyDataModal isOpen={isOpen} onClose={onClose} onSubmit={generateDummyData} />
-                        {docfields && doctypeData && <DummyDataTable docfields={docfields} data={dummyData} doctype={doctypeData?.id} />}
+                        {docfields && doctypeData && <DummyDataTable docfields={docfields} data={dummyData} doctype={doctypeData?.id} uploadData={uploadDummyDataToDatabase} tableName={doctypeData.source} />}
                     </>
             }
         </>
