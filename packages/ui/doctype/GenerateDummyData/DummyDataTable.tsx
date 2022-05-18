@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Center, Code, FormControl, FormLabel, Heading, HStack, Stack, Switch, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useBoolean, useColorModeValue, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, ButtonGroup, Center, Code, FormControl, FormLabel, HStack, Stack, Switch, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useBoolean, useColorModeValue, useDisclosure } from "@chakra-ui/react"
 import { Docfield } from "types/doctypes"
 import { VscJson } from 'react-icons/vsc'
 import { useMemo } from "react"
@@ -22,9 +22,7 @@ export const DummyDataTable = ({ docfields, data, doctype }: Props) => {
     // console.log(docfieldData)
 
     const [visualOn, { toggle }] = useBoolean(true);
-
     const jsonModal = useDisclosure();
-
     const visualData = useMemo(() => {
         return data.map((row) => <Tr key={row.id}>
             <Td>{row.id}.</Td>
@@ -44,9 +42,14 @@ export const DummyDataTable = ({ docfields, data, doctype }: Props) => {
     return (
 
         <>
-            {docfields !== null && docfields.length === 0 && <NoDocfieldStateForDummyDataTable doctype={doctype} />}
-            {docfields !== null && docfields.length > 0 && data.length === 0 && <NoDataStateForDummyDataTable />}
-            {docfields !== null && docfields.length > 0 && data.length > 0 &&
+            {/* No docfields have been defined yet, fake data cannot be generated */}
+            {docfields.length === 0 && <NoDocfieldStateForDummyDataTable doctype={doctype} />}
+
+            {/* Docfields have been defined but user has not generated any data, there is nothing to display */}
+            {docfields.length > 0 && data.length === 0 && <NoDataStateForDummyDataTable />}
+
+            {/* User has generated fake data, show data table with options to download */}
+            {docfields.length > 0 && data.length > 0 &&
                 <Box>
                     <HStack justify={'between'} mt="4">
                         <FormControl display='flex' alignItems='center'>

@@ -108,7 +108,6 @@ const LongTextFormField = () => {
 }
 
 const NumberFieldFormField = () => {
-
     return (
         <SimpleGrid columns={2} spacingX={6} spacingY={4}>
             <SuffixField />
@@ -117,7 +116,6 @@ const NumberFieldFormField = () => {
 }
 
 const CurrencyFieldFormField = () => {
-
     return (
         <SimpleGrid columns={2} spacingX={6} spacingY={4}>
             <CurrencyField />

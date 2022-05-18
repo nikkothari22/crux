@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, FormControl, FormLabel, Heading, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { Button, Divider, Flex, FormControl, FormLabel, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Docfield, Doctype } from 'types/doctypes'
 import { CustomError } from 'types/error';
@@ -99,35 +99,6 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
 
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
-                        {/* <Box>
-                            <HStack spacing={10} mt={{ base: 4, md: 4, lg: 6 }}>
-
-                                <Stack spacing={4}>
-                                    <FormLabel pl={2}>
-                                        Name
-                                    </FormLabel>
-                                    <Input
-                                        isDisabled
-                                        value={doctypeData?.name}
-                                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                                    />
-                                </Stack>
-
-                                <Stack spacing={4}>
-                                    <FormLabel pl={2}>
-                                        Fetch from
-                                    </FormLabel>
-                                    <Input
-                                        isDisabled
-                                        value={doctypeData?.source}
-                                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}
-                                    />
-                                </Stack>
-
-                            </HStack>
-                            <Divider mt={{ base: 4, md: 6, lg: 8 }} />
-                        </Box> */}
-
                         <GenerateDummyDataModal isOpen={isOpen} onClose={onClose} onSubmit={generateDummyData} />
                         {docfields && doctypeData && <DummyDataTable docfields={docfields} data={dummyData} doctype={doctypeData?.id} />}
                     </>
@@ -136,12 +107,12 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields }: Props) =
     )
 }
 
-
 interface DummyDataModalProps {
     isOpen: boolean,
     onClose: VoidFunction,
     onSubmit: (n: number) => void
 }
+
 const GenerateDummyDataModal = ({ isOpen, onClose, onSubmit }: DummyDataModalProps) => {
 
     const [numberOfRows, setNumberOfRows] = useState(10)
@@ -154,6 +125,7 @@ const GenerateDummyDataModal = ({ isOpen, onClose, onSubmit }: DummyDataModalPro
     return <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
+
             <ModalHeader>Number of rows to be generated?</ModalHeader>
             <ModalCloseButton />
 
@@ -181,6 +153,7 @@ const GenerateDummyDataModal = ({ isOpen, onClose, onSubmit }: DummyDataModalPro
                     Generate data
                 </Button>
             </ModalFooter>
+
         </ModalContent>
     </Modal>
 }

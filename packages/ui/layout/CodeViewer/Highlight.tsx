@@ -4,7 +4,6 @@ import BaseHighlight, {
     PrismTheme,
     defaultProps,
 } from 'prism-react-renderer'
-import React from 'react'
 import { liveEditorStyle } from './styles'
 
 const RE = /{([\d,-]+)}/

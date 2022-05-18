@@ -15,7 +15,6 @@ const Login = ({ metadata }: Props) => {
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<null | CustomError>(null)
-
     const router = useRouter()
 
     useEffect(() => {

@@ -19,6 +19,7 @@ const LoginProviders = ({ providers, updateSettings }: Props) => {
             updateSettings([...providers, provider])
         }
     }, [providers, updateSettings])
+
     return (
         <>
             <Text mt={{ base: 5, md: 6, lg: 8 }}

@@ -1,4 +1,4 @@
-import { Button, ButtonProps, HStack, Icon, IconProps, Text, useColorModeValue } from '@chakra-ui/react'
+import { Button, ButtonProps, Icon, IconProps, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import { FaFacebook, FaGithub, FaTwitter } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'

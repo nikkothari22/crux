@@ -67,9 +67,9 @@ interface PasswordInputProps extends InputProps {
 }
 
 export const PasswordField = React.forwardRef<HTMLInputElement, PasswordInputProps>(({ showForgotPassword, ...props }, ref) => {
+
     const { isOpen, onToggle } = useDisclosure()
     const inputRef = React.useRef<HTMLInputElement>(null)
-
     const mergeRef = useMergeRefs(inputRef, ref)
 
     const onClickReveal = () => {

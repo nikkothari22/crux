@@ -16,9 +16,7 @@ const EditDoctype = (props: Props) => {
 
     const router = useRouter()
     const { doctype } = router.query
-
     const doctypeID = typeof doctype === "string" ? doctype : doctype[0]
-
     const [doctypeFetched, setDoctypeFetched] = useState(false)
 
     const getDoctypeDataCallback = async () => {

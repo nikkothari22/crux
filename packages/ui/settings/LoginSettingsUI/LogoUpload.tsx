@@ -1,29 +1,28 @@
-import { Box, Button, Divider, HStack, Img, Text, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure, Icon, Input, FormControl, FormHelperText, ButtonGroup, FormLabel } from "@chakra-ui/react";
+import { Box, Button, Divider, HStack, Text, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure, Icon, Input, FormControl, FormHelperText, ButtonGroup, FormLabel } from "@chakra-ui/react";
 import { FaMoon } from 'react-icons/fa'
 import { BsFillSunFill } from 'react-icons/bs'
 import { useFormContext } from "react-hook-form";
 import Image from 'next/image'
 const logoUploadGraphic = require("../../assets/logoUpload.svg") as string;
 
-type Props = {
-};
+type Props = {};
 
 const LogoUpload = (props: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { register, watch } = useFormContext();
 
-
     const onButtonClicked = () => {
         onClose()
     }
 
-    const logoLightMode = watch('light')
-    const logoDarkMode = watch('dark')
+    const logoLightMode = watch('logoLight')
+    const logoDarkMode = watch('logoDark')
 
     return (
         <>
             <HStack spacing={{ base: 16, md: 28, lg: 24 }} mt={{ base: 5, md: 6, lg: 8 }}>
+
                 <Stack>
                     <Text
                         fontWeight="semibold"
@@ -79,7 +78,7 @@ const LogoUpload = (props: Props) => {
                                         <FormLabel>
                                             <HStack><Icon as={BsFillSunFill} /><Text color="gray.600" fontWeight="semibold">light mode:</Text></HStack>
                                         </FormLabel>
-                                        <Input {...register("light")} />
+                                        <Input {...register("logoLight")} />
                                         <FormHelperText fontSize="xs">Add image URL</FormHelperText>
                                     </Stack>
                                 </FormControl>
@@ -88,7 +87,7 @@ const LogoUpload = (props: Props) => {
                                         <FormLabel>
                                             <HStack><Icon as={FaMoon} height="3" /><Text color="gray.600" fontWeight="semibold">dark mode:</Text></HStack>
                                         </FormLabel>
-                                        <Input {...register("dark")} />
+                                        <Input {...register("logoDark")} />
                                         <FormHelperText fontSize="xs">Add image URL</FormHelperText>
                                     </Stack>
                                 </FormControl>

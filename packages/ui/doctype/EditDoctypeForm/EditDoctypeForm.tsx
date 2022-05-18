@@ -1,5 +1,5 @@
-import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons'
-import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Menu, MenuButton, MenuItem, MenuList, SimpleGrid, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { DeleteIcon } from '@chakra-ui/icons'
+import { Badge, Box, Button, ButtonGroup, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Spinner, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CustomError } from 'types'
@@ -8,7 +8,6 @@ import { AlertBanner, BreadCrumb } from '../../layout'
 import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import { FaClipboardList } from 'react-icons/fa'
 import { RiFileList3Line } from 'react-icons/ri'
 
 interface Props {
@@ -51,9 +50,9 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
             editDoctype(doctypeData?.id, submittedData).then((x) => {
                 console.log("edited doctype:", x)
                 toast({
-                    title: 'DocType saved',
+                    title: 'Doctype saved',
                     status: 'success',
-                    duration: 1000,
+                    duration: 2000,
                     position: 'bottom',
                     variant: 'solid',
                     isClosable: true,
@@ -142,28 +141,15 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                 <NextLink href={`/doctypes/generate-dummy-data/${doctypeData?.id}`} passHref>
                                     <Button colorScheme={'gray'} leftIcon={<RiFileList3Line />}>Generate Fake Data</Button>
                                 </NextLink>
-
-                                {/* <Menu>
-                                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                                        Actions
-                                    </MenuButton>
-                                    <MenuList>
-                                        <MenuItem onClick={onOpen} icon={<DeleteIcon />}>Delete</MenuItem>
-                                        <NextLink href={`/doctypes/generate-dummy-data/${doctypeData?.id}`}>
-                                            <MenuItem icon={<FaClipboardList />}>
-                                                Generate dummy data
-                                            </MenuItem>
-                                        </NextLink>
-                                    </MenuList>
-                                </Menu> */}
-
                             </ButtonGroup>
                         </Flex>
+
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
                         <Box w="60vw" mt={6}>
 
                             <HStack spacing={6} align="end">
+
                                 <FormControl
                                     isRequired
                                     isInvalid={!!errors?.name}>
@@ -212,6 +198,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                         </FormErrorMessage>
                                     </Stack>
                                 </FormControl>
+
                                 <Box>
                                     <Button
                                         colorScheme="blue"
@@ -224,6 +211,7 @@ export const EditDoctypeForm = ({ getDoctypeData, editDoctype, deleteDoctype }: 
                                         Save
                                     </Button>
                                 </Box>
+
                             </HStack>
 
                         </Box>

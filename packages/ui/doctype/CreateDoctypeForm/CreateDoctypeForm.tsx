@@ -1,4 +1,4 @@
-import { Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, HStack, Input, Stack, useToast } from '@chakra-ui/react'
+import { Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Stack, useToast } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -23,7 +23,7 @@ export const CreateDoctypeForm = ({ create }: props) => {
             .then((x) => {
                 console.log("created doctype:", x)
                 toast({
-                    title: 'DocType saved',
+                    title: 'Doctype saved',
                     status: 'success',
                     duration: 2000,
                     position: 'bottom',
@@ -66,15 +66,11 @@ export const CreateDoctypeForm = ({ create }: props) => {
                 <Flex
                     justifyContent="space-between"
                     align="center">
-                    <HStack>
-                        <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
-                            New Doctype
-                        </Heading>
-                        {/* <Badge ml="1"
-                            colorScheme="orange">
-                            not saved
-                        </Badge> */}
-                    </HStack>
+
+                    <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
+                        New Doctype
+                    </Heading>
+
                     <Button
                         fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                         ml={{ base: 16, md: 0, lg: 0 }}

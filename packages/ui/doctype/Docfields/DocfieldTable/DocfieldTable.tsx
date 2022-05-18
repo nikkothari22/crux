@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons"
-import { Text, HStack, IconButton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, Flex, Spinner, Stack, Skeleton, Center, Box, Heading, Icon, useColorModeValue } from "@chakra-ui/react"
+import { Text, HStack, IconButton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, Flex, Stack, Skeleton, Center, Box, Heading, Icon, useColorModeValue } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
 import { Docfield } from "types/doctypes"
 import { CustomError } from "types/error"
@@ -72,67 +72,66 @@ export const DocfieldTable = ({ getDocfields, addField, editField, deleteField }
     return (
         <Box mt="8">
             <Heading as="h4" size="md">Fields</Heading>
-            {fields !== null && fields.length === 0 && <EmptyStateForDocfieldstable openAddForm={openAddForm} />}
 
             {loading ? <Flex width="full"><Stack><Skeleton height='20px' /><Skeleton height='20px' /><Skeleton height='20px' /></Stack></Flex> :
 
                 error ? <AlertBanner status="error" heading="There was an error while fetching the docfields.">{error.message} - {error.code}</AlertBanner> :
 
-                    fields !== null && error === null && fields.length > 0 &&
+                    fields.length === 0 ? <EmptyStateForDocfieldstable openAddForm={openAddForm} /> :
 
-                    <>
-                        <Button
-                            my={8}
-                            colorScheme="blue"
-                            onClick={openAddForm}>
-                            Add Field
-                        </Button>
+                        <>
+                            <Button
+                                my={8}
+                                colorScheme="blue"
+                                onClick={openAddForm}>
+                                Add Field
+                            </Button>
 
-                        <TableContainer mb={16}>
-                            <Table variant="simple" size="sm">
-                                <Thead>
-                                    <Tr>
-                                        <Th py={4}>#</Th>
-                                        <Th py={4}>Label</Th>
-                                        <Th py={4}>Name</Th>
-                                        <Th py={4}>Data Type</Th>
-                                        <Th py={4}>Field Type</Th>
-                                        <Th py={4}>Required</Th>
-                                        <Th py={4}>Actions</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {fields.map((field, index) => <Tr key={field.name}>
-                                        <Td>{index}</Td>
-                                        <Td>{field.label}</Td>
-                                        <Td>{field.name}</Td>
-                                        <Td>{field.dataType}</Td>
-                                        <Td>{field.fieldType}</Td>
-                                        <Td>{field.isRequired === "NO" ? <Icon as={CloseIcon} color='red.400' /> : <Icon color="green.400" as={CheckIcon} />}</Td>
-                                        <Td>
-                                            <HStack spacing={2}>
-                                                <IconButton
-                                                    size="md"
-                                                    variant="ghost"
-                                                    colorScheme="blue"
-                                                    aria-label='edit'
-                                                    onClick={() => openEditForm(field)}
-                                                    icon={<EditIcon />} />
-                                                <IconButton
-                                                    size="md"
-                                                    variant="ghost"
-                                                    colorScheme="red"
-                                                    aria-label='delete'
-                                                    onClick={() => deleteAction(field.id)}
-                                                    icon={<DeleteIcon />} />
-                                            </HStack>
-                                        </Td>
-                                    </Tr>)}
+                            <TableContainer mb={16}>
+                                <Table variant="simple" size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th py={4}>#</Th>
+                                            <Th py={4}>Label</Th>
+                                            <Th py={4}>Name</Th>
+                                            <Th py={4}>Data Type</Th>
+                                            <Th py={4}>Field Type</Th>
+                                            <Th py={4}>Required</Th>
+                                            <Th py={4}>Actions</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {fields.map((field, index) => <Tr key={field.name}>
+                                            <Td>{index}</Td>
+                                            <Td>{field.label}</Td>
+                                            <Td>{field.name}</Td>
+                                            <Td>{field.dataType}</Td>
+                                            <Td>{field.fieldType}</Td>
+                                            <Td>{field.isRequired === "NO" ? <Icon as={CloseIcon} color='red.400' /> : <Icon color="green.400" as={CheckIcon} />}</Td>
+                                            <Td>
+                                                <HStack spacing={2}>
+                                                    <IconButton
+                                                        size="md"
+                                                        variant="ghost"
+                                                        colorScheme="blue"
+                                                        aria-label='edit'
+                                                        onClick={() => openEditForm(field)}
+                                                        icon={<EditIcon />} />
+                                                    <IconButton
+                                                        size="md"
+                                                        variant="ghost"
+                                                        colorScheme="red"
+                                                        aria-label='delete'
+                                                        onClick={() => deleteAction(field.id)}
+                                                        icon={<DeleteIcon />} />
+                                                </HStack>
+                                            </Td>
+                                        </Tr>)}
 
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
-                    </>
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </>
             }
 
             <DocfieldForm isOpen={isOpen} onClose={onClose} initFieldData={fieldBeingEdited ?? undefined} onSubmit={fieldBeingEdited ? editExistingField : addNewField} />

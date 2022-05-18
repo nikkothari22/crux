@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 
-
 interface navItemsProps {
     icon: IconType,
     title: string,

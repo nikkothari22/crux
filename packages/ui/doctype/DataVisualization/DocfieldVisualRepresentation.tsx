@@ -1,5 +1,5 @@
 
-import { DocBooleanField, Docfield, DocFloatField, DocIntegerField, DocStringField } from "types/doctypes";
+import { DocBooleanField, DocFloatField, DocIntegerField, DocStringField } from "types/doctypes";
 
 export const getBooleanField = (docfield: DocBooleanField, data: any) => {
 

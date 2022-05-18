@@ -10,6 +10,7 @@ type Props = {
 }
 
 export const JSONView = ({ data, isOpen, onClose }: Props) => {
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="5xl" scrollBehavior='inside'>
             <ModalOverlay />

@@ -1,4 +1,4 @@
-import { Text, Button, Divider, Flex, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, ButtonGroup, IconButton, Tooltip, Spinner, Box, Center, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react'
+import { Text, Button, Divider, Flex, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, ButtonGroup, IconButton, Spinner, Box, Center, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react'
 import { AlertBanner, BreadCrumb } from '../../layout'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
@@ -6,7 +6,6 @@ import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { CustomError } from 'types/error'
 import Image from 'next/image'
-import { Doctype } from 'types/doctypes'
 import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 
 interface DoctypeListElement {
@@ -49,7 +48,7 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
                 toast({
                     title: 'Doctype Deleted',
                     status: 'error',
-                    duration: 1000,
+                    duration: 2000,
                     position: 'bottom',
                     variant: 'solid',
                     isClosable: true,
@@ -67,6 +66,7 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
             })
             .catch(e => setError(e))
     }
+
     const showErrorToast = (error: Error) => {
         console.error("error creating doctype", error)
         toast({
@@ -79,6 +79,7 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
             description: `${error.message}`
         })
     }
+
     const resetDelete = () => {
         setDoctypeToBeDeleted("")
     }
@@ -122,7 +123,6 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
             {loading ? <Flex align="center" justify="center" height="50vh" width="full"><Spinner /></Flex> :
 
                 error ? <AlertBanner status="error" heading="There was an error while fetching the request.">{error.message} - {error.code}</AlertBanner> :
-
 
                     doctypeList.length === 0 ? <EmptyStateForDoctypeList /> :
 

@@ -13,8 +13,8 @@ interface Props {
 }
 
 interface LoginForm {
-    light: string,
-    dark: string,
+    logoLight: string,
+    logoDark: string,
     loginHeading: string,
     signupHeading: string,
     loginText: string,
@@ -41,8 +41,8 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
             setValue('loginText', settings.text?.login ?? "")
             setValue('signupHeading', settings.heading.signup)
             setValue('signupText', settings.text?.signup ?? "")
-            setValue('light', settings.logo?.light ?? "")
-            setValue('dark', settings.logo?.dark ?? "")
+            setValue('logoLight', settings.logo?.light ?? "")
+            setValue('logoDark', settings.logo?.dark ?? "")
             setError(null)
             setLoading(false)
         });
@@ -53,8 +53,8 @@ export const LoginSettingsFormLayout = ({ getSettings, updateSettings }: Props) 
         setUpdating(true)
         updateSettings({
             logo: {
-                light: data.light,
-                dark: data.dark,
+                light: data.logoLight,
+                dark: data.logoDark,
             },
             heading: {
                 login: data.loginHeading,

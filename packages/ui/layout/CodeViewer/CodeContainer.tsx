@@ -7,6 +7,7 @@ export function CodeContainer(props: BoxProps) {
 interface CopyButtonProps extends ButtonProps {
     code: string
 }
+
 export function CopyButton({ code, ...props }: CopyButtonProps) {
     const { hasCopied, onCopy } = useClipboard(code)
 
