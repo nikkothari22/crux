@@ -1,6 +1,8 @@
 import { FormControl, FormErrorMessage, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, SimpleGrid, Stack } from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 interface Props {
     dataType: string
@@ -16,12 +18,9 @@ export const DataTypeValidationFields = ({ dataType }: Props) => {
         case 'float':
             return <FloatMetadataFormFields />
         case 'timestamp':
-            return (
-                <>
-                </>
-            )
+            return <TimestampMetadataFormFields />
         case 'boolean':
-            return <></>
+            return null
         default: return null
     }
 }
@@ -331,6 +330,82 @@ const FloatMetadataFormFields = () => {
                     </NumberInput>
                     {errors?.metadata?.max && <FormErrorMessage>{errors.metadata.max.message}</FormErrorMessage>}
                 </FormControl>
+            </SimpleGrid>
+        </Stack>
+    )
+}
+
+
+const TimestampMetadataFormFields = () => {
+
+    const { register, resetField, watch, formState: { errors } } = useFormContext();
+    const typeOfValidation = watch("metadata.limit_validation_type")
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+    useEffect(() => {
+        switch (typeOfValidation) {
+            case 'min': resetField("metadata.max")
+                break;
+            case 'max': resetField("metadata.min")
+                break;
+            case 'none': resetField("metadata.min")
+                resetField("metadata.max")
+                break;
+        }
+    }, [typeOfValidation])
+
+    const formProps = useMemo(() => {
+        return {
+            min: {
+                isRequired: ["minMax", "min"].includes(typeOfValidation),
+                isDisabled: ["none", "max"].includes(typeOfValidation),
+                maxValueRequired: typeOfValidation === "minMax"
+            },
+            max: {
+                isRequired: ["minMax", "max"].includes(typeOfValidation),
+                isDisabled: ["none", "min"].includes(typeOfValidation),
+                minValueRequired: typeOfValidation === "minMax"
+            }
+        }
+    }, [typeOfValidation])
+
+    return (
+        <Stack spacing="4">
+            <FormControl isRequired>
+                <FormLabel>Timestamp Period</FormLabel>
+                <Select defaultValue='none'
+                    {...register("metadata.limit_validation_type")}>
+                    <option value='minMax'>Both past and future</option>
+                    <option value='min'>Only future</option>
+                    <option value='max'>Only past</option>
+                    <option value='none'>None</option>
+                </Select>
+            </FormControl>
+            <SimpleGrid columns={2} spacingX={6} spacingY={4}>
+                {!formProps.min.isDisabled &&
+                    <FormControl
+                        isRequired={formProps.min.isRequired}
+                        isInvalid={!!errors?.metadata?.min}>
+                        <FormLabel>Min date</FormLabel>
+                        {/* <DatePicker
+                            {...register("metadata.min")}
+                            selected={startDate}
+                            onChange={(date: Date) => setStartDate(date)} /> */}
+                        {errors?.metadata?.min && <FormErrorMessage>{errors.metadata.min.message}</FormErrorMessage>}
+                    </FormControl>}
+                {!formProps.max.isDisabled &&
+                    <FormControl
+                        isRequired={formProps.max.isRequired}
+                        isInvalid={!!errors?.metadata?.max}>
+                        <FormLabel>Max date</FormLabel>
+                        {/* <DatePicker
+                            {...register("metadata.max")}
+                            selected={endDate}
+                            onChange={(date: Date) => setEndDate(date)} /> */}
+                        {errors?.metadata?.max && <FormErrorMessage>{errors.metadata.max.message}</FormErrorMessage>}
+                    </FormControl>}
             </SimpleGrid>
         </Stack>
     )

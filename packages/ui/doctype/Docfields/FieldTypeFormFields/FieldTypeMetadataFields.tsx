@@ -20,6 +20,8 @@ export const FieldTypeMetadataFields = ({ fieldType }: Props) => {
             return <NumberFieldFormField />
         case 'Currency':
             return <CurrencyFieldFormField />
+        case 'Date':
+            return <TimestampFormFields />
         default: return <EmptyFieldDetailsBanner />
     }
 }
@@ -123,6 +125,30 @@ const CurrencyFieldFormField = () => {
         </SimpleGrid>
     )
 }
+
+const TimestampFormFields = () => {
+
+    const { register } = useFormContext();
+
+    return (
+        <SimpleGrid columns={2} spacingX={6} spacingY={4}>
+            <FormControl>
+                <FormLabel>Format</FormLabel>
+                <Select placeholder="Select format"
+                    {...register("metadata.timestamp_field_format")}>
+                    <option value='dd-mm-yy'>DD/MM/YYYY</option>
+                    <option value='mm-dd-yy'>MM/DD/YYYY</option>
+                    <option value='year'>Year</option>
+                    <option value='month'>Month</option>
+                    <option value='dateAndTime'>Date and time</option>
+                    <option value='time'>Time</option>
+                    <option value='timeago'>Time ago</option>
+                </Select>
+            </FormControl>
+        </SimpleGrid>
+    )
+}
+
 
 const EmptyFieldDetailsBanner = () => {
     return <Text color="gray.400">Nothing to show.</Text>
