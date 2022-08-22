@@ -34,7 +34,7 @@ export const BreadCrumb = ({ pages }: Props) => {
                     color='gray.500' />}>
 
                 {pages.map(({ name, url, isCurrent }) => <BreadcrumbItem isCurrentPage={isCurrent} key={url}>
-                    <NextLink href={url} passHref>
+                    <NextLink href={url} passHref prefetch>
                         <BreadcrumbLink color={isCurrent ? currentPageLinkColor : previousPageLinkColor}>
                             <Text textTransform="uppercase" fontWeight={"600"} color={isCurrent ? currentPageLinkColor : previousPageLinkColor} fontSize={{ base: 'xs', md: 'xs', lg: 'xs' }}>
                                 {name}

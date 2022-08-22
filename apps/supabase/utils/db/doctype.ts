@@ -37,3 +37,49 @@ export const getDocfields = async (doctypeID: string): Promise<Docfield[]> => {
         return data
     }
 }
+
+
+export const deleteDoctype = async (id: string) => {
+    return deleteAllDocfields(id).then(async () => {
+        const { error } = await supabase
+            .from('crux_doctypes')
+            .delete()
+            .match({ id })
+        // console.log("deleted doctype: ", id)
+        if (error) {
+            console.error("error:", error)
+            throw error
+        } else {
+            return
+        }
+    })
+}
+
+export const deleteDocfield = async (id: string) => {
+    console.log(id)
+    const { error } = await supabase
+        .from('crux_docfields')
+        .delete()
+        .match({ id })
+    // console.log("deleted docfield: ", id)
+    if (error) {
+        console.error("error:", error)
+        throw error
+    } else {
+        return
+    }
+}
+
+const deleteAllDocfields = async (doctypeID: string) => {
+    const { error } = await supabase
+        .from('crux_docfields')
+        .delete()
+        .match({ doctype: doctypeID })
+    console.log("deleted docfield: ", doctypeID)
+    if (error) {
+        console.error("error:", error)
+        throw error
+    } else {
+        return
+    }
+}

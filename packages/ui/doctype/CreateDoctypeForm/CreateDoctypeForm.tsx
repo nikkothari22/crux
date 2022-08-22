@@ -1,8 +1,9 @@
-import { Badge, Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Stack, useToast } from '@chakra-ui/react'
+import { Box, Button, chakra, Divider, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Stack, useToast } from '@chakra-ui/react'
 import { BreadCrumb } from '../../layout'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Doctype } from 'types/doctypes'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 
 interface props {
     create: (doctypeData: Doctype) => Promise<void>
@@ -19,10 +20,21 @@ export const CreateDoctypeForm = ({ create }: props) => {
     const createDoctype = (submittedData: Doctype) => {
         setUpdating(true)
         create(submittedData)
+            .then((x) => {
+                console.log("created doctype:", x)
+                toast({
+                    title: 'Doctype saved',
+                    status: 'success',
+                    duration: 1000,
+                    position: 'bottom',
+                    variant: 'solid',
+                    isClosable: true,
+                })
+            })
             .catch((error) => {
                 console.error("error creating doctype", error)
                 toast({
-                    duration: 2000,
+                    duration: 1000,
                     position: 'bottom',
                     variant: 'solid',
                     isClosable: true,
@@ -54,15 +66,11 @@ export const CreateDoctypeForm = ({ create }: props) => {
                 <Flex
                     justifyContent="space-between"
                     align="center">
-                    <HStack>
-                        <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
-                            New Doctype
-                        </Heading>
-                        {/* <Badge ml="1"
-                            colorScheme="orange">
-                            not saved
-                        </Badge> */}
-                    </HStack>
+
+                    <Heading fontSize={{ base: '20px', md: '30px', lg: '40px' }}>
+                        New Doctype
+                    </Heading>
+
                     <Button
                         fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                         ml={{ base: 16, md: 0, lg: 0 }}
@@ -70,8 +78,9 @@ export const CreateDoctypeForm = ({ create }: props) => {
                         type="submit"
                         isLoading={updating}
                         loadingText="Saving..."
+                        rightIcon={<ChevronRightIcon />}
                     >
-                        Save
+                        Next
                     </Button>
                 </Flex>
                 <Divider mt={{ base: 4, md: 4, lg: 6 }} />
@@ -97,11 +106,13 @@ export const CreateDoctypeForm = ({ create }: props) => {
                                         })}
                                     fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                                     maxW="50vw"
-                                    placeholder="The display label for your doctype"
+                                    placeholder="e.g. Employee, User, Product"
                                 />
-                                <FormErrorMessage>
+                                {errors?.name ? <FormErrorMessage>
                                     {errors?.name?.message}
-                                </FormErrorMessage>
+                                </FormErrorMessage> : <FormHelperText>Name of your doctype</FormHelperText>
+                                }
+
                             </Stack>
                         </FormControl>
 
@@ -123,11 +134,12 @@ export const CreateDoctypeForm = ({ create }: props) => {
                                         })}
                                     fontSize={{ base: '12px', md: '14px', lg: '16px' }}
                                     maxW="50vw"
-                                    placeholder="The table name from where we will fetch your data"
+                                    placeholder="e.g. employee_list, table_products"
                                 />
-                                <FormErrorMessage>
+                                {errors?.source ? <FormErrorMessage>
                                     {errors?.source?.message}
-                                </FormErrorMessage>
+                                </FormErrorMessage> : <FormHelperText>Name of the table in your database</FormHelperText>
+                                }
                             </Stack>
                         </FormControl>
 

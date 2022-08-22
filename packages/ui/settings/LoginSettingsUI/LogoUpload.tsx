@@ -1,15 +1,28 @@
-import { Button, Divider, HStack, Text, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Stack, useDisclosure, Flex } from "@chakra-ui/react";
+import { Box, Button, Divider, HStack, Text, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure, Icon, Input, FormControl, FormHelperText, ButtonGroup, FormLabel } from "@chakra-ui/react";
+import { FaMoon } from 'react-icons/fa'
+import { BsFillSunFill } from 'react-icons/bs'
+import { useFormContext } from "react-hook-form";
+import Image from 'next/image'
+const logoUploadGraphic = require("../../assets/logoUpload.svg") as string;
 
 type Props = {};
 
 const LogoUpload = (props: Props) => {
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { register, watch } = useFormContext();
+
+    const onButtonClicked = () => {
+        onClose()
+    }
+
+    const logoLightMode = watch('logoLight')
+    const logoDarkMode = watch('logoDark')
 
     return (
         <>
-
             <HStack spacing={{ base: 16, md: 28, lg: 24 }} mt={{ base: 5, md: 6, lg: 8 }}>
+
                 <Stack>
                     <Text
                         fontWeight="semibold"
@@ -17,45 +30,80 @@ const LogoUpload = (props: Props) => {
                         Logo
                     </Text>
                     <Text color="gray.600" fontSize={{ base: '12px', md: '14px', lg: '14px' }}>
-                        Upload the logo that you want to be displayed on the login screen
+                        Add the url of the logo that you want to be displayed on the application screen
                     </Text>
                 </Stack>
                 <Button
                     variant="outline"
                     onClick={onOpen}
                     maxW={{ base: '100px', md: '120px', lg: '160px' }}>
-                    <Text
-                        p={10}
-                        fontSize={{ base: '12px', md: '14px', lg: '16px' }}>
-                        Upload image
-                    </Text>
+                    {logoDarkMode || logoLightMode ? "Change Logo" : "Add Logo"}
                 </Button>
+
+                <HStack spacing={4}>
+                    {logoLightMode ?
+                        <Stack>
+                            <Box p="4" border="1px">
+                                <img src={logoLightMode} width={100} />
+                            </Box>
+                            <Text fontSize="sm" fontWeight="light">logo: light mode</Text>
+                        </Stack> : null}
+                    {logoDarkMode ?
+                        <Stack>
+                            <Box backgroundColor="blackAlpha.800" p="4">
+                                <img src={logoDarkMode} width={100} />
+                            </Box>
+                            <Text fontSize="sm" fontWeight="light">logo: dark mode</Text>
+                        </Stack> : null}
+                </HStack>
+
             </HStack>
 
-            <Divider mt={{ base: 5, md: 6, lg: 8 }} maxW="90vw" />
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Divider mt={{ base: 5, md: 6, lg: 8 }} />
+
+            <Modal isOpen={isOpen} onClose={onClose} size="2xl">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Upload your logo</ModalHeader>
+                    <ModalHeader>Add your logo</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Text>To support both light and dark color mode please upload your logo accordingly</Text>
-                        <HStack spacing={10} mt={4}>
-                            <Stack>
-                                <HStack><Text fontWeight="semibold">logo: </Text><Text color="gray.600">light</Text></HStack>
-                                <HStack><Text fontWeight="semibold">logo: </Text><Text color="gray.600">dark</Text></HStack>
-                            </Stack>
-                            <Stack spacing={3}>
-                                <Button variant="link" colorScheme="blue">Add file</Button>
-                                <Button variant="link" colorScheme="blue">Add file</Button>
-                            </Stack>
-                        </HStack>
+                        <Stack>
+                            <Box py={2}>
+                                <Image src={logoUploadGraphic} alt="Empty state graphic" height={200} />
+                            </Box>
+                            <Text as="p" fontSize="sm" mt="2" color="gray.600" align="center">To support both light and dark color mode please enter your logo URLs accordingly.</Text>
+                            <HStack align='center' justify={'center'} py={4} px="4" spacing={4}>
+                                <FormControl>
+                                    <Stack>
+                                        <FormLabel>
+                                            <HStack><Icon as={BsFillSunFill} /><Text color="gray.600" fontWeight="semibold">light mode:</Text></HStack>
+                                        </FormLabel>
+                                        <Input {...register("logoLight")} />
+                                        <FormHelperText fontSize="xs">Add image URL</FormHelperText>
+                                    </Stack>
+                                </FormControl>
+                                <FormControl>
+                                    <Stack>
+                                        <FormLabel>
+                                            <HStack><Icon as={FaMoon} height="3" /><Text color="gray.600" fontWeight="semibold">dark mode:</Text></HStack>
+                                        </FormLabel>
+                                        <Input {...register("logoDark")} />
+                                        <FormHelperText fontSize="xs">Add image URL</FormHelperText>
+                                    </Stack>
+                                </FormControl>
+                            </HStack>
+                        </Stack>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3}>
-                            Confirm
-                        </Button>
-                        <Button variant='ghost' onClick={onClose}>Cancel</Button>
+                        <ButtonGroup>
+                            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+                            <Button
+                                onClick={onButtonClicked}
+                                colorScheme="blue"
+                                type="submit">
+                                Confirm
+                            </Button>
+                        </ButtonGroup>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

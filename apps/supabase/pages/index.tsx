@@ -3,6 +3,7 @@ import { DoctypesList } from "ui/doctype";
 import AdminPanelPage from "../components/AdminPanelPage";
 import { supabase } from "../config/supabaseInit";
 import { enforceAuthenticated } from "../utils/auth";
+import { deleteDoctype } from "../utils/db";
 interface Props {
 
 }
@@ -22,7 +23,7 @@ export default function Index(props: Props) {
 
   return (
     <>
-      <DoctypesList getDoctypes={getDoctypesFromDatabase} />
+      <DoctypesList getDoctypes={getDoctypesFromDatabase} deleteDoctype={deleteDoctype} />
     </>
   );
 }

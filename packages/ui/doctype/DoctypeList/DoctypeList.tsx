@@ -1,7 +1,12 @@
-import { Text, Button, Divider, Flex, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { BreadCrumb } from '../../layout'
+import { Text, Button, Divider, Flex, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, ButtonGroup, IconButton, Spinner, Box, Center, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react'
+import { AlertBanner, BreadCrumb } from '../../layout'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { useRouter } from 'next/router'
+import { CustomError } from 'types/error'
+import Image from 'next/image'
+import { DeleteDoctype } from '../DeleteDoctype/DeleteDoctype'
 
 interface DoctypeListElement {
     id: string,
@@ -9,19 +14,88 @@ interface DoctypeListElement {
     source: string,
     updated_on: string,
     created_at: string,
+    created_by: string
 }
-interface props {
-    getDoctypes: () => Promise<any>,
+interface Props {
+    getDoctypes: () => Promise<DoctypeListElement[]>,
+    deleteDoctype: (doctypeID: string) => Promise<void>
 }
 
-export const DoctypesList = ({ getDoctypes }: props) => {
+export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
 
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<CustomError | null>(null)
     const [doctypeList, setDoctypeList] = useState<DoctypeListElement[]>([])
+    const router = useRouter()
+    const { onOpen, isOpen, onClose } = useDisclosure()
+    const [doctypeToBeDeleted, setDoctypeToBeDeleted] = useState("")
+    const toast = useToast()
+
     useEffect(() => {
-        getDoctypes().then((data) => {
-            console.log(data)
-            setDoctypeList(data)
-        });
+        if (doctypeToBeDeleted) {
+            onOpen();
+        } else {
+            onClose();
+        }
+    }, [doctypeToBeDeleted])
+
+    const setDeleteDoctype = (doctypeID: string) => {
+        setDoctypeToBeDeleted(doctypeID)
+    }
+
+    const deleteAction = async () => {
+        return deleteDoctype(doctypeToBeDeleted)
+            .then(() => {
+                toast({
+                    title: 'Doctype Deleted',
+                    status: 'error',
+                    duration: 2000,
+                    position: 'bottom',
+                    variant: 'solid',
+                    isClosable: true,
+                })
+                refreshList()
+            })
+            .catch(e => showErrorToast(e))
+    }
+
+    const refreshList = () => {
+        getDoctypes()
+            .then(data => {
+                setDoctypeList(data)
+                setError(null)
+            })
+            .catch(e => setError(e))
+    }
+
+    const showErrorToast = (error: Error) => {
+        console.error("error creating doctype", error)
+        toast({
+            duration: 2000,
+            position: 'bottom',
+            variant: 'solid',
+            isClosable: true,
+            status: 'error',
+            title: 'Error',
+            description: `${error.message}`
+        })
+    }
+
+    const resetDelete = () => {
+        setDoctypeToBeDeleted("")
+    }
+
+    useEffect(() => {
+        getDoctypes()
+            .then((data) => {
+                console.log("data", data)
+                setDoctypeList(data)
+                setError(null)
+            })
+            .catch((e) => setError(e))
+            .finally(() => {
+                setLoading(false)
+            })
     }, []);
 
     return (
@@ -29,8 +103,8 @@ export const DoctypesList = ({ getDoctypes }: props) => {
             <BreadCrumb
                 pages={
                     [{
-                        name: "Doctypes",
-                        url: '/doctypes',
+                        name: "Home",
+                        url: '/',
                     }]
                 } />
 
@@ -47,57 +121,108 @@ export const DoctypesList = ({ getDoctypes }: props) => {
 
             <Divider mt={{ base: 4, md: 4, lg: 6 }} />
 
-            <Stack spacing={2}>
-                <TableContainer mt={10}>
-                    <Table variant='simple'>
-                        <Thead>
-                            <Tr>
-                                <Th>Name</Th>
-                                <Th>Source</Th>
-                                <Th>Last Modified</Th>
-                                <Th>Created On</Th>
-                                <Th>Generate Dummy Data</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {doctypeList?.map(doctype =>
-                                <Tr key={doctype.name}>
-                                    <Td>
-                                        <NextLink
-                                            href={`/doctypes/${doctype.id}`}>
-                                            {doctype.name}
-                                        </NextLink>
-                                    </Td>
-                                    <Td>
-                                        <Text>
-                                            {doctype.source}
-                                        </Text>
-                                    </Td>
-                                    <Td>
-                                        <Text>
-                                            {doctype.updated_on.substring(0, 10)}
-                                        </Text>
-                                    </Td>
-                                    <Td>
-                                        <Text>
-                                            {doctype.created_at.substring(0, 10)}
-                                        </Text>
-                                    </Td>
-                                    <Td>
-                                        <Text fontStyle="italic">
-                                            <NextLink
-                                                href={`/doctypes/generate-dummy-data/${doctype.id}`}>
-                                                generate data
-                                            </NextLink>
-                                        </Text>
-                                    </Td>
-                                </Tr>
-                            )}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            </Stack>
+            {loading ? <Flex align="center" justify="center" height="50vh" width="full"><Spinner /></Flex> :
 
+                error ? <AlertBanner status="error" heading="There was an error while fetching the request.">{error.message} - {error.code}</AlertBanner> :
+
+                    doctypeList.length === 0 ? <EmptyStateForDoctypeList /> :
+
+                        <Stack spacing={2} py={12}>
+                            <TableContainer>
+                                <Table variant='simple' size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th py={4}>#</Th>
+                                            <Th py={4}>Name</Th>
+                                            <Th py={4}>Source</Th>
+                                            <Th py={4}>Created On</Th>
+                                            <Th py={4}>Last Modified</Th>
+                                            <Th py={4}>Actions</Th>
+                                            <Th py={4}>Fake Data</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {doctypeList?.map((doctype, index) =>
+                                            <Tr key={doctype.name}>
+                                                <Td>{index + 1}</Td>
+                                                <Td>
+                                                    <NextLink
+                                                        href={`/doctypes/${doctype.id}`}>
+                                                        {doctype.name}
+                                                    </NextLink>
+                                                </Td>
+                                                <Td>
+                                                    <Text>
+                                                        {doctype.source}
+                                                    </Text>
+                                                </Td>
+                                                <Td>
+                                                    <Text>
+                                                        {(new Date(doctype.created_at)).toLocaleDateString()}
+                                                    </Text>
+                                                </Td>
+                                                <Td>
+                                                    <Text>
+                                                        {(new Date(doctype.updated_on)).toLocaleDateString()}
+                                                    </Text>
+                                                </Td>
+                                                <Td>
+                                                    <ButtonGroup spacing={2}>
+                                                        <IconButton
+                                                            onClick={() => router.push(`/doctypes/${doctype.id}`)}
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            title="Edit"
+                                                            colorScheme="blue"
+                                                            aria-label='Edit'
+                                                            icon={<EditIcon />} />
+                                                        <IconButton
+                                                            onClick={() => setDeleteDoctype(doctype.id)}
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            colorScheme="red"
+                                                            aria-label='Delete'
+                                                            title="Delete"
+                                                            icon={<DeleteIcon />} />
+                                                    </ButtonGroup>
+                                                </Td>
+                                                <Td>
+                                                    <NextLink href={`/doctypes/generate-fake-data/${doctype.id}`} passHref>
+                                                        <Button variant="outline" colorScheme={'blue'} size="sm">
+                                                            Generate
+                                                        </Button>
+                                                    </NextLink>
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </Stack>
+            }
+            <DeleteDoctype onClose={resetDelete} isOpen={isOpen} deleteAction={deleteAction} />
         </>
     )
+}
+
+const emptyStateGraphic = require("../../assets/emptyStateDoctypeListImage.svg") as string;
+
+export const EmptyStateForDoctypeList = () => {
+
+    return (
+        <Center pt="100px">
+            <Stack align="center" spacing={{ base: 8, md: 6 }}>
+                <Stack align="center" spacing={10}>
+                    <Stack align="center" spacing={1} px={2}>
+                        <Text as="p" fontSize="xl" fontWeight="semibold" mt="2" color={useColorModeValue('gray.800', 'gray.100')} align="center">Get started by creating your first doctype.</Text>
+                        <Text as="p" fontSize="md" maxW="40vw" mt="2" color={useColorModeValue('gray.600', 'gray.300')} align="center">Doctypes are essential metadata about your data tables, which allow the tool to generate high-quality fake data.</Text>
+                    </Stack>
+                    <Box>
+                        <Image src={emptyStateGraphic} alt="empty state graphic" height={260} />
+                    </Box>
+                </Stack>
+            </Stack>
+        </Center>
+    )
+
 }

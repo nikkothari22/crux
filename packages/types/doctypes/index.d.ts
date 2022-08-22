@@ -18,6 +18,8 @@ export interface DocfieldBasicDetails {
     doctype: string,
     /** ID of docfield  */
     id: string,
+    /** user ID of creator */
+    created_by: string,
     order: number,
     defaultValue: string,
     description: string,
@@ -28,26 +30,50 @@ export interface DocfieldBasicDetails {
 
 export interface DocStringField extends DocfieldBasicDetails {
     dataType: 'string',
-    fieldType: 'Short Text' | 'Long Text' | 'Select' | 'Email' | 'Phone' | 'Image' | 'URL'
-    metadata: DocStringFieldMetadata
+    fieldType: 'Short Text' | 'Long Text' | 'Select' | 'Email' | 'Phone' | 'URL' | 'ID'
+    metadata: {
+        min?: string,
+        max?: string,
+        length_validation_type?: 'minMax' | 'min' | 'max' | 'none',
+        options?: string,
+        fake_data_category?: string,
+        fake_data_type?: string,
+        long_text_type?: string,
+        num_of_words_or_lines?: string
+    }
 }
 
 export interface DocIntegerField extends DocfieldBasicDetails {
     dataType: 'int'
-    fieldType: 'Number' | 'Currency' | 'Measurement'
-    metadata: any
+    fieldType: 'Number' | 'Currency' | 'Percentage'
+    metadata: {
+        min?: string,
+        max?: string,
+        limit_validation_type?: 'minMax' | 'min' | 'max' | 'none',
+        suffix?: string,
+        currency?: string,
+    }
 }
 
 export interface DocFloatField extends DocfieldBasicDetails {
     dataType: 'float'
-    fieldType: 'Number' | 'Percentage' | 'Currency' | 'Measurement' | 'Temperature'
-    metadata: any
+    fieldType: 'Number' | 'Currency' | 'Percentage'
+    metadata: {
+        min?: string,
+        max?: string,
+        limit_validation_type?: 'minMax' | 'min' | 'max' | 'none',
+        suffix?: string,
+        precision?: number,
+        currency?: string,
+    }
 }
 
 export interface DocTimestampField extends DocfieldBasicDetails {
     dataType: 'timestamp'
-    fieldType: 'Date' | 'Time' | 'Date and Time' | 'Date Range'
-    metadata: any
+    fieldType: 'Timestamp' | 'Month' | 'Weekday'
+    metadata: {
+        timestamp_field?: string
+    }
 }
 
 export interface DocBooleanField extends DocfieldBasicDetails {

@@ -11,8 +11,8 @@ export const getLoginSettings = async () => {
     } else {
         return {
             logo: {
-                light: "https://supabase.com/brand-assets/supabase-logo-wordmark--light.svg",
-                dark: "https://supabase.com/brand-assets/supabase-logo-wordmark--dark.svg"
+                light: "",
+                dark: ""
             },
             heading: {
                 login: "Welcome back",

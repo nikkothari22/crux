@@ -5,7 +5,7 @@ import { enforceAuthenticated } from '../../utils/auth'
 import { Docfield, Doctype } from 'types/doctypes';
 import { supabase } from '../../config/supabaseInit';
 import { EditDoctypeForm } from 'ui/doctype';
-import { getDoctype, getDocfields } from '../../utils/db';
+import { getDoctype, getDocfields, deleteDoctype, deleteDocfield } from '../../utils/db';
 import { DocfieldTable } from 'ui/doctype/Docfields/DocfieldTable/DocfieldTable';
 
 interface Props {
@@ -16,10 +16,9 @@ const EditDoctype = (props: Props) => {
 
     const router = useRouter()
     const { doctype } = router.query
-
     const doctypeID = typeof doctype === "string" ? doctype : doctype[0]
-
     const [doctypeFetched, setDoctypeFetched] = useState(false)
+    const user = supabase.auth.user()
 
     const getDoctypeDataCallback = async () => {
         return getDoctype(doctypeID).then((data) => {
@@ -54,7 +53,7 @@ const EditDoctype = (props: Props) => {
         }
     }
 
-    const editDocfield = async (docfieldData: Docfield) => {
+    const editDocfield = async (docfieldData: Partial<Docfield>) => {
         const { error } = await supabase
             .from('crux_docfields')
             .update({
@@ -81,7 +80,7 @@ const EditDoctype = (props: Props) => {
         }
     }
 
-    const createDocfield = async (docfieldData: Docfield) => {
+    const createDocfield = async (docfieldData: Partial<Docfield>) => {
         const { error } = await supabase
             .from('crux_docfields')
             .insert({
@@ -95,7 +94,8 @@ const EditDoctype = (props: Props) => {
                 order: docfieldData.order,
                 metadata: docfieldData.metadata,
                 defaultValue: docfieldData.defaultValue,
-                description: docfieldData.description
+                description: docfieldData.description,
+                created_by: user.id
             })
         console.log("created docfield: ", docfieldData)
         if (error) {
@@ -128,50 +128,6 @@ const EditDoctype = (props: Props) => {
             throw error
         } else {
             return count > 1
-        }
-    }
-
-    const deleteDoctype = async (id: string) => {
-        deleteAllDocfields(id).then
-        const { error } = await supabase
-            .from('crux_doctypes')
-            .delete()
-            .match({ id })
-        // console.log("deleted doctype: ", id)
-        if (error) {
-            console.error("error:", error)
-            throw error
-        } else {
-            return
-        }
-    }
-
-    const deleteDocfield = async (id: string) => {
-        console.log(id)
-        const { error } = await supabase
-            .from('crux_docfields')
-            .delete()
-            .match({ id })
-        // console.log("deleted docfield: ", id)
-        if (error) {
-            console.error("error:", error)
-            throw error
-        } else {
-            return
-        }
-    }
-
-    const deleteAllDocfields = async (doctypeID: string) => {
-        const { error } = await supabase
-            .from('crux_docfields')
-            .delete()
-            .match({ doctype: doctypeID })
-        console.log("deleted docfield: ", doctypeID)
-        if (error) {
-            console.error("error:", error)
-            throw error
-        } else {
-            return
         }
     }
 

@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, HStack, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, VStack, Text, useColorModeValue, Heading, Skeleton } from '@chakra-ui/react'
+import { Avatar, Box, Flex, HStack, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, useColorModeValue, Heading, Skeleton } from '@chakra-ui/react'
 import { ColorModeButton } from '../../theme';
 
 interface Props {
@@ -53,7 +53,7 @@ export const Navbar = ({ logo, logout, userEmail, loading }: Props) => {
                             <MenuList
                                 bg={useColorModeValue('white', 'gray.900')}
                                 borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                                <MenuItem>Profile</MenuItem>
+                                {/* <MenuItem>Profile</MenuItem> */}
                                 <MenuItem as="a" href="/settings">Settings</MenuItem>
                                 <MenuDivider />
                                 <MenuItem onClick={logout}>Sign out</MenuItem>

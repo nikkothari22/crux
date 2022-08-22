@@ -64,13 +64,13 @@ const DocfieldFormContent = ({ initFieldData, onClose, onSubmit }: FormContentPr
             const getDefaultMetadataForDatatype = (d: string) => {
                 switch (d) {
                     case "string":
-                        setValue('metadata.length_validation_type', 'minMax')
+                        setValue('metadata.length_validation_type', 'none')
                         break;
                     case "int":
-                        setValue('metadata.limit_validation_type', 'minMax')
+                        setValue('metadata.limit_validation_type', 'none')
                         break;
                     case "float":
-                        setValue('metadata.limit_validation_type', 'minMax')
+                        setValue('metadata.limit_validation_type', 'none')
                         setValue('metadata.precision', '2')
                         break;
                 }

@@ -1,57 +1,89 @@
-import { faker, Faker } from '@faker-js/faker';
-import { Docfield } from 'types/doctypes'
+import { faker } from '@faker-js/faker';
+import { DocStringField, DocTimestampField } from 'types/doctypes'
+import { Chance } from 'chance';
 
 export const randomBoolean = () => Math.random() < 0.5;
 
 export const randomNumber = (min?: number, max?: number, type?: 'Int' | 'Float', precision?: number) => {
 
-    let random = Math.random();
-
+    let chance = new Chance();
     if (type === 'Int') {
-        return Math.round(random)
-    } else {
-        if (precision) {
-            //TODO: Round off number to x digits
+        if (min !== undefined && max !== undefined) {
+            return chance.integer({ min, max })
+        } else if (min !== undefined) {
+            return chance.integer({ min })
+        } else if (max !== undefined) {
+            return chance.integer({ max })
         } else {
-            return Math.random()
+            return chance.integer()
+        }
+    } else {
+        if (min !== undefined && max !== undefined) {
+            return chance.floating({ min: min, max: max, fixed: precision })
+        } else if (min !== undefined) {
+            return chance.floating({ min, fixed: precision })
+        } else if (max !== undefined) {
+            return chance.floating({ max, fixed: precision })
+        } else {
+            return chance.floating({ fixed: precision })
         }
     }
 
 }
 
-export const randomTimestamp = () => {
-    return faker.date.between('', '')
-}
 
-//TODO: Set types for Faker Categories and Faker Types
-// type FakerCategories = 'name'
-// type FakerTypes = "firstName" | "lastName"
-export const randomString = (category: string, type: string) => {
-    // @ts-ignore
-    return faker[category][type]()
-}
+export const randomTimestamp = (docfield: DocTimestampField) => {
 
-export const getDummyDataObjectFromDocfields = (docfields: Docfield[]) => {
+    const type = docfield.metadata?.timestamp_field;
 
-    let data: any = {
-        id: faker.random.alphaNumeric(12)
+    if (docfield.fieldType === 'Month') {
+        return faker.date.month()
+    } else if (docfield.fieldType === 'Weekday') {
+        return faker.date.weekday()
+    } else if (docfield.fieldType === 'Timestamp') {
+        switch (type) {
+            case "between": return faker.date.between('2020-01-01T00:00:00.000Z', '2030-01-01T00:00:00.000Z')
+        }
     }
+}
 
-    docfields?.forEach(df => {
-        if (df.dataType === "string") {
-            if (df.fieldType === "Short Text") {
-                // data[df.label] = randomString(metadata.fake_data_category, metadata.fake_data_type)
-            } else if (df.fieldType === "Email") {
-                data[df.label] = randomString("internet", "email")
-            } else if (df.fieldType === "Phone") {
-                data[df.label] = randomString("phone", "phoneNumber")
-            } else if (df.fieldType === "URL") {
-                data[df.label] = randomString("internet", "url")
+
+export const randomString = (docfield: DocStringField) => {
+
+    const str = docfield.metadata?.options;
+    const arr = str?.split('\n');
+    const category = docfield.metadata?.fake_data_category;
+    const type = docfield.metadata?.fake_data_type;
+    const fullNameWithMiddleName = faker.name.firstName() + " " + faker.name.middleName() + " " + faker.name.lastName();
+    const longTextType = docfield.metadata?.long_text_type;
+    const numOfWordsOrLines = docfield.metadata?.num_of_words_or_lines;
+
+    switch (docfield.fieldType) {
+        case "Short Text":
+            // @ts-ignore
+            let output = faker[category ?? "name"][type]()
+            switch (type) {
+                case "fullName": output = faker.name.findName();
+                    break;
+                case "fullName with middleName": output = fullNameWithMiddleName;
+                    break;
             }
-        } else if (df.dataType === "boolean") {
-            data[df.label] = randomBoolean()
-        }
-    })
-
-    return data
+            switch (category) {
+                // @ts-ignore
+                case "image": output = faker.image[type](undefined, undefined, true);
+                    break;
+            }
+            return output
+        // @ts-ignore
+        case "Long Text": return faker.lorem[longTextType](numOfWordsOrLines);
+        case "Select": return faker.helpers.arrayElement(arr)
+        case "Email": return faker.internet.email();
+        case "Phone": return faker.phone.phoneNumber();
+        case "URL": return faker.internet.url();
+        case "ID": return faker.datatype.uuid();
+        default: return faker.word.noun();
+    }
 }
+
+
+export { getDummyDataObjectFromDocfields } from './docfields';

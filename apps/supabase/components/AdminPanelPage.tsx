@@ -21,7 +21,7 @@ const AdminPanelPage = ({ children }: Props) => {
 
     useEffect(() => {
 
-        console.log("Mounted")
+        // console.log("Mounted")
 
         //Fetch metadata
         getLoginSettings().then(metadata => {

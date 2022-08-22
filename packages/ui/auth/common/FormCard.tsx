@@ -1,5 +1,5 @@
 import { BoxProps, Stack, useColorModeValue } from '@chakra-ui/react'
-import React from 'react'
+
 export const FormCard = (props: BoxProps) => {
     return (
         <Stack
