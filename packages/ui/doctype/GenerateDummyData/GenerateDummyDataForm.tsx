@@ -1,10 +1,12 @@
-import { Button, Divider, Flex, FormControl, FormLabel, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonGroup, Divider, Flex, FormControl, FormLabel, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Docfield, Doctype } from 'types/doctypes'
 import { CustomError } from 'types/error';
 import { AlertBanner, BreadCrumb } from '../../layout';
 import { DummyDataTable } from './DummyDataTable';
 import { getDummyDataObjectFromDocfields } from 'dummy_data_generation'
+import NextLink from 'next/link'
+
 interface Props {
     getDoctypeData: () => Promise<Doctype>,
     getDocfields: () => Promise<Docfield[]>,
@@ -100,13 +102,20 @@ export const GenerateDummyDataForm = ({ getDoctypeData, getDocfields, uploadData
                                     color={subTextColor}>{doctypeData?.name} ({doctypeData?.source})</Text>}
                             </Stack>
                             {docfields !== null && docfields.length > 0 &&
-                                <Button
-                                    onClick={onOpen}
-                                    colorScheme="blue">
-                                    Generate Data
-                                </Button>
+                                <ButtonGroup>
+                                    <Button>
+                                        <NextLink
+                                            href={`/doctypes/${doctypeData?.id}`}>
+                                            Edit Docfields
+                                        </NextLink>
+                                    </Button>
+                                    <Button
+                                        onClick={onOpen}
+                                        colorScheme="blue">
+                                        Generate Data
+                                    </Button>
+                                </ButtonGroup>
                             }
-
                         </Flex>
 
                         <Divider mt={{ base: 4, md: 4, lg: 6 }} />
