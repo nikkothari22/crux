@@ -18,6 +18,7 @@ const EditDoctype = (props: Props) => {
     const { doctype } = router.query
     const doctypeID = typeof doctype === "string" ? doctype : doctype[0]
     const [doctypeFetched, setDoctypeFetched] = useState(false)
+    const user = supabase.auth.user()
 
     const getDoctypeDataCallback = async () => {
         return getDoctype(doctypeID).then((data) => {
@@ -93,7 +94,8 @@ const EditDoctype = (props: Props) => {
                 order: docfieldData.order,
                 metadata: docfieldData.metadata,
                 defaultValue: docfieldData.defaultValue,
-                description: docfieldData.description
+                description: docfieldData.description,
+                created_by: user.id
             })
         console.log("created docfield: ", docfieldData)
         if (error) {

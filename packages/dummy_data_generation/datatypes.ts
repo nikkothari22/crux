@@ -1,5 +1,5 @@
-import { DocFloatField, DocIntegerField, DocStringField } from "types/doctypes";
-import { randomNumber, randomString } from ".";
+import { DocFloatField, DocIntegerField, DocStringField, DocTimestampField } from "types/doctypes";
+import { randomNumber, randomString, randomTimestamp } from ".";
 
 export const generateDataForInt = (docfield: DocIntegerField) => {
 
@@ -61,4 +61,15 @@ export const generateDataForString = (docfield: DocStringField) => {
     //3. Return string
 
     return randomString(docfield)
+}
+
+export const generateTimestampData = (docfield: DocTimestampField) => {
+
+    //For timestamp, dummy data does depend on fieldType and field catagory 
+
+    //1. Check fieldType
+    //2. Check fieldCatagory
+    //3. Return string
+
+    return randomTimestamp(docfield)
 }

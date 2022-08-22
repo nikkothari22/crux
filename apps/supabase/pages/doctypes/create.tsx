@@ -13,6 +13,10 @@ interface Props {
 const CreateNewDoctype = (props: Props) => {
 
     const router = useRouter()
+    const user = supabase.auth.user()
+
+    // console.log(user?.id)
+
     const createDoctype = async (doctypeData: Doctype) => {
 
         // 1. check if this doctype name or source already exists
@@ -33,6 +37,7 @@ const CreateNewDoctype = (props: Props) => {
     const uploadDoctypeToDatabase = async (doctypeData: Doctype) => {
         const { error, data } = await supabase.from('crux_doctypes').insert({
             created_at: new Date(),
+            created_by: user?.id,
             name: doctypeData.name,
             source: doctypeData.source,
             metadata: {

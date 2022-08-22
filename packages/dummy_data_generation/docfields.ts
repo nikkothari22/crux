@@ -1,6 +1,6 @@
 import { Docfield } from "types/doctypes"
 import { randomBoolean, randomString } from "."
-import { generateDataForFloat, generateDataForInt } from "./datatypes"
+import { generateDataForFloat, generateDataForInt, generateTimestampData } from "./datatypes"
 
 export const getDummyDataObjectFromDocfields = (docfields: Docfield[]) => {
 
@@ -23,7 +23,7 @@ export const getDataForDocfield = (docfield: Docfield) => {
         case "boolean": return randomBoolean()
         case "int": return generateDataForInt(docfield)
         case "float": return generateDataForFloat(docfield)
-        case "timestamp": return null
+        case "timestamp": return generateTimestampData(docfield)
         default: return null
     }
 }

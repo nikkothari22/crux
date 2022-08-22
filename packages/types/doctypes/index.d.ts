@@ -18,6 +18,8 @@ export interface DocfieldBasicDetails {
     doctype: string,
     /** ID of docfield  */
     id: string,
+    /** user ID of creator */
+    created_by: string,
     order: number,
     defaultValue: string,
     description: string,
@@ -68,8 +70,10 @@ export interface DocFloatField extends DocfieldBasicDetails {
 
 export interface DocTimestampField extends DocfieldBasicDetails {
     dataType: 'timestamp'
-    fieldType: 'Date' | 'Time' | 'Date and Time' | 'Date Range'
-    metadata: any
+    fieldType: 'Timestamp' | 'Month' | 'Weekday'
+    metadata: {
+        timestamp_field?: string
+    }
 }
 
 export interface DocBooleanField extends DocfieldBasicDetails {

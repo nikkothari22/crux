@@ -1,5 +1,5 @@
 
-import { DocBooleanField, DocFloatField, DocIntegerField, DocStringField } from "types/doctypes";
+import { DocBooleanField, DocFloatField, DocIntegerField, DocStringField, DocTimestampField } from "types/doctypes";
 
 export const getBooleanField = (docfield: DocBooleanField, data: any) => {
 
@@ -36,6 +36,20 @@ export const getStringField = (docfield: DocStringField, data: any) => {
         case "Email": return <a href={`mailto:${data[docfield.name]}`}>{data[docfield.name]}</a>
         case "Phone": return <a href={`tel:${data[docfield.name]}`}>{data[docfield.name]}</a>
         case "URL": return <a href={data[docfield.name]}>{data[docfield.name]}</a>
+        case "Short Text": return docfield.metadata.fake_data_category === 'image' ? <ImageField data={data[docfield.name]} /> : data[docfield.name]
         default: return data[docfield.name]
     }
+}
+
+export const ImageField = ({ data }: { data: string }) => {
+    return (
+        <img alt="example image" src={data} width='200px' height='200px' />
+    )
+}
+
+export const getTimestampField = (docfield: DocTimestampField, data: any) => {
+    if (typeof data[docfield.name] === "object") {
+        return data[docfield.name].toLocaleString()
+    }
+    return data[docfield.name]
 }

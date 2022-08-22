@@ -2,7 +2,7 @@ import { Box, Button, ButtonGroup, Center, Code, FormControl, FormLabel, HStack,
 import { Docfield } from "types/doctypes"
 import { VscJson } from 'react-icons/vsc'
 import { useMemo } from "react"
-import { getBooleanField, getIntegerField, getStringField } from "../DataVisualization/DocfieldVisualRepresentation"
+import { getBooleanField, getIntegerField, getStringField, getTimestampField } from "../DataVisualization/DocfieldVisualRepresentation"
 import { JSONView } from "./JSONView"
 import { FiDatabase } from "react-icons/fi"
 import { CSVDownloadButton } from "./CSVDownloadButton"
@@ -28,19 +28,7 @@ export const DummyDataTable = ({ docfields, data, doctype, uploadData, tableName
     const jsonModal = useDisclosure();
     const uploadDataModal = useDisclosure();
     const visualData = useMemo(() => {
-        return data.map((row, index) => <Tr key={index}>
-            <Td>{index}.</Td>
-            {docfields.map((field) => {
-                switch (field.dataType) {
-                    case "int": return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
-                    case 'float': return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
-                    case "boolean": return <Td key={field.id}>{getBooleanField(field, row)}</Td>
-                    case "string": return <Td key={field.id}>{getStringField(field, row)}</Td>
-                    default: return <Td key={field.id}></Td>
-                }
-            })}
-        </Tr>
-        )
+        return
     }, [docfields, data])
 
     return (
@@ -89,11 +77,24 @@ export const DummyDataTable = ({ docfields, data, doctype, uploadData, tableName
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {visualOn ? visualData :
+                                    {visualOn ? data.map((row, index) => <Tr key={index}>
+                                        <Td>{index + 1}.</Td>
+                                        {docfields.map((field) => {
+                                            switch (field.dataType) {
+                                                case "int": return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
+                                                case 'float': return <Td isNumeric key={field.id}>{getIntegerField(field, row)}</Td>
+                                                case "boolean": return <Td key={field.id}>{getBooleanField(field, row)}</Td>
+                                                case "string": return <Td key={field.id}>{getStringField(field, row)}</Td>
+                                                case "timestamp": return <Td key={field.id}>{getTimestampField(field, row)}</Td>
+                                                default: null
+                                            }
+                                        })}
+                                    </Tr>
+                                    ) :
                                         data.map((d, index) => <Tr key={index}>
-                                            <Td>{index}.</Td>
+                                            <Td>{index + 1}.</Td>
                                             {docfields.map(df => <Td isNumeric={df.dataType === "float" || df.dataType === "int"}>{
-                                                df.dataType === "boolean" ? <Code>{d[df.name] ? "true" : "false"}</Code> : d[df.name]}</Td>)}
+                                                df.dataType === "boolean" ? <Code>{d[df.name] ? "true" : "false"}</Code> : JSON.stringify(d[df.name])}</Td>)}
                                         </Tr>
                                         )}
                                 </Tbody>

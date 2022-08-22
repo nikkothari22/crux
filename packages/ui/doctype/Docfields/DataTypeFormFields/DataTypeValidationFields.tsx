@@ -1,15 +1,16 @@
-import { FormControl, FormErrorMessage, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, SimpleGrid, Stack } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, SimpleGrid, Stack, useColorModeValue } from "@chakra-ui/react";
+import { forwardRef, useEffect, useMemo } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import ReactDatePicker from "react-datepicker";
+import { CalendarIcon } from "@chakra-ui/icons";
 import "react-datepicker/dist/react-datepicker.css";
-
+import "../../../theme/Chakra-React-DatePicker/chakra-react-datepicker.css";
 
 interface Props {
     dataType: string
 }
 
 export const DataTypeValidationFields = ({ dataType }: Props) => {
-
     switch (dataType) {
         case 'string':
             return <StringMetadataFormFields />
@@ -18,13 +19,15 @@ export const DataTypeValidationFields = ({ dataType }: Props) => {
         case 'float':
             return <FloatMetadataFormFields />
         case 'timestamp':
-            return <TimestampMetadataFormFields />
+            return null
         case 'boolean':
             return null
         default: return null
     }
 }
 
+
+// STRING METADATA FORM
 const StringMetadataFormFields = () => {
 
     const { register, resetField, watch, formState: { errors } } = useFormContext();
@@ -123,6 +126,8 @@ const StringMetadataFormFields = () => {
     )
 }
 
+
+// INT METADATA FORM
 const IntMetadataFormFields = () => {
 
     const { register, watch, resetField, formState: { errors } } = useFormContext();
@@ -222,6 +227,8 @@ const IntMetadataFormFields = () => {
     )
 }
 
+
+// FLOAT METADATA FORM
 const FloatMetadataFormFields = () => {
 
     const { register, watch, resetField, formState: { errors } } = useFormContext();
@@ -336,22 +343,20 @@ const FloatMetadataFormFields = () => {
 }
 
 
+// TIMESTAMP METADATA FORM
 const TimestampMetadataFormFields = () => {
 
-    const { register, resetField, watch, formState: { errors } } = useFormContext();
+    const { register, watch, resetField, control, formState: { errors } } = useFormContext();
     const typeOfValidation = watch("metadata.limit_validation_type")
-
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
 
     useEffect(() => {
         switch (typeOfValidation) {
-            case 'min': resetField("metadata.max")
+            case 'min': resetField("metadata.maxDate")
                 break;
-            case 'max': resetField("metadata.min")
+            case 'max': resetField("metadata.minDate")
                 break;
-            case 'none': resetField("metadata.min")
-                resetField("metadata.max")
+            case 'none': resetField("metadata.minDate")
+                resetField("metadata.maxDate")
                 break;
         }
     }, [typeOfValidation])
@@ -360,16 +365,26 @@ const TimestampMetadataFormFields = () => {
         return {
             min: {
                 isRequired: ["minMax", "min"].includes(typeOfValidation),
-                isDisabled: ["none", "max"].includes(typeOfValidation),
-                maxValueRequired: typeOfValidation === "minMax"
             },
             max: {
                 isRequired: ["minMax", "max"].includes(typeOfValidation),
-                isDisabled: ["none", "min"].includes(typeOfValidation),
-                minValueRequired: typeOfValidation === "minMax"
             }
         }
     }, [typeOfValidation])
+
+    const customDateInput = ({ value, onClick, onChange }: any, ref: any) => (
+        <Input
+            autoComplete="off"
+            value={value}
+            ref={ref}
+            onClick={onClick}
+            onChange={onChange}
+        />
+    )
+    customDateInput.displayName = "DateInput"
+    const CustomInput = forwardRef(customDateInput)
+    const icon = <CalendarIcon fontSize="sm" />
+    const theme = useColorModeValue("light-theme", "dark-theme")
 
     return (
         <Stack spacing="4">
@@ -384,27 +399,49 @@ const TimestampMetadataFormFields = () => {
                 </Select>
             </FormControl>
             <SimpleGrid columns={2} spacingX={6} spacingY={4}>
-                {!formProps.min.isDisabled &&
+                {(typeOfValidation === 'min' || typeOfValidation === 'minMax') &&
                     <FormControl
                         isRequired={formProps.min.isRequired}
-                        isInvalid={!!errors?.metadata?.min}>
+                        isInvalid={!!errors?.metadata?.minDate}>
                         <FormLabel>Min date</FormLabel>
-                        {/* <DatePicker
-                            {...register("metadata.min")}
-                            selected={startDate}
-                            onChange={(date: Date) => setStartDate(date)} /> */}
-                        {errors?.metadata?.min && <FormErrorMessage>{errors.metadata.min.message}</FormErrorMessage>}
+                        <InputGroup className={theme} maxW='50%'>
+                            <Controller
+                                control={control}
+                                name="metadata.minDate"
+                                render={({ field }) => (
+                                    <ReactDatePicker
+                                        selected={field.value}
+                                        onChange={(date: Date) => field.onChange(date)}
+                                        showPopperArrow={false}
+                                        className="react-datapicker__input-text"
+                                        customInput={<CustomInput />} />
+                                )}
+                            />
+                            <InputRightElement color="gray.500" children={icon} />
+                        </InputGroup>
+                        {errors?.metadata?.minDate && <FormErrorMessage>{errors.metadata.minDate.message}</FormErrorMessage>}
                     </FormControl>}
-                {!formProps.max.isDisabled &&
+                {(typeOfValidation === 'max' || typeOfValidation === 'minMax') &&
                     <FormControl
                         isRequired={formProps.max.isRequired}
-                        isInvalid={!!errors?.metadata?.max}>
+                        isInvalid={!!errors?.metadata?.maxDate}>
                         <FormLabel>Max date</FormLabel>
-                        {/* <DatePicker
-                            {...register("metadata.max")}
-                            selected={endDate}
-                            onChange={(date: Date) => setEndDate(date)} /> */}
-                        {errors?.metadata?.max && <FormErrorMessage>{errors.metadata.max.message}</FormErrorMessage>}
+                        <InputGroup className={theme} maxW='50%'>
+                            <Controller
+                                control={control}
+                                name="metadata.maxDate"
+                                render={({ field }) => (
+                                    <ReactDatePicker
+                                        selected={field.value}
+                                        onChange={(date: Date) => field.onChange(date)}
+                                        showPopperArrow={false}
+                                        className="react-datapicker__input-text"
+                                        customInput={<CustomInput />} />
+                                )}
+                            />
+                            <InputRightElement color="gray.500" children={icon} />
+                        </InputGroup>
+                        {errors?.metadata?.maxDate && <FormErrorMessage>{errors.metadata.maxDate.message}</FormErrorMessage>}
                     </FormControl>}
             </SimpleGrid>
         </Stack>

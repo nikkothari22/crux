@@ -102,7 +102,7 @@ export const DocfieldTable = ({ getDocfields, addField, editField, deleteField }
                                     </Thead>
                                     <Tbody>
                                         {fields.map((field, index) => <Tr key={field.name}>
-                                            <Td>{index}</Td>
+                                            <Td>{index + 1}</Td>
                                             <Td>{field.label}</Td>
                                             <Td>{field.name}</Td>
                                             <Td>{field.dataType}</Td>

@@ -14,6 +14,7 @@ interface DoctypeListElement {
     source: string,
     updated_on: string,
     created_at: string,
+    created_by: string
 }
 interface Props {
     getDoctypes: () => Promise<DoctypeListElement[]>,
@@ -87,7 +88,7 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
     useEffect(() => {
         getDoctypes()
             .then((data) => {
-                console.log(data)
+                console.log("data", data)
                 setDoctypeList(data)
                 setError(null)
             })
@@ -143,7 +144,7 @@ export const DoctypesList = ({ getDoctypes, deleteDoctype }: Props) => {
                                     <Tbody>
                                         {doctypeList?.map((doctype, index) =>
                                             <Tr key={doctype.name}>
-                                                <Td>{index}</Td>
+                                                <Td>{index + 1}</Td>
                                                 <Td>
                                                     <NextLink
                                                         href={`/doctypes/${doctype.id}`}>

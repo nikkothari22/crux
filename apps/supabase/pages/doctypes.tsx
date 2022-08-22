@@ -10,9 +10,12 @@ interface Props {
 
 const Doctypes = (props: Props) => {
 
+    const user = supabase.auth.user()
+
     const getDoctypesFromDatabase = async () => {
         let { data, error } = await supabase.from('crux_doctypes')
-            .select(`id, name, source, updated_on, created_at`)
+            .select(`id, name, source, updated_on, created_at, created_by`)
+            .eq('created_by', user.id)
             .order('updated_on', { ascending: false })
         if (error) {
             console.error("error:", error)

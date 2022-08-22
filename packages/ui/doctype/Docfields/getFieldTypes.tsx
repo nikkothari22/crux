@@ -13,7 +13,7 @@ export const getFieldTypes = (dataType: string) => {
             fieldTypes = ["Number", "Currency", "Percentage"]
             break;
         case 'timestamp':
-            fieldTypes = ["Date", "Time", "Date and Time", "Date Range"]
+            fieldTypes = ["Timestamp", "Month", "Weekday"]
             break;
         case 'boolean':
             fieldTypes = ["True/False", "Yes/No", "1/0"]

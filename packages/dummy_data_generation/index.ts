@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { DocStringField } from 'types/doctypes'
+import { DocStringField, DocTimestampField } from 'types/doctypes'
 import { Chance } from 'chance';
 
 export const randomBoolean = () => Math.random() < 0.5;
@@ -32,8 +32,19 @@ export const randomNumber = (min?: number, max?: number, type?: 'Int' | 'Float',
 }
 
 
-export const randomTimestamp = () => {
-    return faker.date.between('', '')
+export const randomTimestamp = (docfield: DocTimestampField) => {
+
+    const type = docfield.metadata?.timestamp_field;
+
+    if (docfield.fieldType === 'Month') {
+        return faker.date.month()
+    } else if (docfield.fieldType === 'Weekday') {
+        return faker.date.weekday()
+    } else if (docfield.fieldType === 'Timestamp') {
+        switch (type) {
+            case "between": return faker.date.between('2020-01-01T00:00:00.000Z', '2030-01-01T00:00:00.000Z')
+        }
+    }
 }
 
 
@@ -49,12 +60,20 @@ export const randomString = (docfield: DocStringField) => {
 
     switch (docfield.fieldType) {
         case "Short Text":
+            // @ts-ignore
+            let output = faker[category ?? "name"][type]()
             switch (type) {
-                case "fullName": return faker.name.findName();
-                case "fullName with middleName": return fullNameWithMiddleName;
-                // @ts-ignore
-                default: return faker[category][type]();
+                case "fullName": output = faker.name.findName();
+                    break;
+                case "fullName with middleName": output = fullNameWithMiddleName;
+                    break;
             }
+            switch (category) {
+                // @ts-ignore
+                case "image": output = faker.image[type](undefined, undefined, true);
+                    break;
+            }
+            return output
         // @ts-ignore
         case "Long Text": return faker.lorem[longTextType](numOfWordsOrLines);
         case "Select": return faker.helpers.arrayElement(arr)
